@@ -17,15 +17,17 @@ def plot_save(self):
                                      'real_height': plt.gcf().get_size_inches()[1],
                                      'set_height': None, 'set_width': None, 'user_size': False}
         if self.pw_saveOptions_ln_1.text():
-            self.fig_size_proportions['set_height'] = float(self.pw_saveOptions_ln_1.text())
             if self.pw_saveOptions_cb_1.currentText() == 'Centimeters':
                 self.fig_size_proportions['set_height'] = round((self.fig_size_proportions['set_height']
                                                                  / 2.54) * 100) / 100
+            else:
+                self.fig_size_proportions['set_height'] = float(self.pw_saveOptions_ln_1.text())
         if self.pw_saveOptions_ln_2.text():
-            self.fig_size_proportions['set_width'] = float(self.pw_saveOptions_ln_2.text())
             if self.pw_saveOptions_cb_2.currentText() == 'Centimeters':
                 self.fig_size_proportions['set_width'] = round((self.fig_size_proportions['set_width']
                                                                 / 2.54) * 100) / 100
+            else:
+                self.fig_size_proportions['set_width'] = float(self.pw_saveOptions_ln_2.text())
         if self.fig_size_proportions['set_height'] is not None and self.fig_size_proportions['set_width'] is not None:
             if ((self.fig_size_proportions['real_height'] - 0.1) <= self.fig_size_proportions['set_height']
                     <= (self.fig_size_proportions['real_height'] + 0.1)
@@ -36,15 +38,16 @@ def plot_save(self):
                 self.fig_size_proportions['user_size'] = True
                 plt.gcf().set_size_inches(self.fig_size_proportions['set_width'],
                                           self.fig_size_proportions['set_height'])
-        kwargs = {"orientation": 'landscape', "papertype": 'a4', "format": None,
-                  "bbox_inches": None, "pad_inches": 0.1, "frameon": None,
-                  'dpi': 100}
+        kwargs = {'orientation': 'landscape', 'format': None, 'bbox_inches': None, 'pad_inches': 0.1, 'dpi': 100}
         try:
             kwargs['dpi'] = int(self.pw_saveOptions_ln_3.text())
         except ValueError:
             pass
         if out_file_ext == '.jpg':
-            kwargs['quality'] = self.pw_saveOptions_sl_1.value()
+            pil_kwargs = {'quality': self.pw_saveOptions_sl_1.value()}
+        else:
+            pil_kwargs = {}
+        kwargs['pil_kwargs'] = pil_kwargs
         kwargs['transparent'] = self.pw_saveOptions_ck_1.isChecked()
         self.print_thread = PrintingThread(save_file_name, kwargs)
         self.print_thread.started.connect(lambda: wait_window(self))

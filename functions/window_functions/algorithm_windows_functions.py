@@ -458,12 +458,16 @@ class MyProcessing(QtWidgets.QDialog, Ui_processingWindow):
         self.wait_window.close()
         self.close()
 
-    def processing_error(self):
+    def processing_error(self, val):
         logging.debug('gui - algorithm_window_functions.py - MyProcessing - processing_error')
+        exc_type = val[0]
+        exc_value = val[1]
+        info_str = ('An important exception occurred during the processing. Please try to launch it again. If the '
+                    'process is still not working, please check the log file for details about the exception and '
+                    'review the algorithm for any coding issue. Do not hesitate to contact the developer. <br><br>'
+                    'Exception type: ' + exc_type + '<br><br>Exception value: ' + exc_value)
         self.wait_window.close()
-        info_text = ('Something went wrong during the processing. Please try to launch it again. If the process is'
-                     + ' still not working, please check the algorithm and/or contact the developer.')
-        info_window = MyInfo(info_text)
+        info_window = MyInfo(info_str)
         info_window.exec_()
         self.close_window()
 
@@ -899,13 +903,13 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
     def add_input(self):
         logging.debug('gui - algorithm_windows_functions.py - MyAlgorithm - add_input')
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         font2 = QtGui.QFont()
-        font2.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font2.setPointSize(9)
+        font2.setFamily("Source Sans Pro")
+        font2.setPointSize(10)
         font2.setKerning(True)
         font2.setStyleStrategy(QtGui.QFont.PreferAntialias)
         icon = QtGui.QIcon()
@@ -1270,13 +1274,13 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
     def add_output(self):
         logging.debug('gui - algorithm_window_functions.py - MyAlgorithm - add_output')
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         font2 = QtGui.QFont()
-        font2.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font2.setPointSize(9)
+        font2.setFamily("Source Sans Pro")
+        font2.setPointSize(10)
         font2.setKerning(True)
         font2.setStyleStrategy(QtGui.QFont.PreferAntialias)
         icon = QtGui.QIcon()
@@ -1382,11 +1386,11 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_hl_5[self.output_num].setObjectName("cw_output_hl_5_" + str(self.output_num))
         self.cw_output_ln_5.append(QtWidgets.QLineEdit())
         self.cw_output_ln_5[self.output_num].setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.cw_output_ln_5[self.output_num].sizePolicy().hasHeightForWidth())
-        self.cw_output_ln_5[self.output_num].setSizePolicy(sizePolicy)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.cw_output_ln_5[self.output_num].sizePolicy().hasHeightForWidth())
+        self.cw_output_ln_5[self.output_num].setSizePolicy(size_policy)
         self.cw_output_ln_5[self.output_num].setMinimumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_5[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_ln_5[self.output_num].setFont(font2)
@@ -1404,7 +1408,6 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_ln_5[self.output_num].setFrame(False)
         self.cw_output_ln_5[self.output_num].setObjectName("cw_output_ln_5_" + str(self.output_num))
         self.cw_output_hl_5[self.output_num].addWidget(self.cw_output_ln_5[self.output_num])
-
         self.cw_output_hl_5[self.output_num].addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed,
                                                                            QtWidgets.QSizePolicy.Minimum))
 
@@ -1499,11 +1502,11 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_hl_6[self.output_num].setObjectName("cw_output_hl_6_" + str(self.output_num))
         self.cw_output_ln_6.append(QtWidgets.QLineEdit())
         self.cw_output_ln_6[self.output_num].setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.cw_output_ln_6[self.output_num].sizePolicy().hasHeightForWidth())
-        self.cw_output_ln_6[self.output_num].setSizePolicy(sizePolicy)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.cw_output_ln_6[self.output_num].sizePolicy().hasHeightForWidth())
+        self.cw_output_ln_6[self.output_num].setSizePolicy(size_policy)
         self.cw_output_ln_6[self.output_num].setMinimumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_6[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_ln_6[self.output_num].setFont(font2)

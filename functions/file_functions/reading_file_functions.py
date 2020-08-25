@@ -18,10 +18,14 @@ def reading_file(self):
     self.reading_window = MyWaitReading(self.file_name, self.file_ext, self.config_dict)
     self.reading_window.exec_()
     if self.reading_window.error_occurred:
-        info_str = ('An unexpected error occurred during the reading of the file, thus the GUI decided to stop the '
-                    'reading. Please read the log file to check which kind of error occurred.')
-        self.infoWindow = MyInfo(info_str)
-        self.infoWindow.exec_()
+        exc_type = self.reading_window.error_reason[0]
+        exc_value = self.reading_window.error_reason[1]
+        info_str = ('An exception occurred during the reading of the file. Thus the GUI decided to stop the '
+                    'process. Please read the log file to have more details about the exception. Contact the '
+                    'developer if the same exception occurs again.<br><br>Exception type: ' + exc_type +
+                    '<br><br>Exception value: ' + exc_value)
+        self.info_window = MyInfo(info_str)
+        self.info_window.exec_()
     if self.reading_window.success:
         self.opened_file = self.reading_window.final_dict['opened_file']
         self.list_of_global_attributes = self.reading_window.final_dict['glob_attr_list']
@@ -57,6 +61,7 @@ class MyWaitReading(QtWidgets.QDialog, Ui_waitBatchWindow):
         self.error_occurred = False
         self.success = True
         self.final_dict = None
+        self.error_reason = None
         self.setup_spinner()
         self.launch_reading_thread()
         logging.info('gui - old_reading_functions.py - MyWaitReading - ready')
@@ -81,10 +86,11 @@ class MyWaitReading(QtWidgets.QDialog, Ui_waitBatchWindow):
         self.final_dict = final_dict
         self.close()
 
-    def reading_failed(self):
+    def reading_failed(self, val):
         logging.debug('gui - old_reading_functions.py - MyWaitReading - reading_failed')
         self.error_occurred = True
         self.success = False
+        self.error_reason = val
         self.close()
 
     def setup_spinner(self):

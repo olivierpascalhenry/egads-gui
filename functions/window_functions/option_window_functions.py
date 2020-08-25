@@ -9,7 +9,7 @@ from ui.Ui_optionwindow import Ui_optionWindow
 from functions.help_functions import option_information_text
 from functions.window_functions.other_windows_functions import MyInfo, MyUpdateAvailable
 from functions.thread_functions.update_functions import CheckEGADSGuiUpdateOnline, CheckEGADSUpdateOnline
-from functions.utils import add_element, get_element_value
+from functions.utils import add_element, get_element_value, icon_creation_function
 from ui._version import _gui_version
 
 
@@ -354,14 +354,20 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
     def read_folder_list_quick_access(self):
         if self.ow_checkbox_8.isChecked():
             if pathlib.Path(pathlib.Path(self.user_path).joinpath('user_folder_list.xml')).exists():
+                icon = icon_creation_function('small_warning_icon.svg')
                 f = open(str(pathlib.Path(self.user_path).joinpath('user_folder_list.xml')), 'r')
                 doc = xml.dom.minidom.parse(f)
+                f.close()
                 folders = doc.getElementsByTagName('Folders')[0]
                 nodes = folders.getElementsByTagName('Folder')
                 for node in nodes:
                     path = get_element_value(node, 'Path')
-                    self.ow_folderList_1.addItem(str(path))
-                f.close()
+                    item = QtWidgets.QListWidgetItem()
+                    item.setText(str(path))
+                    if not pathlib.Path(str(path)).exists():
+                        item.setIcon(icon)
+                        item.setToolTip('The path is not valid')
+                    self.ow_folderList_1.addItem(item)
 
     def button_info(self):
         logging.debug('gui - option_window_functions.py - MyOptions - button_info')

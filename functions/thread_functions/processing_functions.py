@@ -5,13 +5,14 @@ import os
 import egads
 import math
 import copy
+import sys
 from PyQt5 import QtCore, QtWidgets
 
 
 class VariableProcessingThread(QtCore.QThread):
     started = QtCore.pyqtSignal()
     finished = QtCore.pyqtSignal(dict)
-    error = QtCore.pyqtSignal()
+    error = QtCore.pyqtSignal(list)
 
     def __init__(self, algorithm, list_combobox_input, coefficient_matrix_values, list_edit_output,
                  list_of_variables_and_attributes):
@@ -61,7 +62,8 @@ class VariableProcessingThread(QtCore.QThread):
             self.finished.emit(self.list_of_new_variables_and_attributes)
         except Exception:
             logging.exception('gui - file_functions.py - VariableProcessingThread - an exception occurred')
-            self.error.emit()
+            etype, evalue, _ = sys.exc_info()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def stop(self):
         logging.debug('gui - file_functions.py - VariableProcessingThread - stop')
@@ -70,7 +72,7 @@ class VariableProcessingThread(QtCore.QThread):
 
 class BatchProcessingThread(QtCore.QThread):
     progress = QtCore.pyqtSignal(list)
-    error = QtCore.pyqtSignal()
+    error = QtCore.pyqtSignal(list)
     finished = QtCore.pyqtSignal()
 
     def __init__(self, batch_dict, config_dict):
@@ -108,6 +110,7 @@ class BatchProcessingThread(QtCore.QThread):
         error = False
         f = None
         filename_base, start_nbr, digit_nbr = self.set_filename_base()
+        etype, evalue = None, None
         for i, file_path in enumerate(self.batch_dict['file_list']):
             try:
                 self.progress.emit([os.path.split(file_path)[1],
@@ -243,6 +246,9 @@ class BatchProcessingThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - BatchProcessingThread - algorithm_processing - an '
                                   'exception occurred during concatenation - stop_processing ' + str(stop_processing))
+
+                etype, evalue, _ = sys.exc_info()
+
                 if stop_processing == 0:
                     f.close()
                     continue
@@ -253,7 +259,7 @@ class BatchProcessingThread(QtCore.QThread):
         if not error:
             self.finished.emit()
         else:
-            self.error.emit()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def delete_variable(self):
         logging.debug('gui - file_functions.py - BatchProcessingThread - delete_variable')
@@ -266,6 +272,7 @@ class BatchProcessingThread(QtCore.QThread):
         error = False
         f = None
         filename_base, start_nbr, digit_nbr = self.set_filename_base()
+        etype, evalue = None, None
         for i, file_path in enumerate(self.batch_dict['file_list']):
             try:
                 self.progress.emit([os.path.split(file_path)[1],
@@ -348,6 +355,9 @@ class BatchProcessingThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - BatchProcessingThread - nc_to_na - an exception '
                                   'occurred during concatenation - stop_processing ' + str(stop_processing))
+
+                etype, evalue, _ = sys.exc_info()
+
                 if stop_processing == 0:
                     f.close()
                     continue
@@ -358,7 +368,7 @@ class BatchProcessingThread(QtCore.QThread):
         if not error:
             self.finished.emit()
         else:
-            self.error.emit()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def delete_metadata(self):
         logging.debug('gui - file_functions.py - BatchProcessingThread - delete_metadata')
@@ -371,6 +381,7 @@ class BatchProcessingThread(QtCore.QThread):
         error = False
         f = None
         filename_base, start_nbr, digit_nbr = self.set_filename_base()
+        etype, evalue = None, None
         for i, file_path in enumerate(self.batch_dict['file_list']):
             try:
                 self.progress.emit([os.path.split(file_path)[1],
@@ -417,6 +428,9 @@ class BatchProcessingThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - BatchProcessingThread - delete_metadata - an exception '
                                   'occurred during concatenation - stop_processing ' + str(stop_processing))
+
+                etype, evalue, _ = sys.exc_info()
+
                 if stop_processing == 0:
                     f.close()
                     continue
@@ -427,7 +441,7 @@ class BatchProcessingThread(QtCore.QThread):
         if not error:
             self.finished.emit()
         else:
-            self.error.emit()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def file_conversion(self):
         if self.batch_dict['processing_options'] == 'HDF5 -> NASA Ames':
@@ -451,6 +465,7 @@ class BatchProcessingThread(QtCore.QThread):
         error = False
         f = None
         filename_base, start_nbr, digit_nbr = self.set_filename_base()
+        etype, evalue = None, None
         for i, file_path in enumerate(self.batch_dict['file_list']):
             try:
                 self.progress.emit([os.path.split(file_path)[1],
@@ -462,6 +477,9 @@ class BatchProcessingThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - BatchProcessingThread - h5_to_na - an exception '
                                   'occurred during concatenation - stop_processing ' + str(stop_processing))
+
+                etype, evalue, _ = sys.exc_info()
+
                 if stop_processing == 0:
                     f.close()
                     continue
@@ -472,7 +490,7 @@ class BatchProcessingThread(QtCore.QThread):
         if not error:
             self.finished.emit()
         else:
-            self.error.emit()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def h5_to_nc(self):
         logging.debug('gui - file_functions.py - BatchProcessingThread - h5_to_nc')
@@ -482,6 +500,7 @@ class BatchProcessingThread(QtCore.QThread):
         error = False
         f = None
         filename_base, start_nbr, digit_nbr = self.set_filename_base()
+        etype, evalue = None, None
         for i, file_path in enumerate(self.batch_dict['file_list']):
             try:
                 self.progress.emit([os.path.split(file_path)[1],
@@ -493,6 +512,9 @@ class BatchProcessingThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - BatchProcessingThread - h5_to_nc - an exception '
                                   'occurred during concatenation - stop_processing ' + str(stop_processing))
+
+                etype, evalue, _ = sys.exc_info()
+
                 if stop_processing == 0:
                     f.close()
                     continue
@@ -503,7 +525,7 @@ class BatchProcessingThread(QtCore.QThread):
         if not error:
             self.finished.emit()
         else:
-            self.error.emit()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def nc_to_h5(self):
         logging.debug('gui - file_functions.py - BatchProcessingThread - nc_to_h5')
@@ -513,6 +535,7 @@ class BatchProcessingThread(QtCore.QThread):
         error = False
         f = None
         filename_base, start_nbr, digit_nbr = self.set_filename_base()
+        etype, evalue = None, None
         for i, file_path in enumerate(self.batch_dict['file_list']):
             try:
                 self.progress.emit([os.path.split(file_path)[1],
@@ -524,6 +547,9 @@ class BatchProcessingThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - BatchProcessingThread - nc_to_h5 - an exception '
                                   'occurred during concatenation - stop_processing ' + str(stop_processing))
+
+                etype, evalue, _ = sys.exc_info()
+
                 if stop_processing == 0:
                     f.close()
                     continue
@@ -534,7 +560,7 @@ class BatchProcessingThread(QtCore.QThread):
         if not error:
             self.finished.emit()
         else:
-            self.error.emit()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def nc_to_na(self):
         logging.debug('gui - file_functions.py - BatchProcessingThread - nc_to_na')
@@ -544,6 +570,7 @@ class BatchProcessingThread(QtCore.QThread):
         error = False
         f = None
         filename_base, start_nbr, digit_nbr = self.set_filename_base()
+        etype, evalue = None, None
         for i, file_path in enumerate(self.batch_dict['file_list']):
             try:
                 self.progress.emit([os.path.split(file_path)[1],
@@ -555,6 +582,9 @@ class BatchProcessingThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - BatchProcessingThread - nc_to_na - an exception '
                                   'occurred during concatenation - stop_processing ' + str(stop_processing))
+
+                etype, evalue, _ = sys.exc_info()
+
                 if stop_processing == 0:
                     f.close()
                     continue
@@ -565,7 +595,7 @@ class BatchProcessingThread(QtCore.QThread):
         if not error:
             self.finished.emit()
         else:
-            self.error.emit()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def na_to_h5(self):
         logging.debug('gui - file_functions.py - BatchProcessingThread - na_to_h5')
@@ -575,6 +605,7 @@ class BatchProcessingThread(QtCore.QThread):
         error = False
         f = None
         filename_base, start_nbr, digit_nbr = self.set_filename_base()
+        etype, evalue = None, None
         for i, file_path in enumerate(self.batch_dict['file_list']):
             try:
                 self.progress.emit([os.path.split(file_path)[1],
@@ -586,6 +617,9 @@ class BatchProcessingThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - BatchProcessingThread - na_to_h5 - an exception '
                                   'occurred during concatenation - stop_processing ' + str(stop_processing))
+
+                etype, evalue, _ = sys.exc_info()
+
                 if stop_processing == 0:
                     f.close()
                     continue
@@ -596,7 +630,7 @@ class BatchProcessingThread(QtCore.QThread):
         if not error:
             self.finished.emit()
         else:
-            self.error.emit()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def na_to_nc(self):
         logging.debug('gui - file_functions.py - BatchProcessingThread - na_to_nc')
@@ -606,11 +640,12 @@ class BatchProcessingThread(QtCore.QThread):
         error = False
         f = None
         filename_base, start_nbr, digit_nbr = self.set_filename_base()
+        etype, evalue = None, None
         for i, file_path in enumerate(self.batch_dict['file_list']):
             try:
                 self.progress.emit([os.path.split(file_path)[1],
                                     math.floor(100 * float(i) / float(len(self.batch_dict['file_list'])))])
-                ext = pathlib.Path(file_path).suffix
+                # ext = pathlib.Path(file_path).suffix
                 filename = self.set_filename(file_path, '.nc', filename_base, start_nbr, digit_nbr)
                 f = egads.input.EgadsNasaAmes(file_path, 'r')
                 f.convert_to_netcdf(nc_file=os.path.join(dest_folder, filename))
@@ -618,6 +653,9 @@ class BatchProcessingThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - BatchProcessingThread - na_to_nc - an exception '
                                   'occurred during concatenation - stop_processing ' + str(stop_processing))
+
+                etype, evalue, _ = sys.exc_info()
+
                 if stop_processing == 0:
                     f.close()
                     continue
@@ -628,7 +666,7 @@ class BatchProcessingThread(QtCore.QThread):
         if not error:
             self.finished.emit()
         else:
-            self.error.emit()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def concatenate_files(self):
         logging.debug('gui - file_functions.py - BatchProcessingThread - concatenate_files')
@@ -641,6 +679,7 @@ class BatchProcessingThread(QtCore.QThread):
         out_format = self.batch_dict['out_format']
         error = False
         f = None
+        etype, evalue = None, None
         if self.batch_dict['filename_options'] is None:
             if out_format == 'NetCDF':
                 ext = '.nc'
@@ -723,6 +762,9 @@ class BatchProcessingThread(QtCore.QThread):
                     logging.exception('gui - file_functions.py - BatchProcessingThread - concatenate_files - an '
                                       'exception occurred during concatenation - stop_processing '
                                       + str(stop_processing))
+
+                    etype, evalue, _ = sys.exc_info()
+
                     if stop_processing == 0:
                         f.close()
                         continue
@@ -741,7 +783,7 @@ class BatchProcessingThread(QtCore.QThread):
                 self.finished.emit()
             else:
                 final_file.close()
-                self.error.emit()
+                self.error.emit([etype.__name__, str(evalue)])
         elif out_format == 'NASA Ames':
             final_file = egads.input.NasaAmes()
             na_dict = final_file.create_na_dict()
@@ -785,6 +827,9 @@ class BatchProcessingThread(QtCore.QThread):
                     logging.exception('gui - file_functions.py - BatchProcessingThread - concatenate_files - an '
                                       'exception occurred during concatenation - stop_processing '
                                       + str(stop_processing))
+
+                    etype, evalue, _ = sys.exc_info()
+
                     if stop_processing == 0:
                         f.close()
                         continue
@@ -814,7 +859,7 @@ class BatchProcessingThread(QtCore.QThread):
                 self.finished.emit()
             else:
                 final_file.close()
-                self.error.emit()
+                self.error.emit([etype.__name__, str(evalue)])
 
     def stop(self):
         logging.debug('gui - file_functions.py - BatchProcessingThread - stop')

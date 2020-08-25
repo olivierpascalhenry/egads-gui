@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ticks_colorbar_window.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -180,85 +180,6 @@ class Ui_tickscolorbarWindow(object):
 "}")
         self.gridLayout = QtWidgets.QGridLayout(tickscolorbarWindow)
         self.gridLayout.setObjectName("gridLayout")
-        self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem)
-        self.ok_button = QtWidgets.QToolButton(tickscolorbarWindow)
-        self.ok_button.setMinimumSize(QtCore.QSize(100, 27))
-        self.ok_button.setMaximumSize(QtCore.QSize(100, 27))
-        font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ok_button.setFont(font)
-        self.ok_button.setStyleSheet("QToolButton {\n"
-"    border: 1px solid #acacac;\n"
-"    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
-"    color: black;\n"
-"}\n"
-"\n"
-"QToolButton:hover {\n"
-"    border: 1px solid #7eb4ea;\n"
-"    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
-"}\n"
-"\n"
-"\n"
-"QToolButton:pressed {\n"
-"    border: 1px solid #579de5;\n"
-"    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-"                                      stop: 0 #daecfc, stop: 1 #c4e0fc);\n"
-"}")
-        self.ok_button.setObjectName("ok_button")
-        self.horizontalLayout_7.addWidget(self.ok_button)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem1)
-        self.cancel_button = QtWidgets.QToolButton(tickscolorbarWindow)
-        self.cancel_button.setMinimumSize(QtCore.QSize(100, 27))
-        self.cancel_button.setMaximumSize(QtCore.QSize(100, 27))
-        font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.cancel_button.setFont(font)
-        self.cancel_button.setStyleSheet("QToolButton {\n"
-"    border: 1px solid #acacac;\n"
-"    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
-"    color: black;\n"
-"}\n"
-"\n"
-"QToolButton:hover {\n"
-"    border: 1px solid #7eb4ea;\n"
-"    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
-"}\n"
-"\n"
-"\n"
-"QToolButton:pressed {\n"
-"    border: 1px solid #579de5;\n"
-"    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-"                                      stop: 0 #daecfc, stop: 1 #c4e0fc);\n"
-"}")
-        self.cancel_button.setObjectName("cancel_button")
-        self.horizontalLayout_7.addWidget(self.cancel_button)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem2)
-        self.gridLayout.addLayout(self.horizontalLayout_7, 2, 0, 1, 1)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
@@ -267,8 +188,8 @@ class Ui_tickscolorbarWindow(object):
         self.label.setMinimumSize(QtCore.QSize(0, 27))
         self.label.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.label.setFont(font)
@@ -280,8 +201,8 @@ class Ui_tickscolorbarWindow(object):
         self.verticalLayout_2.addWidget(self.label)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem3)
+        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
         self.add_button = QtWidgets.QToolButton(tickscolorbarWindow)
         self.add_button.setMinimumSize(QtCore.QSize(27, 27))
         self.add_button.setMaximumSize(QtCore.QSize(27, 27))
@@ -320,8 +241,8 @@ class Ui_tickscolorbarWindow(object):
         self.del_button.setIconSize(QtCore.QSize(23, 23))
         self.del_button.setObjectName("del_button")
         self.horizontalLayout.addWidget(self.del_button)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem4)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
         self.horizontalLayout_3.addLayout(self.verticalLayout_2)
         self.table = QtWidgets.QTableWidget(tickscolorbarWindow)
@@ -333,8 +254,8 @@ class Ui_tickscolorbarWindow(object):
         self.table.setMinimumSize(QtCore.QSize(0, 50))
         self.table.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         font.setBold(False)
         font.setWeight(50)
         font.setKerning(True)
@@ -529,15 +450,16 @@ class Ui_tickscolorbarWindow(object):
         self.table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.table.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        self.table.setGridStyle(QtCore.Qt.SolidLine)
+        self.table.setShowGrid(True)
+        self.table.setGridStyle(QtCore.Qt.NoPen)
         self.table.setRowCount(1)
         self.table.setColumnCount(7)
         self.table.setObjectName("table")
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         item.setFont(font)
         brush = QtGui.QBrush(QtGui.QColor(230, 230, 230))
         brush.setStyle(QtCore.Qt.NoBrush)
@@ -547,8 +469,8 @@ class Ui_tickscolorbarWindow(object):
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         item.setFont(font)
         brush = QtGui.QBrush(QtGui.QColor(230, 230, 230))
         brush.setStyle(QtCore.Qt.NoBrush)
@@ -558,8 +480,8 @@ class Ui_tickscolorbarWindow(object):
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         item.setFont(font)
         brush = QtGui.QBrush(QtGui.QColor(230, 230, 230))
         brush.setStyle(QtCore.Qt.NoBrush)
@@ -569,8 +491,8 @@ class Ui_tickscolorbarWindow(object):
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         item.setFont(font)
         brush = QtGui.QBrush(QtGui.QColor(230, 230, 230))
         brush.setStyle(QtCore.Qt.NoBrush)
@@ -580,8 +502,8 @@ class Ui_tickscolorbarWindow(object):
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         item.setFont(font)
         brush = QtGui.QBrush(QtGui.QColor(230, 230, 230))
         brush.setStyle(QtCore.Qt.NoBrush)
@@ -591,8 +513,8 @@ class Ui_tickscolorbarWindow(object):
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         item.setFont(font)
         brush = QtGui.QBrush(QtGui.QColor(230, 230, 230))
         brush.setStyle(QtCore.Qt.NoBrush)
@@ -602,8 +524,8 @@ class Ui_tickscolorbarWindow(object):
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         item.setFont(font)
         brush = QtGui.QBrush(QtGui.QColor(230, 230, 230))
         brush.setStyle(QtCore.Qt.NoBrush)
@@ -620,8 +542,116 @@ class Ui_tickscolorbarWindow(object):
         self.table.verticalHeader().setMinimumSectionSize(35)
         self.horizontalLayout_3.addWidget(self.table)
         self.gridLayout.addLayout(self.horizontalLayout_3, 0, 0, 1, 1)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 2, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem5, 1, 0, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 2, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacerItem2, 1, 0, 1, 1)
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem3)
+        self.ok_button = QtWidgets.QToolButton(tickscolorbarWindow)
+        self.ok_button.setMinimumSize(QtCore.QSize(100, 27))
+        self.ok_button.setMaximumSize(QtCore.QSize(100, 27))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
+        font.setBold(False)
+        font.setWeight(50)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ok_button.setFont(font)
+        self.ok_button.setStyleSheet("QToolButton {\n"
+"    border: 1px solid #acacac;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
+"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"QToolButton:hover {\n"
+"    border: 1px solid #7eb4ea;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
+"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"}\n"
+"\n"
+"\n"
+"QToolButton:pressed {\n"
+"    border: 1px solid #579de5;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #daecfc, stop: 1 #c4e0fc);\n"
+"}")
+        self.ok_button.setObjectName("ok_button")
+        self.horizontalLayout_7.addWidget(self.ok_button)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem4)
+        self.cancel_button = QtWidgets.QToolButton(tickscolorbarWindow)
+        self.cancel_button.setMinimumSize(QtCore.QSize(100, 27))
+        self.cancel_button.setMaximumSize(QtCore.QSize(100, 27))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
+        font.setBold(False)
+        font.setWeight(50)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.cancel_button.setFont(font)
+        self.cancel_button.setStyleSheet("QToolButton {\n"
+"    border: 1px solid #acacac;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
+"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"QToolButton:hover {\n"
+"    border: 1px solid #7eb4ea;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
+"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"}\n"
+"\n"
+"\n"
+"QToolButton:pressed {\n"
+"    border: 1px solid #579de5;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #daecfc, stop: 1 #c4e0fc);\n"
+"}")
+        self.cancel_button.setObjectName("cancel_button")
+        self.horizontalLayout_7.addWidget(self.cancel_button)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem5)
+        self.info_button = QtWidgets.QToolButton(tickscolorbarWindow)
+        self.info_button.setMinimumSize(QtCore.QSize(27, 27))
+        self.info_button.setMaximumSize(QtCore.QSize(27, 27))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
+        font.setBold(False)
+        font.setWeight(50)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.info_button.setFont(font)
+        self.info_button.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("icons/info_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.info_button.setIcon(icon3)
+        self.info_button.setIconSize(QtCore.QSize(23, 23))
+        self.info_button.setObjectName("info_button")
+        self.horizontalLayout_7.addWidget(self.info_button)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem6)
+        self.gridLayout.addLayout(self.horizontalLayout_7, 2, 0, 1, 1)
 
         self.retranslateUi(tickscolorbarWindow)
         QtCore.QMetaObject.connectSlotsByName(tickscolorbarWindow)
@@ -629,24 +659,10 @@ class Ui_tickscolorbarWindow(object):
     def retranslateUi(self, tickscolorbarWindow):
         _translate = QtCore.QCoreApplication.translate
         tickscolorbarWindow.setWindowTitle(_translate("tickscolorbarWindow", "Set your own ticks/labels"))
-        self.ok_button.setText(_translate("tickscolorbarWindow", "Ok"))
-        self.cancel_button.setText(_translate("tickscolorbarWindow", "Cancel"))
         self.label.setText(_translate("tickscolorbarWindow", "Colorbar ticks:"))
         __sortingEnabled = self.table.isSortingEnabled()
         self.table.setSortingEnabled(False)
-        item = self.table.item(0, 0)
-        item.setToolTip(_translate("tickscolorbarWindow", "Sunday"))
-        item = self.table.item(0, 1)
-        item.setToolTip(_translate("tickscolorbarWindow", "Monday"))
-        item = self.table.item(0, 2)
-        item.setToolTip(_translate("tickscolorbarWindow", "Tuesday"))
-        item = self.table.item(0, 3)
-        item.setToolTip(_translate("tickscolorbarWindow", "Wednesday"))
-        item = self.table.item(0, 4)
-        item.setToolTip(_translate("tickscolorbarWindow", "Thursday"))
-        item = self.table.item(0, 5)
-        item.setToolTip(_translate("tickscolorbarWindow", "Friday"))
-        item = self.table.item(0, 6)
-        item.setToolTip(_translate("tickscolorbarWindow", "Saturday"))
         self.table.setSortingEnabled(__sortingEnabled)
+        self.ok_button.setText(_translate("tickscolorbarWindow", "Ok"))
+        self.cancel_button.setText(_translate("tickscolorbarWindow", "Cancel"))
 

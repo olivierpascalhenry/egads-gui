@@ -5,7 +5,8 @@ import re
 import pathlib
 from functions.window_functions.plot_gd_option_gui_functions import add_figure_options, add_plot_options
 from functions.window_functions.plot_gd_option_secondary_functions import (set_projection_function, wait_window,
-                                                                           close_wait_window, update_wait_window)
+                                                                           close_wait_window, update_wait_window,
+                                                                           close_wait_window_error)
 from functions.thread_functions.plot_functions import DrawGriddedMap
 from functions.material_functions import cmap_default_fig_margins, grid_projection_parameters, cmap_dict
 import matplotlib.pyplot as plt
@@ -149,24 +150,20 @@ def set_single_gd_fig_options(self):
 def set_single_gd_plt_options(self):
     logging.debug('gui - plot_gd_main_functions.py - set_single_gd_plt_options')
     if self.plot_dict['georeferenced']:
-        self.gd_plot_options['xticks'] = [-180., -120.,  -60.,    0.,   60.,  120.,  180.]
-        self.gd_plot_options['yticks'] = [-100.,  -80.,  -60.,  -40.,  -20.,    0.,   20.,   40.,   60.,   80.,  100.]
-        self.gd_plot_options['default_xticks'] = [-180., -120., -60., 0., 60., 120., 180.]
-        self.gd_plot_options['default_yticks'] = [-100., -80., -60., -40., -20., 0., 20., 40., 60., 80., 100.]
+        self.gd_plot_options['xticks'] = [-180., -120., -60., 0., 60., 120., 180.]
+        self.gd_plot_options['yticks'] = [-100.,  -80., -60., -40., -20., 0., 20., 40., 60., 80., 100.]
         self.gd_ticks_options['xticks'] = [-180., -120., -60., 0., 60., 120., 180.]
         self.gd_ticks_options['yticks'] = [-100., -80., -60., -40., -20., 0., 20., 40., 60., 80., 100.]
         self.gd_extent_options['ymin'] = -90
         self.gd_extent_options['ymax'] = 90
         self.gd_extent_options['xmin'] = -180
         self.gd_extent_options['xmax'] = 180
+        self.gd_extent_options['central_longitude_extent'] = True
         self.gd_plot_options['ymin'] = -90
         self.gd_plot_options['ymax'] = 90
         self.gd_plot_options['xmin'] = -180
         self.gd_plot_options['xmax'] = 180
-        self.gd_plot_options['default_ymin'] = -90
-        self.gd_plot_options['default_ymax'] = 90
-        self.gd_plot_options['default_xmin'] = -180
-        self.gd_plot_options['default_xmax'] = 180
+        self.gd_plot_options['central_longitude_extent'] = True
         self.gd_layer_order = {'Background': 1, 'Data': 3, 'Coasts': 4, 'Lands': 2, 'Rivers': 5, 'Lakes': 6, 'Grid': 7}
         self.gd_plot_options['layer_order'] = {'Background': 1, 'Data': 3, 'Coasts': 4, 'Lands': 2, 'Rivers': 5,
                                                'Lakes': 6, 'Grid': 7}
@@ -228,34 +225,18 @@ def set_single_gd_plt_options(self):
 def plot_single_grid_start(self):
     logging.debug('gui - plot_gd_main_functions.py - plot_single_grid_start')
     if self.plot_dict['georeferenced']:
-        try:
-            layer_num = self.plot_dict['layer_num']
-            var_values = numpy.take(self.variables[self.var_name]['values'], self.plot_dict['layer_idx'], layer_num)
-            var_values, lon = cartopy.util.add_cyclic_point(var_values, coord=self.plot_dict['lon_values'],
-                                                            axis=self.plot_dict['lon_num'] - 1)
-        except KeyError:
-            var_values = self.variables[self.var_name]['values']
-            var_values, lon = cartopy.util.add_cyclic_point(var_values, coord=self.plot_dict['lon_values'],
-                                                            axis=self.plot_dict['lon_num'])
-        self.plot_dict['var_values'], self.plot_dict['lon_values_cyclic'] = var_values, lon
         proj_instance = set_projection_function(self.gd_plot_options['projection'],
                                                 self.gd_plot_options['projection_options'])
         self.plot_dict['projection_instance'] = proj_instance
-    else:
-        try:
-            layer_num = self.plot_dict['layer_num']
-            var_values = numpy.take(self.variables[self.var_name]['values'], self.plot_dict['layer_idx'], layer_num)
-        except KeyError:
-            var_values = self.variables[self.var_name]['values']
-        self.plot_dict['var_values'] = var_values
-        self.plot_dict['projection_instance'] = None
+
     self.plot_dict['ax'] = plt.subplot(len(self.variables), 1, 1, projection=self.plot_dict['projection_instance'])
     self.plot_dict['ax'].set_global()
-    self.draw_map_thread = DrawGriddedMap(self.canvas, self.plot_dict, self.gd_figure_options, self.gd_plot_options,
-                                          self.gui_path)
+    self.draw_map_thread = DrawGriddedMap(self.canvas, self.variables, self.var_name, self.plot_dict,
+                                          self.gd_figure_options, self.gd_plot_options, self.gui_path)
     self.draw_map_thread.started.connect(lambda: wait_window(self))
     self.draw_map_thread.update.connect(lambda val: update_wait_window(self, val))
     self.draw_map_thread.finished.connect(lambda: close_wait_window(self))
+    self.draw_map_thread.error.connect(lambda val: close_wait_window_error(self, val))
     self.draw_map_thread.start()
 
 
@@ -267,12 +248,25 @@ def update_gd_fig_plt_options(self):
         self.plot_zoom()
 
     if self.plot_dict['georeferenced']:
-        self.gd_plot_options['xticks'] = self.gd_ticks_options['xticks']
-        self.gd_plot_options['yticks'] = self.gd_ticks_options['yticks']
-        self.gd_plot_options['ymin'] = self.gd_extent_options['ymin']
-        self.gd_plot_options['ymax'] = self.gd_extent_options['ymax']
-        self.gd_plot_options['xmin'] = self.gd_extent_options['xmin']
-        self.gd_plot_options['xmax'] = self.gd_extent_options['xmax']
+        if self.gd_ticks_options:
+            self.gd_plot_options['xticks'] = self.gd_ticks_options['xticks']
+            self.gd_plot_options['yticks'] = self.gd_ticks_options['yticks']
+        else:
+            self.gd_plot_options['xticks'] = None
+            self.gd_plot_options['yticks'] = None
+        if self.gd_extent_options:
+            self.gd_plot_options['ymin'] = self.gd_extent_options['ymin']
+            self.gd_plot_options['ymax'] = self.gd_extent_options['ymax']
+            self.gd_plot_options['xmin'] = self.gd_extent_options['xmin']
+            self.gd_plot_options['xmax'] = self.gd_extent_options['xmax']
+            if self.gd_extent_options:
+                self.gd_plot_options['central_longitude_extent'] = self.gd_extent_options['central_longitude_extent']
+        else:
+            self.gd_plot_options['ymin'] = None
+            self.gd_plot_options['ymax'] = None
+            self.gd_plot_options['xmin'] = None
+            self.gd_plot_options['xmax'] = None
+            self.gd_plot_options['central_longitude_extent'] = None
         self.gd_plot_options['layer_order'] = self.gd_layer_order
         self.gd_plot_options['projection'] = str(self.pw_grid_combobox_7.currentText())
         self.gd_plot_options['projection_options'] = self.gd_projection_options
@@ -457,7 +451,7 @@ def update_gd_fig_plt_options(self):
     except ValueError:
         self.gd_plot_options['colorbar_min_value'] = None
     try:
-        self.gd_plot_options['colorbar_step_value'] = float(self.pw_grid_line_7.text())
+        self.gd_plot_options['colorbar_step_value'] = int(self.pw_grid_line_7.text())
     except ValueError:
         self.gd_plot_options['colorbar_step_value'] = None
 

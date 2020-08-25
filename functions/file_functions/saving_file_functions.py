@@ -14,12 +14,17 @@ def saving_file(self, save_file_name, save_file_ext, open_file_ext):
     self.saving_window.exec_()
     if self.saving_window.error_occurred:
         if self.saving_window.error_reason:
-            info_str = self.saving_window.error_reason
+            exc_type = self.saving_window.error_reason[0]
+            exc_value = self.saving_window.error_reason[1]
+            info_str = ('An exception occurred during the saving of the file. Thus the GUI decided to stop the '
+                        'process. Please read the log file to have more details about the exception. Contact the '
+                        'developer if the same exception occurs again.<br><br>Exception type: ' + exc_type +
+                        '<br><br>Exception value: ' + exc_value)
         else:
             info_str = ('An unexpected error occurred during the saving of the file, thus the GUI decided to stop the '
                         'process. Please read the log file to check which kind of error occurred.')
-        self.infoWindow = MyInfo(info_str)
-        self.infoWindow.exec_()
+        self.info_window = MyInfo(info_str)
+        self.info_window.exec_()
     if self.saving_window.success:
         self.modified = False
         self.make_window_title()
@@ -72,8 +77,7 @@ class MyWaitSaving(QtWidgets.QDialog, Ui_waitBatchWindow):
         logging.debug('gui - saving_file_functions.py - MyWaitSaving - saving_failed')
         self.error_occurred = True
         self.success = False
-        if val:
-            self.error_reason = val
+        self.error_reason = val
         self.close()
 
     def setup_spinner(self):

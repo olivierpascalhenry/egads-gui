@@ -13,7 +13,7 @@ import xml
 import datetime
 import collections
 from ui._version import _gui_version
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from ui.Ui_mainwindow import Ui_MainWindow
 from functions.window_functions.option_window_functions import MyOptions
 from functions.window_functions.plot_window_functions import PlotWindow
@@ -59,6 +59,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.system = system
         self.installed_app = installed
         self.egads_config_dict = egads.config_dict
+
+        QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-Regular.ttf')
+        QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-SemiBold.ttf')
+
+
         self.setupUi(self)
         self.font_list, self.default_font = setup_fonts()
         self.list_of_algorithms = create_algorithm_dict()

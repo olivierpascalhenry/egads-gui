@@ -9,17 +9,17 @@ import matplotlib.pyplot as plt
 def plot_ts_single(self):
     logging.debug('gui - plot_ts_main_functions.py - plot_ts_single')
     self.plot_type = 'single_timeseries'
-    plot = self.figure.add_subplot(1, 1, 1)
+    self.ts_plot = self.figure.add_subplot(1, 1, 1)
     yname = list(self.variables.keys())[0]
-    plot.plot(self.dimensions[self.variables[yname]['dimensions'][0]]['values'], self.variables[yname]['values'],
-              label=yname)
-    plot.set_ylabel(self.variables[yname]['units'])
-    plot.set_xlabel(self.dimensions[self.variables[yname]['dimensions'][0]]['units'])
-    plot.set_ylim([plot.axes.get_yticks()[0], plot.axes.get_yticks()[-1]])
-    plot.set_xlim([plot.axes.get_xticks()[0], plot.axes.get_xticks()[-1]])
-    plot.spines['top'].set_visible(False)
-    plot.spines['right'].set_visible(False)
-    leg = plot.legend(prop={'family': self.default_font, 'size': '10'})
+    self.ts_plot.plot(self.dimensions[self.variables[yname]['dimensions'][0]]['values'],
+                      self.variables[yname]['values'], label=yname)
+    self.ts_plot.set_ylabel(self.variables[yname]['units'])
+    self.ts_plot.set_xlabel(self.dimensions[self.variables[yname]['dimensions'][0]]['units'])
+    self.ts_plot.set_ylim([self.ts_plot.axes.get_yticks()[0], self.ts_plot.axes.get_yticks()[-1]])
+    self.ts_plot.set_xlim([self.ts_plot.axes.get_xticks()[0], self.ts_plot.axes.get_xticks()[-1]])
+    self.ts_plot.spines['top'].set_visible(False)
+    self.ts_plot.spines['right'].set_visible(False)
+    leg = self.ts_plot.legend(prop={'family': self.default_font, 'size': '10'})
     try:
         leg.set_draggable(True)
     except AttributeError:
@@ -38,21 +38,21 @@ def plot_ts_multiple(self, plot_type, pos_dict=None):
         self.plot_type = 'multiple_timeseries_single_fig'
         yunits = ''
         xunits = ''
-        plot = self.figure.add_subplot(1, 1, 1)
+        self.ts_plot = self.figure.add_subplot(1, 1, 1)
         for yname in self.variables:
             yvalues = self.variables[yname]['values']
             yunits = self.variables[yname]['units']
             xname = self.variables[yname]['dimensions'][0]
             xvalues = self.dimensions[xname]['values']
             xunits = self.dimensions[xname]['units']
-            plot.plot(xvalues, yvalues, label=yname)
-        plot.set_ylabel(yunits)
-        plot.set_xlabel(xunits)
-        plot.set_ylim([plot.axes.get_yticks()[0], plot.axes.get_yticks()[-1]])
-        plot.set_xlim([plot.axes.get_xticks()[0], plot.axes.get_xticks()[-1]])
-        plot.spines['top'].set_visible(False)
-        plot.spines['right'].set_visible(False)
-        leg = plot.legend(prop={'family': self.default_font, 'size': '10'})
+            self.ts_plot.plot(xvalues, yvalues, label=yname)
+        self.ts_plot.set_ylabel(yunits)
+        self.ts_plot.set_xlabel(xunits)
+        self.ts_plot.set_ylim([self.ts_plot.get_yticks()[0], self.ts_plot.get_yticks()[-1]])
+        self.ts_plot.set_xlim([self.ts_plot.get_xticks()[0], self.ts_plot.get_xticks()[-1]])
+        self.ts_plot.spines['top'].set_visible(False)
+        self.ts_plot.spines['right'].set_visible(False)
+        leg = self.ts_plot.legend(prop={'family': self.default_font, 'size': '10'})
         try:
             leg.set_draggable(True)
         except AttributeError:
@@ -88,8 +88,8 @@ def plot_ts_multiple(self, plot_type, pos_dict=None):
             subplot_list[i].plot(xvalues, yvalues, label=yname)
             subplot_list[i].set_ylabel(yunits)
             subplot_list[i].set_xlabel(xunits)
-            subplot_list[i].set_ylim([subplot_list[i].axes.get_yticks()[0], subplot_list[i].axes.get_yticks()[-1]])
-            subplot_list[i].set_xlim([subplot_list[i].axes.get_xticks()[0], subplot_list[i].axes.get_xticks()[-1]])
+            subplot_list[i].set_ylim([subplot_list[i].get_yticks()[0], subplot_list[i].get_yticks()[-1]])
+            subplot_list[i].set_xlim([subplot_list[i].get_xticks()[0], subplot_list[i].get_xticks()[-1]])
             subplot_list[i].spines['top'].set_visible(False)
             subplot_list[i].spines['right'].set_visible(False)
             leg = subplot_list[i].legend(prop={'family': self.default_font, 'size': '10'})
@@ -112,10 +112,10 @@ def set_single_ts_figure_options(self):
     self.ts_figure_options['title'] = ''
     self.ts_figure_options['title_font'] = self.default_font
     self.ts_figure_options['title_size'] = 10
-    self.ts_figure_options['xlabel'] = plt.axes().xaxis.get_label_text()
+    self.ts_figure_options['xlabel'] = self.ts_plot.get_xlabel()
     self.ts_figure_options['xlabel_font'] = self.default_font
     self.ts_figure_options['xlabel_size'] = 10
-    self.ts_figure_options['ylabel'] = plt.axes().yaxis.get_label_text()
+    self.ts_figure_options['ylabel'] = self.ts_plot.get_ylabel()
     self.ts_figure_options['ylabel_font'] = self.default_font
     self.ts_figure_options['ylabel_size'] = 10
     self.ts_figure_options['spine_top'] = False
@@ -132,20 +132,20 @@ def set_single_ts_figure_options(self):
     self.ts_figure_options['default_grid_size'] = 0.5
     self.ts_figure_options['grid_color'] = 'Black'
     self.ts_figure_options['display_legend'] = True
-    self.ts_figure_options['xlim_max'] = plt.axes().get_xlim()[1]
-    self.ts_figure_options['xlim_min'] = plt.axes().get_xlim()[0]
-    self.ts_figure_options['ylim_max'] = plt.axes().get_ylim()[1]
-    self.ts_figure_options['ylim_min'] = plt.axes().get_ylim()[0]
-    self.ts_figure_options['xlim_step'] = plt.axes().get_xticks()[1] - plt.axes().get_xticks()[0]
-    self.ts_figure_options['ylim_step'] = plt.axes().get_yticks()[1] - plt.axes().get_yticks()[0]
-    self.ts_figure_options['default_xlim_max'] = plt.axes().get_xlim()[1]
-    self.ts_figure_options['default_xlim_min'] = plt.axes().get_xlim()[0]
-    self.ts_figure_options['default_ylim_max'] = plt.axes().get_ylim()[1]
-    self.ts_figure_options['default_ylim_min'] = plt.axes().get_ylim()[0]
-    self.ts_figure_options['default_xlim_step'] = plt.axes().get_xticks()[1] - plt.axes().get_xticks()[0]
-    self.ts_figure_options['default_ylim_step'] = plt.axes().get_yticks()[1] - plt.axes().get_yticks()[0]
-    self.ts_figure_options['xticks'] = plt.axes().get_xticks()
-    self.ts_figure_options['yticks'] = plt.axes().get_yticks()
+    self.ts_figure_options['xlim_max'] = self.ts_plot.get_xlim()[1]
+    self.ts_figure_options['xlim_min'] = self.ts_plot.get_xlim()[0]
+    self.ts_figure_options['ylim_max'] = self.ts_plot.get_ylim()[1]
+    self.ts_figure_options['ylim_min'] = self.ts_plot.get_ylim()[0]
+    self.ts_figure_options['xlim_step'] = self.ts_plot.get_xticks()[1] - self.ts_plot.get_xticks()[0]
+    self.ts_figure_options['ylim_step'] = self.ts_plot.get_yticks()[1] - self.ts_plot.get_yticks()[0]
+    self.ts_figure_options['default_xlim_max'] = self.ts_plot.get_xlim()[1]
+    self.ts_figure_options['default_xlim_min'] = self.ts_plot.get_xlim()[0]
+    self.ts_figure_options['default_ylim_max'] = self.ts_plot.get_ylim()[1]
+    self.ts_figure_options['default_ylim_min'] = self.ts_plot.get_ylim()[0]
+    self.ts_figure_options['default_xlim_step'] = self.ts_plot.get_xticks()[1] - self.ts_plot.get_xticks()[0]
+    self.ts_figure_options['default_ylim_step'] = self.ts_plot.get_yticks()[1] - self.ts_plot.get_yticks()[0]
+    self.ts_figure_options['xticks'] = self.ts_plot.get_xticks()
+    self.ts_figure_options['yticks'] = self.ts_plot.get_yticks()
 
 
 def set_multiple_ts_figure_options(self, subplot_list):
@@ -187,24 +187,24 @@ def set_multiple_ts_figure_options(self, subplot_list):
 
 def set_single_ts_plot_options(self):
     logging.debug('gui - plot_ts_main_functions.py - set_single_ts_plot_options')
-    self.ts_plot_options['line_style'] = plt.axes().lines[0].get_linestyle()
+    self.ts_plot_options['line_style'] = self.ts_plot.get_lines()[0].get_linestyle()
     self.ts_plot_options['line_marker'] = 'line'
-    self.ts_plot_options['line_color'] = plt.axes().lines[0].get_color()
-    self.ts_plot_options['default_line_color'] = plt.axes().lines[0].get_color()
-    self.ts_plot_options['line_width'] = plt.axes().lines[0].get_linewidth()
-    self.ts_plot_options['default_line_width'] = plt.axes().lines[0].get_linewidth()
-    self.ts_plot_options['line_antialiased'] = plt.axes().lines[0].get_antialiased()
+    self.ts_plot_options['line_color'] = self.ts_plot.get_lines()[0].get_color()
+    self.ts_plot_options['default_line_color'] = self.ts_plot.get_lines()[0].get_color()
+    self.ts_plot_options['line_width'] = self.ts_plot.get_lines()[0].get_linewidth()
+    self.ts_plot_options['default_line_width'] = self.ts_plot.get_lines()[0].get_linewidth()
+    self.ts_plot_options['line_antialiased'] = self.ts_plot.get_lines()[0].get_antialiased()
     self.ts_plot_options['line_alpha'] = False
-    self.ts_plot_options['line_alpha_perc'] = plt.axes().lines[0].get_alpha()
-    self.ts_plot_options['default_line_alpha_perc'] = plt.axes().lines[0].get_alpha()
-    self.ts_plot_options['legend_label'] = plt.axes().lines[0].get_label()
-    self.ts_plot_options['default_legend_label'] = plt.axes().lines[0].get_label()
+    self.ts_plot_options['line_alpha_perc'] = self.ts_plot.get_lines()[0].get_alpha()
+    self.ts_plot_options['default_line_alpha_perc'] = self.ts_plot.get_lines()[0].get_alpha()
+    self.ts_plot_options['legend_label'] = self.ts_plot.get_lines()[0].get_label()
+    self.ts_plot_options['default_legend_label'] = self.ts_plot.get_lines()[0].get_label()
 
 
 def set_multiple_ts_plot_options(self, subplot_list=None):
     logging.debug('gui - plot_ts_main_functions.py - set_multiple_ts_plot_options')
     if subplot_list is None:
-        for line in plt.axes().lines:
+        for line in self.ts_plot.get_lines():
             plot_options = {'line_style': line.get_linestyle(),
                             'line_marker': 'line',
                             'line_color': line.get_color(),

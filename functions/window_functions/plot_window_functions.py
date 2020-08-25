@@ -53,6 +53,9 @@ class PlotWindow(QtWidgets.QDialog, Ui_plotWindow):
         self.thread_set_width_height = None
         self.draw_map_thread = None
         self.var_name = ''
+
+        self.ts_plot = None
+
         self.plot_type = ''
         self.plot_dict = {}
         self.ts_figure_options = {}
@@ -87,7 +90,7 @@ class PlotWindow(QtWidgets.QDialog, Ui_plotWindow):
         self.pw_navigate_bt_2.clicked.connect(self.navigate_layers_right)
         self.pw_update_bt_1.clicked.connect(self.update_options)
         self.pw_update_bt_2.clicked.connect(self.update_options)
-        self.set_window_size_thread()
+        # self.set_window_size_thread()
         self.select_plot_type()
         logging.info('gui - plot_window_functions.py - PlotWindow - ready')
 
@@ -121,9 +124,12 @@ class PlotWindow(QtWidgets.QDialog, Ui_plotWindow):
                     info_window = MyInfo(text)
                     info_window.exec_()
             else:
-                print('EGADS GUI can\'t plot variables with more than 2 dimensions.')
                 logging.info('gui - plot_window_functions.py - PlotWindow - select_plot_type - EGADS GUI can\'t plot '
-                             'variables with more than 2 dimensions.')
+                             'variables with more than 3 dimensions.')
+                text = 'Actually, EGADS Lineage GUI can\'t plot variables with more than three dimensions.'
+                info_window = MyInfo(text)
+                info_window.exec_()
+
         elif len(self.variables) > 1:
             logging.debug('gui - plot_window_functions.py - PlotWindow - select_plot_type - more than one variable '
                           'have been found, ' + str(len(self.variables)))
@@ -176,13 +182,20 @@ class PlotWindow(QtWidgets.QDialog, Ui_plotWindow):
                         self.remove_layer_navigation()
                         plot_ts_multiple(self, 'subplot', pos_dict)
                 else:
-                    print('EGADS GUI can\'t plot more than 1 variable with more than 1 dimensions')
                     logging.info('gui - plot_window_functions.py - PlotWindow - select_plot_type - EGADS GUI can\'t '
                                  'plot more than 1 variable with more than 1 dimensions')
+
+                    text = ('Actually, EGADS Lineage GUI can\'t plot more than one variable with more than one '
+                            'dimension each.')
+                    info_window = MyInfo(text)
+                    info_window.exec_()
             else:
-                print('Each variable has a different number of dimensions, this is not yet supported')
                 logging.info('gui - plot_window_functions.py - PlotWindow - select_plot_type - Each variable has a '
                              'different number of dimensions, this is not yet supported')
+                text = ('Each variable has a different number of dimensions, this is not yet supported by EGADS '
+                        'Lineage GUI')
+                info_window = MyInfo(text)
+                info_window.exec_()
 
     def plot_pan(self):
         logging.debug('gui - plot_window_functions.py - PlotWindow - plot_pan')
@@ -274,9 +287,21 @@ class PlotWindow(QtWidgets.QDialog, Ui_plotWindow):
         logging.debug('gui - plot_window_functions.py - PlotWindow - setup_plot_area')
         self.figure = plt.figure(facecolor='white')
         self.canvas = FigureCanvas(self.figure)
+        self.canvas.mpl_connect('resize_event', self.on_resize)
         self.pw_plot_fr.addWidget(self.canvas)
         self.navigation_toolbar = NavigationToolbar(self.canvas, self)
         self.navigation_toolbar.hide()
+
+    def on_resize(self, _):
+        fig_size = plt.gcf().get_size_inches()
+        if self.pw_saveOptions_cb_1.currentText() == 'Centimeters':
+            h = round((fig_size[1] * 2.54) * 100.) / 100.
+            w = round((fig_size[0] * 2.54) * 100.) / 100.
+        else:
+            h = fig_size[1]
+            w = fig_size[0]
+        self.pw_saveOptions_ln_1.setText(str(h))
+        self.pw_saveOptions_ln_2.setText(str(w))
 
     def plot_home(self):
         logging.debug('gui - plot_window_functions.py - PlotWindow - plot_home')
@@ -331,17 +356,6 @@ class PlotWindow(QtWidgets.QDialog, Ui_plotWindow):
             name = self.sender().objectName()
         info_window = MyInfo(self.information_text[name])
         info_window.exec_()
-
-    def set_window_size_thread(self):
-        logging.debug('gui - plot_window_functions.py - PlotWindow - set_window_size_thread')
-        self.thread_set_width_height = ProvideWidthHeight()
-        self.thread_set_width_height.finished.connect(self.set_window_size)
-        self.thread_set_width_height.start()
-
-    def set_window_size(self, val):
-        logging.debug('gui - plot_window_functions.py - PlotWindow - set_window_size')
-        self.pw_saveOptions_ln_1.setText(val[0])
-        self.pw_saveOptions_ln_2.setText(val[1])
 
     def navigate_layers_left(self):
         logging.debug('gui - plot_window_functions.py - PlotWindow - navigate_layers_left')

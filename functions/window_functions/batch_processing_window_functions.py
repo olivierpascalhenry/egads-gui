@@ -207,9 +207,12 @@ class MyBatchProcessing(QtWidgets.QDialog, Ui_batchProcessingWindow):
         error_occurred = processing_window.error_occurred
         success = processing_window.success
         if error_occurred:
-            info_str = ('An important error occurred during the batch processing. The GUI decided to stop the '
+            exc_type = processing_window.error_message[0]
+            exc_value = processing_window.error_message[1]
+            info_str = ('An important exception occurred during the batch processing. The GUI decided to stop the '
                         'processing based on the choice of the user (cf. first tab and error option). Please read the '
-                        'log file to check which kind or error occurred.')
+                        'log file to check details about the exception. Contact the developer if the same exception '
+                        'occurs again.<br><br>Exception type: ' + exc_type + '<br><br>Exception value: ' + exc_value)
             info_indow = MyInfo(info_str)
             info_indow.exec_()
         if success:
@@ -1526,6 +1529,7 @@ class MyWaitProcessing(QtWidgets.QDialog, Ui_waitBatchWindow):
         self.batch_thread = None
         self.error_occurred = False
         self.success = True
+        self.error_message = None
         self.setup_spinner()
         self.launch_processing_thread()
         logging.info('gui - batch_processing_window_functions.py - MyWaitProcessing - ready')
@@ -1549,10 +1553,11 @@ class MyWaitProcessing(QtWidgets.QDialog, Ui_waitBatchWindow):
         logging.debug('gui - batch_processing_window_functions.py - MyWaitProcessing - processing_finished')
         self.close()
 
-    def processing_failed(self):
+    def processing_failed(self, val):
         logging.debug('gui - batch_processing_window_functions.py - MyWaitProcessing - processing_failed')
         self.error_occurred = True
         self.success = False
+        self.error_message = val
         self.close()
 
     def setup_spinner(self):

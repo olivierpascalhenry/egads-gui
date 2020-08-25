@@ -447,26 +447,30 @@ def icon_creation_function(icon_filename):
 def font_creation_function(font_style):
     logging.debug('gui - utils.py - font_creation_function')
     font = QtGui.QFont()
-    font.setFamily("fonts/SourceSansPro-Regular.ttf")
+
     font.setKerning(True)
     font.setStyleStrategy(QtGui.QFont.PreferAntialias)
     if font_style == 'normal':
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
     elif font_style == 'big':
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setFamily("Source Sans Pro Semibold")
+        font.setPointSize(11)
+        # font.setBold(True)
+        # font.setWeight(75)
     elif font_style == 'small':
-        font.setPointSize(9)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(10)
     elif font_style == 'small-italic':
-        font.setPointSize(9)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(10)
         font.setItalic(True)
     return font
 
 
 def stylesheet_creation_function(stylesheet):
     logging.debug('gui - utils.py - stylesheet_creation_function')
-    stylesheet ='graphic_materials/style_sheets/' + stylesheet + '_stylesheet.dat'
+    stylesheet = 'graphic_materials/style_sheets/' + stylesheet + '_stylesheet.dat'
     f = open(stylesheet, 'r')
     stylesheet_str = ''.join(f.readlines())
     f.close()

@@ -8,6 +8,7 @@ import simplekml
 import numpy
 import zipfile
 import tempfile
+import sys
 from PyQt5 import QtCore
 import matplotlib as mpl
 from functions.material_functions import transparency_hexa_dict_function
@@ -15,7 +16,7 @@ from functions.material_functions import transparency_hexa_dict_function
 
 class ReadFileThread(QtCore.QThread):
     progress = QtCore.pyqtSignal(list)
-    error = QtCore.pyqtSignal()
+    error = QtCore.pyqtSignal(list)
     finished = QtCore.pyqtSignal(dict)
 
     def __init__(self, file_path, file_ext, config_dict):
@@ -121,7 +122,8 @@ class ReadFileThread(QtCore.QThread):
         except Exception:
             logging.exception('gui - file_functions.py - ReadFileThread : an error occured during the reading of a '
                               'file')
-            self.error.emit()
+            etype, evalue, _ = sys.exc_info()
+            self.error.emit([etype.__name__, str(evalue)])
 
     def stop(self):
         logging.debug('gui - file_functions.py - ReadFileThread - stop')
@@ -130,7 +132,7 @@ class ReadFileThread(QtCore.QThread):
 
 class SaveFileThread(QtCore.QThread):
     progress = QtCore.pyqtSignal(list)
-    error = QtCore.pyqtSignal(str)
+    error = QtCore.pyqtSignal(list)
     finished = QtCore.pyqtSignal()
 
     def __init__(self, file_name, file_ext, open_file_ext, glob_attr, var_dict):
@@ -226,7 +228,8 @@ class SaveFileThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - SaveFileThread : an error occured during the '
                                   'saving of a file')
-                self.error.emit('')
+                etype, evalue, _ = sys.exc_info()
+                self.error.emit([etype.__name__, str(evalue)])
         elif self.open_file_ext == 'NASA Ames Files (*.na)':
             try:
                 self.progress.emit(['Standby...', 0])
@@ -297,7 +300,8 @@ class SaveFileThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - SaveFileThread : an error occured during the '
                                   'saving of a file')
-                self.error.emit('')
+                etype, evalue, _ = sys.exc_info()
+                self.error.emit([etype.__name__, str(evalue)])
 
     def run_hdf(self):
         format_dict = {'int32': 'int', 'float64': 'double', 'float32': 'float', 'int16': 'short', 'int8': 'byte',
@@ -358,7 +362,8 @@ class SaveFileThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - SaveFileThread : an error occured during the '
                                   'saving of a file')
-                self.error.emit('')
+                etype, evalue, _ = sys.exc_info()
+                self.error.emit([etype.__name__, str(evalue)])
         elif self.open_file_ext == 'NASA Ames Files (*.na)':
             try:
                 self.progress.emit(['Standby...', 0])
@@ -428,7 +433,8 @@ class SaveFileThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - SaveFileThread : an error occured during the '
                                   'saving of a file')
-                self.error.emit('')
+                etype, evalue, _ = sys.exc_info()
+                self.error.emit([etype.__name__, str(evalue)])
 
     def run_nasaames(self):
         if self.open_file_ext in ['NetCDF Files (*.nc *.cdf)', 'Hdf Files (*.h5 *.hdf5 *.he5)']:
@@ -557,7 +563,8 @@ class SaveFileThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - SaveFileThread : an error occured during the '
                                   'saving of a file')
-                self.error.emit('')
+                etype, evalue, _ = sys.exc_info()
+                self.error.emit([etype.__name__, str(evalue)])
         elif self.open_file_ext == 'NASA Ames Files (*.na)':
             try:
                 self.progress.emit(['Standby...', 0])
@@ -596,7 +603,8 @@ class SaveFileThread(QtCore.QThread):
             except Exception:
                 logging.exception('gui - file_functions.py - SaveFileThread : an error occured during the '
                                   'saving of a file')
-                self.error.emit('')
+                etype, evalue, _ = sys.exc_info()
+                self.error.emit([etype.__name__, str(evalue)])
 
     def stop(self):
         logging.debug('gui - file_functions.py - SaveFileThread - stop')

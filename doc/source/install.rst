@@ -11,14 +11,15 @@ Prerequisites
 
 The use of the EGADS GUI as a standard Python script requires the following packages:
 
-* Python 3.5.4 or newer. Available at https://www.python.org/
-* PyQt 5.11.3 or newer. Available at https://www.riverbankcomputing.com/software/pyqt/download5
-* EGADS 1.0.0 or newer. Available at https://pypi.python.org/pypi/egads
-* Matplotlib 3.0.3 or newer. Available at https://pypi.python.org/pypi/matplotlib
-* Cartopy 0.17.0 or newer. Available at https://pypi.org/project/Cartopy/
-* Simplekml 1.3.1 or newer. Available at https://pypi.org/project/simplekml/
-* Requests 2.18.4 or newer. Optional, only for update checking. Available at https://pypi.org/project/requests/
-* Markdown 3.1.1 or newer. Optional, only to have a nice changelog in the GUI. Available at https://pypi.org/project/Markdown/
+* Python 3.7 or newer. Available at https://www.python.org/
+* PyQt 5.15 or newer. Available at https://www.riverbankcomputing.com/software/pyqt/download5
+* EGADS Lineage 1.2.7 or newer. Available at https://pypi.python.org/pypi/egads
+* Matplotlib 3.3 or newer. Available at https://pypi.python.org/pypi/matplotlib
+* Cartopy 0.18 or newer. Available at https://pypi.org/project/Cartopy/
+* Simplekml 1.3.5 or newer. Available at https://pypi.org/project/simplekml/
+* Requests 2.24 or newer. Optional, only for update checking. Available at https://pypi.org/project/requests/
+* Markdown 3.2.2 or newer. Optional, only to have a nice changelog in the GUI. Available at https://pypi.org/project/Markdown/
+* Pillow 7.2 or newer. Optional, only to save figures in JPEG and TIFF format. Available at https://pypi.org/project/Pillow/
 
 
 *************
@@ -35,6 +36,8 @@ Installation
 The EGADS GUI is actually available as a common Python script, thus it doesn't need any particular installation. To use it, the package must be downloaded and uncompressed somewhere on the hard drive, and the script executed with the usual command ``python egads_gui.py`` from a terminal launched in the EGADS GUI directory. This version can be executed on any version of Linux, Windows and MacOS as soon as prerequisites are installed and working.
 
 To learn how to install EGADS, please read the EGADS documentation available at the following places: https://github.com/EUFAR/egads/tree/Lineage/Documentation & https://egads.readthedocs.io/en/lineage/
+
+Anaconda3 can be a good alternative, in particular if the use of Cartopy is mandatory and if the user can't build Cartopy himself. For Windows, an already-built version of Cartopy exists at the followind address : https://www.lfd.uci.edu/~gohlke/pythonlibs/.
 
 
 ***********

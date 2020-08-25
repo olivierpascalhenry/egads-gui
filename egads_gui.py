@@ -42,9 +42,9 @@ def launch_egads_gui(gui_path, user_path):
     logging.info('**********************************')
     logging.info('EGADS GUI ' + _gui_version + ' is starting ...')
     logging.info('**********************************')
-    logging.info('gui - gui frozen ? ' + str(frozen))
     system, release, version = platform.system_alias(platform.system(), platform.release(), platform.version())
     logging.info('gui - operating system: ' + system + ' ' + release + ' (' + version + ')')
+    logging.info('gui - gui frozen ? ' + str(frozen))
     installed = None
     if system == 'Windows':
         try:

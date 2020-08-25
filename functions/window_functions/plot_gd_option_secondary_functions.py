@@ -1,7 +1,7 @@
 import logging
 import cartopy
 from functions.window_functions.other_windows_functions import (MyWait, MyProjection, MyTicks, MyColorbarTicks,
-                                                                MyExtent, MyLayer)
+                                                                MyExtent, MyLayer, MyInfo)
 from functions.material_functions import cmap_default_fig_margins, grid_projection_parameters
 from PyQt5 import QtCore
 
@@ -23,8 +23,10 @@ def display_grid_projection_options(self, projection_options=None):
     if projection_options is None:
         projection_options = self.gd_projection_options
     text = 'Options: '
+    non_options = ['default_ticks', 'default_extent', 'central_longitude_extent', 'zonal_label_display', 'zlb_defaults']
     for option in sorted(projection_options.keys()):
-        text += option + '=' + str(projection_options[option]) + ' ; '
+        if option not in non_options:
+            text += option + '=' + str(projection_options[option]) + ' ; '
     text = text[: -3]
     self.pw_grid_label_13.setText(text)
 
@@ -33,14 +35,49 @@ def set_projection_options(self):
     logging.debug('gui - plot_gd_option_secondary_functions.py - set_projection_options')
     self.gd_projection_options = grid_projection_parameters()[str(self.pw_grid_combobox_7.currentText())]
     display_grid_projection_options(self, self.gd_projection_options)
-    if str(self.pw_grid_combobox_7.currentText()) not in ['PlateCarree', 'Mercator']:
-        self.pw_grid_set_ticks.setEnabled(False)
-        self.pw_grid_label_14.setEnabled(False)
-        self.pw_grid_label_15.setEnabled(False)
-    else:
+    self.gd_ticks_options = grid_projection_parameters()[str(self.pw_grid_combobox_7.currentText())]['default_ticks']
+    self.gd_extent_options = grid_projection_parameters()[str(self.pw_grid_combobox_7.currentText())]['default_extent']
+    if self.gd_extent_options:
+        cle = grid_projection_parameters()[str(self.pw_grid_combobox_7.currentText())]['central_longitude_extent']
+        self.gd_extent_options['central_longitude_extent'] = cle
+    label_display = grid_projection_parameters()[str(self.pw_grid_combobox_7.currentText())]['zonal_label_display']
+    if self.gd_ticks_options:
         self.pw_grid_set_ticks.setEnabled(True)
         self.pw_grid_label_14.setEnabled(True)
+        display_grid_ticks_options(self)
+    else:
+        self.pw_grid_set_ticks.setEnabled(False)
+        self.pw_grid_label_14.setEnabled(False)
+        self.pw_grid_label_14.setText('')
+
+    if self.gd_extent_options:
+        self.pw_grid_set_extent.setEnabled(True)
         self.pw_grid_label_15.setEnabled(True)
+        display_grid_extent(self)
+    else:
+        self.pw_grid_set_extent.setEnabled(False)
+        self.pw_grid_label_15.setEnabled(False)
+        self.pw_grid_label_15.setText('')
+
+    if label_display:
+        label_dict = grid_projection_parameters()[str(self.pw_grid_combobox_7.currentText())]['zlb_defaults']
+        self.pw_grid_checkbox_11.setChecked(label_dict['top'])
+        self.pw_grid_checkbox_12.setChecked(label_dict['bottom'])
+        self.pw_grid_checkbox_13.setChecked(label_dict['right'])
+        self.pw_grid_checkbox_14.setChecked(label_dict['left'])
+        self.pw_grid_checkbox_11.setEnabled(True)
+        self.pw_grid_checkbox_12.setEnabled(True)
+        self.pw_grid_checkbox_13.setEnabled(True)
+        self.pw_grid_checkbox_14.setEnabled(True)
+    else:
+        self.pw_grid_checkbox_11.setChecked(True)
+        self.pw_grid_checkbox_12.setChecked(True)
+        self.pw_grid_checkbox_13.setChecked(True)
+        self.pw_grid_checkbox_14.setChecked(True)
+        self.pw_grid_checkbox_11.setEnabled(False)
+        self.pw_grid_checkbox_12.setEnabled(False)
+        self.pw_grid_checkbox_13.setEnabled(False)
+        self.pw_grid_checkbox_14.setEnabled(False)
 
 
 def display_grid_ticks_options(self, ticks_options=None):
@@ -54,10 +91,14 @@ def display_grid_extent(self, extent_options=None):
     logging.debug('gui - plot_gd_option_secondary_functions.py - display_grid_extent')
     if extent_options is None:
         extent_options = self.gd_extent_options
-    self.pw_grid_label_15.setText('Y min: ' + str(extent_options['ymin'])
-                                  + ' | Y max: ' + str(extent_options['ymax'])
-                                  + ' | X min: ' + str(extent_options['xmin'])
-                                  + ' | X max: ' + str(extent_options['xmax']))
+
+    if extent_options['ymin'] is not None:
+        self.pw_grid_label_15.setText('Y min: ' + str(extent_options['ymin'])
+                                      + ' | Y max: ' + str(extent_options['ymax'])
+                                      + ' | X min: ' + str(extent_options['xmin'])
+                                      + ' | X max: ' + str(extent_options['xmax']))
+    else:
+        self.pw_grid_label_15.setText('Y min: -90 | Y max: 90 | X min: -180 | X max: 180')
 
 
 def display_layer_order(self, layer_order=None):
@@ -447,7 +488,7 @@ def set_projection_function(proj, option_dict):
                                                   globe=option_dict['globe'])
     elif proj == 'AzimuthalEquidistant':
         proj_result = cartopy.crs.AzimuthalEquidistant(central_longitude=option_dict['central_longitude'],
-                                                       entral_latitude=option_dict['entral_latitude'],
+                                                       central_latitude=option_dict['central_latitude'],
                                                        false_easting=option_dict['false_easting'],
                                                        false_northing=option_dict['false_northing'],
                                                        globe=option_dict['globe'])
@@ -545,6 +586,18 @@ def close_wait_window(self):
     self.mywait_window.close()
 
 
+def close_wait_window_error(self, message):
+    logging.debug('gui - plot_gd_option_secondary_functions.py - close_wait_window_error')
+    self.mywait_window.close()
+    exc_type = message[0]
+    exc_value = message[1]
+    error_message = ('An exception has been thrown and the rendering of the figure couldn\'t be achieved. Please try '
+                     'again or select different options. Contact the developer if the same exception occurs again.'
+                     '<br><br>Exception type: ' + exc_type + '<br><br>Exception value: ' + exc_value)
+    info_window = MyInfo(error_message)
+    info_window.exec_()
+
+
 def projection_option_window(self):
     logging.debug('gui - plot_gd_option_secondary_functions.py - projection_option_window')
     option_window = MyProjection(self.gd_projection_options, str(self.pw_grid_combobox_7.currentText()))
@@ -556,7 +609,8 @@ def projection_option_window(self):
 
 def tick_option_window(self):
     logging.debug('gui - plot_gd_option_secondary_functions.py - tick_option_window')
-    ticks_window = MyTicks(self.gd_ticks_options)
+    default_tick_dict = grid_projection_parameters()[str(self.pw_grid_combobox_7.currentText())]['default_ticks']
+    ticks_window = MyTicks(self.gd_ticks_options, default_tick_dict)
     ticks_window.exec_()
     if ticks_window.new_option_dict is not None:
         self.gd_ticks_options = ticks_window.new_option_dict
@@ -565,7 +619,8 @@ def tick_option_window(self):
 
 def extent_option_window(self):
     logging.debug('gui - plot_gd_option_secondary_functions.py - tick_option_window')
-    extent_window = MyExtent(self.gd_extent_options)
+    default_extent_dict = grid_projection_parameters()[str(self.pw_grid_combobox_7.currentText())]['default_extent']
+    extent_window = MyExtent(self.gd_extent_options, default_extent_dict)
     extent_window.exec_()
     if extent_window.new_option_dict is not None:
         self.gd_extent_options = extent_window.new_option_dict

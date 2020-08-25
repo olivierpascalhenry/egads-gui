@@ -993,62 +993,65 @@ class MyProjection(QtWidgets.QDialog, Ui_projectionWindow):
     def parse_option_dict(self):
         logging.debug('gui - other_windows_functions.py - MyProjection - parse_option_dict')
         option_nbr = 0
+        non_options = ['default_ticks', 'default_extent', 'central_longitude_extent', 'zonal_label_display',
+                       'zlb_defaults']
         grid_layout = QtWidgets.QGridLayout()
         grid_layout.setObjectName('grid_layout')
         self.option_layout.addLayout(grid_layout)
         self.option_layout.setAlignment(QtCore.Qt.AlignTop)
         for option in sorted(self.option_dict):
-            self.label_list.append(QtWidgets.QLabel())
-            self.label_list[option_nbr].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTop |
-                                                     QtCore.Qt.AlignTrailing)
-            self.label_list[option_nbr].setMinimumSize(QtCore.QSize(0, 27))
-            self.label_list[option_nbr].setMaximumSize(QtCore.QSize(16777215, 27))
-            self.label_list[option_nbr].setFont(font_creation_function('normal'))
-            self.label_list[option_nbr].setText(option + ':')
-            self.label_list[option_nbr].setStyleSheet("QLabel {\n"
-                                                      "    color: rgb(45,45,45);\n"
-                                                      "}")
-            self.label_list[option_nbr].setObjectName(option + '_lb')
-            grid_layout.addWidget(self.label_list[option_nbr], option_nbr, 0, 1, 1)
-            self.line_list.append(QtWidgets.QLineEdit())
-            self.line_list[option_nbr].setMinimumSize(QtCore.QSize(100, 27))
-            self.line_list[option_nbr].setMaximumSize(QtCore.QSize(16777215, 27))
-            self.line_list[option_nbr].setFont(font_creation_function('small'))
-            self.line_list[option_nbr].setText(str(self.option_dict[option]))
-            self.line_list[option_nbr].setStyleSheet("QLineEdit {\n"
-                                                     "    border-radius: 3px;\n"
-                                                     "    padding: 1px 4px 1px 4px;\n"
-                                                     "    background-color:  rgb(240, 240, 240);\n"
-                                                     "    color: rgb(45,45,45);\n"
-                                                     "}\n"
-                                                     "\n"
-                                                     "QLineEdit:disabled {\n"
-                                                     "    background-color:  rgb(200,200,200);\n"
-                                                     "    color: rgb(45,45,45);\n"
-                                                     "}")
-            self.line_list[option_nbr].setObjectName(option + '_ln')
-            grid_layout.addWidget(self.line_list[option_nbr], option_nbr, 1, 1, 1)
-            if option == 'globe':
-                self.line_list[option_nbr].setEnabled(False)
-            self.button_list.append(QtWidgets.QToolButton())
-            self.button_list[option_nbr].setMinimumSize(QtCore.QSize(27, 27))
-            self.button_list[option_nbr].setMaximumSize(QtCore.QSize(27, 27))
-            self.button_list[option_nbr].setStyleSheet("QToolButton {\n"
-                                                       "    border: 1px solid transparent;\n"
-                                                       "    background-color: transparent;\n"
-                                                       "    width: 27px;\n"
-                                                       "    height: 27px;\n"
-                                                       "}\n"
-                                                       "\n"
-                                                       "QToolButton:flat {\n"
-                                                       "    border: none;\n"
-                                                       "}")
-            self.button_list[option_nbr].setIcon(icon_creation_function('info_icon.svg'))
-            self.button_list[option_nbr].setIconSize(QtCore.QSize(23, 23))
-            self.button_list[option_nbr].setObjectName(option + '_bt')
-            grid_layout.addWidget(self.button_list[option_nbr], option_nbr, 2, 1, 1)
-            self.button_list[option_nbr].clicked.connect(self.option_information)
-            option_nbr += 1
+            if option not in non_options:
+                self.label_list.append(QtWidgets.QLabel())
+                self.label_list[option_nbr].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTop |
+                                                         QtCore.Qt.AlignTrailing)
+                self.label_list[option_nbr].setMinimumSize(QtCore.QSize(0, 27))
+                self.label_list[option_nbr].setMaximumSize(QtCore.QSize(16777215, 27))
+                self.label_list[option_nbr].setFont(font_creation_function('normal'))
+                self.label_list[option_nbr].setText(option + ':')
+                self.label_list[option_nbr].setStyleSheet("QLabel {\n"
+                                                          "    color: rgb(45,45,45);\n"
+                                                          "}")
+                self.label_list[option_nbr].setObjectName(option + '_lb')
+                grid_layout.addWidget(self.label_list[option_nbr], option_nbr, 0, 1, 1)
+                self.line_list.append(QtWidgets.QLineEdit())
+                self.line_list[option_nbr].setMinimumSize(QtCore.QSize(100, 27))
+                self.line_list[option_nbr].setMaximumSize(QtCore.QSize(16777215, 27))
+                self.line_list[option_nbr].setFont(font_creation_function('small'))
+                self.line_list[option_nbr].setText(str(self.option_dict[option]))
+                self.line_list[option_nbr].setStyleSheet("QLineEdit {\n"
+                                                         "    border-radius: 3px;\n"
+                                                         "    padding: 1px 4px 1px 4px;\n"
+                                                         "    background-color:  rgb(240, 240, 240);\n"
+                                                         "    color: rgb(45,45,45);\n"
+                                                         "}\n"
+                                                         "\n"
+                                                         "QLineEdit:disabled {\n"
+                                                         "    background-color:  rgb(200,200,200);\n"
+                                                         "    color: rgb(45,45,45);\n"
+                                                         "}")
+                self.line_list[option_nbr].setObjectName(option + '_ln')
+                grid_layout.addWidget(self.line_list[option_nbr], option_nbr, 1, 1, 1)
+                if option == 'globe':
+                    self.line_list[option_nbr].setEnabled(False)
+                self.button_list.append(QtWidgets.QToolButton())
+                self.button_list[option_nbr].setMinimumSize(QtCore.QSize(27, 27))
+                self.button_list[option_nbr].setMaximumSize(QtCore.QSize(27, 27))
+                self.button_list[option_nbr].setStyleSheet("QToolButton {\n"
+                                                           "    border: 1px solid transparent;\n"
+                                                           "    background-color: transparent;\n"
+                                                           "    width: 27px;\n"
+                                                           "    height: 27px;\n"
+                                                           "}\n"
+                                                           "\n"
+                                                           "QToolButton:flat {\n"
+                                                           "    border: none;\n"
+                                                           "}")
+                self.button_list[option_nbr].setIcon(icon_creation_function('info_icon.svg'))
+                self.button_list[option_nbr].setIconSize(QtCore.QSize(23, 23))
+                self.button_list[option_nbr].setObjectName(option + '_bt')
+                grid_layout.addWidget(self.button_list[option_nbr], option_nbr, 2, 1, 1)
+                self.button_list[option_nbr].clicked.connect(self.option_information)
+                option_nbr += 1
 
     def prepare_new_dict(self):
         logging.debug('gui - other_windows_functions.py - MyProjection - prepare_new_dict')
@@ -1087,21 +1090,30 @@ class MyProjection(QtWidgets.QDialog, Ui_projectionWindow):
 
 
 class MyTicks(QtWidgets.QDialog, Ui_tickslabelsWindow):
-    def __init__(self, option_dict):
+    def __init__(self, option_dict, default_tick_dict):
         logging.debug('gui - other_windows_functions.py - MyTicks - __init__')
         QtWidgets.QWidget.__init__(self)
         self.setupUi(self)
         self.option_dict = option_dict
+        self.default_tick_dict = default_tick_dict
         self.new_option_dict = copy.deepcopy(self.option_dict)
         self.cancel = True
         self.ok_button.clicked.connect(self.prepare_new_dict)
         self.cancel_button.clicked.connect(self.close)
+        self.info_button.clicked.connect(self.display_information)
+        self.default_button.clicked.connect(self.set_default_values)
         self.x_add_button.clicked.connect(self.add_col)
         self.y_add_button.clicked.connect(self.add_col)
         self.x_del_button.clicked.connect(self.remove_col)
         self.y_del_button.clicked.connect(self.remove_col)
         self.parse_option_dict()
         logging.info('gui - other_windows_functions.py - MyTicks - ready')
+
+    def set_default_values(self):
+        self.new_option_dict['xticks'] = self.default_tick_dict['xticks']
+        self.new_option_dict['yticks'] = self.default_tick_dict['xticks']
+        self.cancel = False
+        self.close()
 
     def parse_option_dict(self):
         logging.debug('gui - other_windows_functions.py - MyTicks - parse_option_dict')
@@ -1125,7 +1137,11 @@ class MyTicks(QtWidgets.QDialog, Ui_tickslabelsWindow):
             table = self.x_table
         else:
             table = self.y_table
-        table.insertColumn(table.columnCount())
+        cells = table.selectedItems()
+        if cells:
+            table.insertColumn(table.indexFromItem(cells[0]).column() + 1)
+        else:
+            table.insertColumn(table.columnCount())
 
     def remove_col(self):
         logging.debug('gui - other_windows_functions.py - MyTicks - remove_col')
@@ -1134,7 +1150,11 @@ class MyTicks(QtWidgets.QDialog, Ui_tickslabelsWindow):
             table = self.x_table
         else:
             table = self.y_table
-        table.removeColumn(table.columnCount() - 1)
+        cells = table.selectedItems()
+        if cells:
+            table.removeColumn(table.indexFromItem(cells[0]).column())
+        else:
+            table.removeColumn(table.columnCount() - 1)
 
     def prepare_new_dict(self):
         logging.debug('gui - other_windows_functions.py - MyTicks - prepare_new_dict')
@@ -1170,6 +1190,17 @@ class MyTicks(QtWidgets.QDialog, Ui_tickslabelsWindow):
             self.cancel = False
             self.close()
 
+    @staticmethod
+    def display_information():
+        text = ('From this window, ticks and labels can be modified.<br><br>Buttons \'+\' and \'x\' control the cell '
+                'addition and deletion. If no cell is selected, the \'+\' button will add a cell at the end of the '
+                'row, and the \'x\' button will delete the last cell ; if a cell is selected, the \'+\' button will '
+                'add a cell after the selected one, and the \'x\' button will delete the selected cell.<br><br>To '
+                'validate an input, the \'ENTER\' key must be hit or another cell must be selected.<br><br> To '
+                'deselect a cell, click on it with the \'CTRL\' key pressed.')
+        info_window = MyInfo(text)
+        info_window.exec_()
+
     def closeEvent(self, event):
         logging.debug('gui - other_windows_functions.py - MyTicks - closeEvent')
         if self.cancel:
@@ -1178,17 +1209,28 @@ class MyTicks(QtWidgets.QDialog, Ui_tickslabelsWindow):
 
 
 class MyExtent(QtWidgets.QDialog, Ui_mapextentWindow):
-    def __init__(self, option_dict):
+    def __init__(self, option_dict, default_extent_dict):
         logging.debug('gui - other_windows_functions.py - MyExtent - __init__')
         QtWidgets.QWidget.__init__(self)
         self.setupUi(self)
         self.option_dict = option_dict
+        self.default_extent_dict = default_extent_dict
         self.new_option_dict = copy.deepcopy(self.option_dict)
         self.cancel = True
         self.ok_button.clicked.connect(self.prepare_new_dict)
+        self.default_button.clicked.connect(self.set_default_values)
         self.cancel_button.clicked.connect(self.close)
         self.parse_option_dict()
         logging.info('gui - other_windows_functions.py - MyExtent - ready')
+
+    def set_default_values(self):
+        self.new_option_dict['ymax'] = self.default_extent_dict['ymax']
+        self.new_option_dict['ymin'] = self.default_extent_dict['ymin']
+        self.new_option_dict['xmax'] = self.default_extent_dict['xmax']
+        self.new_option_dict['xmin'] = self.default_extent_dict['xmin']
+        self.new_option_dict['central_longitude_extent'] = self.default_extent_dict['central_longitude_extent']
+        self.cancel = False
+        self.close()
 
     def parse_option_dict(self):
         logging.debug('gui - other_windows_functions.py - MyExtent - prepare_new_dict')
@@ -1196,27 +1238,33 @@ class MyExtent(QtWidgets.QDialog, Ui_mapextentWindow):
         self.y_min_edit.setText(str(self.option_dict['ymin']))
         self.x_max_edit.setText(str(self.option_dict['xmax']))
         self.x_min_edit.setText(str(self.option_dict['xmin']))
+        if self.option_dict['central_longitude_extent'] is not None:
+            self.x_relative_ck.setChecked(self.option_dict['central_longitude_extent'])
+        else:
+            self.x_relative_ck.setEnabled(False)
 
     def prepare_new_dict(self):
         logging.debug('gui - other_windows_functions.py - MyExtent - prepare_new_dict')
         error = False
         y_max, y_min, x_max, x_min = None, None, None, None
-        try:
-            y_max = float(self.y_max_edit.text())
-        except ValueError:
-            error = True
-        try:
-            y_min = float(self.y_min_edit.text())
-        except ValueError:
-            error = True
-        try:
-            x_max = float(self.x_max_edit.text())
-        except ValueError:
-            error = True
-        try:
-            x_min = float(self.x_min_edit.text())
-        except ValueError:
-            error = True
+        if (self.y_max_edit.text() != 'None' or self.x_max_edit.text() != 'None' or self.y_min_edit.text() != 'None'
+                or self.x_min_edit.text() != 'None'):
+            try:
+                y_max = float(self.y_max_edit.text())
+            except ValueError:
+                error = True
+            try:
+                y_min = float(self.y_min_edit.text())
+            except ValueError:
+                error = True
+            try:
+                x_max = float(self.x_max_edit.text())
+            except ValueError:
+                error = True
+            try:
+                x_min = float(self.x_min_edit.text())
+            except ValueError:
+                error = True
         if error:
             text = ('One or more values can\'t be understand by Cartopy. Please correct them.'
                     + '<br><br>For your information, Cartopy requires numbers, floats or integers, for extent, not'
@@ -1229,6 +1277,10 @@ class MyExtent(QtWidgets.QDialog, Ui_mapextentWindow):
             self.new_option_dict['ymin'] = y_min
             self.new_option_dict['xmax'] = x_max
             self.new_option_dict['xmin'] = x_min
+
+            if self.x_relative_ck.isEnabled():
+                self.new_option_dict['central_longitude_extent'] = self.x_relative_ck.isChecked()
+
             self.cancel = False
             self.close()
 
@@ -1249,6 +1301,7 @@ class MyColorbarTicks(QtWidgets.QDialog, Ui_tickscolorbarWindow):
         self.cancel = True
         self.ok_button.clicked.connect(self.prepare_new_dict)
         self.cancel_button.clicked.connect(self.close)
+        self.info_button.clicked.connect(self.display_information)
         self.add_button.clicked.connect(self.add_col)
         self.del_button.clicked.connect(self.remove_col)
         self.parse_option_dict()
@@ -1265,11 +1318,19 @@ class MyColorbarTicks(QtWidgets.QDialog, Ui_tickscolorbarWindow):
 
     def add_col(self):
         logging.debug('gui - other_windows_functions.py - MyColorbarTicks - add_col')
-        self.table.insertColumn(self.table.columnCount())
+        cells = self.table.selectedItems()
+        if cells:
+            self.table.insertColumn(self.table.indexFromItem(cells[0]).column() + 1)
+        else:
+            self.table.insertColumn(self.table.columnCount())
 
     def remove_col(self):
         logging.debug('gui - other_windows_functions.py - MyColorbarTicks - remove_col')
-        self.table.removeColumn(self.table.columnCount() - 1)
+        cells = self.table.selectedItems()
+        if cells:
+            self.table.removeColumn(self.table.indexFromItem(cells[0]).column())
+        else:
+            self.table.removeColumn(self.table.columnCount() - 1)
 
     def prepare_new_dict(self):
         logging.debug('gui - other_windows_functions.py - MyColorbarTicks - prepare_new_dict')
@@ -1293,6 +1354,18 @@ class MyColorbarTicks(QtWidgets.QDialog, Ui_tickscolorbarWindow):
             self.new_option_dict = tick_list
             self.cancel = False
             self.close()
+
+    @staticmethod
+    def display_information():
+        text = ('From this window, colorbar ticks can be modified.<br><br>Buttons \'+\' and \'x\' control '
+                'the cell '
+                'addition and deletion. If no cell is selected, the \'+\' button will add a cell at the end of the '
+                'row, and the \'x\' button will delete the last cell ; if a cell is selected, the \'+\' button will '
+                'add a cell after the selected one, and the \'x\' button will delete the selected cell.<br><br>To '
+                'validate an input, the \'ENTER\' key must be hit or another cell must be selected.<br><br> To '
+                'deselect a cell, click on it with the \'CTRL\' key pressed.')
+        info_window = MyInfo(text)
+        info_window.exec_()
 
     def closeEvent(self, event):
         logging.debug('gui - other_windows_functions.py - MyColorbarTicks - closeEvent')

@@ -270,7 +270,9 @@ def algorithm_creation_information_text():
 def plot_information_text():
     logging.debug('gui - help_functions.py - plot_information__text')
     info_dict = {'pw_info_bt_1': 'Control the size of the figure when it is saved, if the user wants a '
-                                 'size different than the one of the window.',
+                                 'size different than the one of the window. Based on a ResizeEvent, the '
+                                 'values are automatically updated when the figure is resized, even if the'
+                                 'automatic option has been unlocked.',
                  'pw_info_bt_2': 'The resolution of the figure in dot per inch (dpi). Numbers up to 600 '
                                  'are accepted.',
                  'pw_info_bt_3': 'Use this checkbox to activate or deactivate the transparency of the '
@@ -305,12 +307,15 @@ def plot_information_text():
                                           'the size of their fonts, and their position.',
                  'pw_grid_info_button_3': 'The projection can be chosen from this list. Options for each projection '
                                           'are set by default and can be changed by clicking on Set options.',
-                 'pw_grid_info_button_6': 'Click on Set X/Y ticks to change the ticks set by default. Please remember '
-                                          'that this option is only available for two projections: PlateCarree and '
-                                          'Mercator. With the next version of Cartopy, this limitation will disappear.',
+                 'pw_grid_info_button_6': 'Click on Set X/Y ticks to change the ticks set by default. Please note '
+                                          'that this option is not available for all projections.',
                  'pw_grid_info_button_11': 'Click on Set extent to change the extent of the map. If the '
                                            'projection has options to limit the extent, the limits set by the '
-                                           'user can\'t excess the projection ones.',
+                                           'user can\'t excess the projection ones.<br>Extension values are based on'
+                                           ' central longitude and central latitude (if they exists in the projection '
+                                           'options): if the longitude extension is set between -45° and 45° with a '
+                                           'central longitude of 45°E, the total extent is considered between 0°E and '
+                                           '90°E.',
                  'pw_grid_info_button_7': 'This section controls the addition of coastlines, their resolution, their '
                                           'size and their color.',
                  'pw_grid_info_button_8': 'This section controls the addition of lakes and rivers, their resolution, '

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'aboutlogwindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -15,8 +15,8 @@ class Ui_aboutlogWindow(object):
         aboutlogWindow.setMinimumSize(QtCore.QSize(0, 0))
         aboutlogWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         font.setBold(False)
         font.setWeight(50)
         font.setKerning(True)
@@ -227,8 +227,8 @@ class Ui_aboutlogWindow(object):
         self.label.setMinimumSize(QtCore.QSize(0, 27))
         self.label.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
         font.setKerning(True)
@@ -250,8 +250,8 @@ class Ui_aboutlogWindow(object):
         self.browser_1.setSizePolicy(sizePolicy)
         self.browser_1.setMinimumSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(9)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(10)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.browser_1.setFont(font)
@@ -443,8 +443,8 @@ class Ui_aboutlogWindow(object):
         self.label_2.setMinimumSize(QtCore.QSize(0, 27))
         self.label_2.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
         font.setKerning(True)
@@ -466,8 +466,8 @@ class Ui_aboutlogWindow(object):
         self.browser_2.setSizePolicy(sizePolicy)
         self.browser_2.setMinimumSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(9)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(10)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.browser_2.setFont(font)
@@ -654,8 +654,8 @@ class Ui_aboutlogWindow(object):
         self.button.setMinimumSize(QtCore.QSize(100, 27))
         self.button.setMaximumSize(QtCore.QSize(100, 27))
         font = QtGui.QFont()
-        font.setFamily("fonts/SourceSansPro-Regular.ttf")
-        font.setPointSize(10)
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.button.setFont(font)
@@ -697,16 +697,16 @@ class Ui_aboutlogWindow(object):
         self.browser_1.setHtml(_translate("aboutlogWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><title>Changelog</title><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'FreeSans\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"justify\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">EGADS (EUFAR General Airborne Data-processing Software) and its GUI are both Python-based toolboxes for processing airborne atmospheric data and data visualization.</p>\n"
-"<p align=\"justify\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Based on Python xx and PyQt xx, EGADS and its GUI provide a framework for researchers to apply expert-contributed algorithms to data files, and acts as a platform for data intercomparison. Algorithms in EGADS will be contributed by members of the EUFAR Expert Working Group if they are found to be mature and well-established in the scientific community.</p>\n"
-"<p align=\"justify\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">EGADS and its GUI are under development by EUFAR (European Facility for Airborne Research), an Integrating Activity funded by the European Commission. Specifically, the networking activity Standards &amp; Protocols within EUFAR is responsible for development of toolbox, in addition to developing standards for use within the EUFAR community. A compilation of these standards and other Standards &amp; Protocols products is available on the EUFAR website: <a href=\"http://www.eufar.net/tools/\"><span style=\" text-decoration: underline; color:#0000ff;\">http://www.eufar.net/tools/</span></a></p></body></html>"))
+"</style></head><body style=\" font-family:\'Source Sans Pro\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"justify\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'FreeSans\'; font-size:9pt;\">EGADS (EUFAR General Airborne Data-processing Software) and its GUI are both Python-based toolboxes for processing airborne atmospheric data and data visualization.</span></p>\n"
+"<p align=\"justify\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'FreeSans\'; font-size:9pt;\">Based on Python xx and PyQt xx, EGADS and its GUI provide a framework for researchers to apply expert-contributed algorithms to data files, and acts as a platform for data intercomparison. Algorithms in EGADS will be contributed by members of the EUFAR Expert Working Group if they are found to be mature and well-established in the scientific community.</span></p>\n"
+"<p align=\"justify\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'FreeSans\'; font-size:9pt;\">EGADS and its GUI are under development by EUFAR (European Facility for Airborne Research), an Integrating Activity funded by the European Commission. Specifically, the networking activity Standards &amp; Protocols within EUFAR is responsible for development of toolbox, in addition to developing standards for use within the EUFAR community. A compilation of these standards and other Standards &amp; Protocols products is available on the EUFAR website: </span><a href=\"http://www.eufar.net/tools/\"><span style=\" font-family:\'FreeSans\'; font-size:9pt; text-decoration: underline; color:#0000ff;\">http://www.eufar.net/tools/</span></a></p></body></html>"))
         self.label_2.setText(_translate("aboutlogWindow", "Changelog"))
         self.browser_2.setDocumentTitle(_translate("aboutlogWindow", "Changelog"))
         self.browser_2.setHtml(_translate("aboutlogWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><title>Changelog</title><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'FreeSans\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+"</style></head><body style=\" font-family:\'Source Sans Pro\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'FreeSans\'; font-size:9pt;\"><br /></p></body></html>"))
         self.button.setText(_translate("aboutlogWindow", "Ok"))
 

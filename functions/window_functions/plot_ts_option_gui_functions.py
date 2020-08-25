@@ -1204,16 +1204,16 @@ def add_figure_options(self, subplot=None):
         self.pw_figureOptions_ln_9[self.figure_option_num].setText(str(ystep))
         self.pw_figureOptions_ln_9[self.figure_option_num].setCursorPosition(0)
     else:
-        self.pw_figureOptions_ln_2[self.figure_option_num].setText(plt.axes().xaxis.get_label_text())
+        self.pw_figureOptions_ln_2[self.figure_option_num].setText(self.ts_plot.get_xlabel())
         self.pw_figureOptions_ln_2[self.figure_option_num].setCursorPosition(0)
-        self.pw_figureOptions_ln_3[self.figure_option_num].setText(plt.axes().yaxis.get_label_text())
+        self.pw_figureOptions_ln_3[self.figure_option_num].setText(self.ts_plot.get_ylabel())
         self.pw_figureOptions_ln_3[self.figure_option_num].setCursorPosition(0)
-        xlim_up = plt.axes().get_xlim()[1]
-        xlim_dn = plt.axes().get_xlim()[0]
-        ylim_up = plt.axes().get_ylim()[1]
-        ylim_dn = plt.axes().get_ylim()[0]
-        xstep = plt.axes().get_xticks()[1] - plt.axes().get_xticks()[0]
-        ystep = plt.axes().get_yticks()[1] - plt.axes().get_yticks()[0]
+        xlim_up = self.ts_plot.get_xlim()[1]
+        xlim_dn = self.ts_plot.get_xlim()[0]
+        ylim_up = self.ts_plot.get_ylim()[1]
+        ylim_dn = self.ts_plot.get_ylim()[0]
+        xstep = self.ts_plot.get_xticks()[1] - self.ts_plot.get_xticks()[0]
+        ystep = self.ts_plot.get_yticks()[1] - self.ts_plot.get_yticks()[0]
         self.pw_figureOptions_ln_4[self.figure_option_num].setText(str(xlim_dn))
         self.pw_figureOptions_ln_4[self.figure_option_num].setCursorPosition(0)
         self.pw_figureOptions_ln_5[self.figure_option_num].setText(str(xlim_up))

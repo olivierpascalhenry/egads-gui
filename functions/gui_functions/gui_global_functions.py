@@ -9,6 +9,7 @@ from functions.utils import (font_creation_function, stylesheet_creation_functio
                              replace_old_path_by_new_path_tooltip, get_element_value)
 from functions.gui_functions.gui_widgets import DropFrame
 from functions.gui_functions.gui_support_functions import too_many_files
+from functions.window_functions.other_windows_functions import MyInfo
 
 
 def gui_reset_function(self):
@@ -39,6 +40,7 @@ def gui_reset_function(self):
 def file_drop_layout(self):
     logging.debug('gui - old_gui_global_functions.py - file_drop_layout')
     font1 = font_creation_function('normal')
+    font2 = font_creation_function('big')
     self.drop_grid_layout_2 = QtWidgets.QGridLayout()
     self.drop_grid_layout_2.setObjectName("drop_grid_layout_2")
     self.drop_grid_layout_2.addItem(QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum,
@@ -77,15 +79,42 @@ def file_drop_layout(self):
     self.drop_hor_layout.addItem(QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding,
                                                        QtWidgets.QSizePolicy.Minimum))
     self.drop_vert_layout.addLayout(self.drop_hor_layout)
+    self.drop_hor_layout_2 = QtWidgets.QHBoxLayout()
+    self.drop_hor_layout_2.setObjectName("drop_hor_layout_2")
     self.drop_label_2 = QtWidgets.QLabel(self.drop_frame)
     self.drop_label_2.setMinimumSize(QtCore.QSize(0, 27))
     self.drop_label_2.setMaximumSize(QtCore.QSize(16777215, 27))
-    self.drop_label_2.setFont(font1)
+    self.drop_label_2.setFont(font2)
     self.drop_label_2.setStyleSheet(stylesheet_creation_function('qlabel_noborder'))
     self.drop_label_2.setObjectName("drop_label_2")
-    self.drop_label_2.setText("<html><head/><body><p><span style=\" font-weight:600;\">Choose</span> a file or <span "
-                              "style=\" font-weight:600;\">drop</span> it here.</p></body></html>")
-    self.drop_vert_layout.addWidget(self.drop_label_2)
+    self.drop_label_2.setText('Choose')
+    self.drop_label_3 = QtWidgets.QLabel(self.drop_frame)
+    self.drop_label_3.setMinimumSize(QtCore.QSize(0, 27))
+    self.drop_label_3.setMaximumSize(QtCore.QSize(16777215, 27))
+    self.drop_label_3.setFont(font1)
+    self.drop_label_3.setStyleSheet(stylesheet_creation_function('qlabel_noborder'))
+    self.drop_label_3.setObjectName("drop_label_3")
+    self.drop_label_3.setText('a file or')
+    self.drop_label_4 = QtWidgets.QLabel(self.drop_frame)
+    self.drop_label_4.setMinimumSize(QtCore.QSize(0, 27))
+    self.drop_label_4.setMaximumSize(QtCore.QSize(16777215, 27))
+    self.drop_label_4.setFont(font2)
+    self.drop_label_4.setStyleSheet(stylesheet_creation_function('qlabel_noborder'))
+    self.drop_label_4.setObjectName("drop_label_4")
+    self.drop_label_4.setText('drop')
+    self.drop_label_5 = QtWidgets.QLabel(self.drop_frame)
+    self.drop_label_5.setMinimumSize(QtCore.QSize(0, 27))
+    self.drop_label_5.setMaximumSize(QtCore.QSize(16777215, 27))
+    self.drop_label_5.setFont(font1)
+    self.drop_label_5.setStyleSheet(stylesheet_creation_function('qlabel_noborder'))
+    self.drop_label_5.setObjectName("drop_label_5")
+    self.drop_label_5.setText('it here.')
+    self.drop_hor_layout_2.addWidget(self.drop_label_2)
+    self.drop_hor_layout_2.addWidget(self.drop_label_3)
+    self.drop_hor_layout_2.addWidget(self.drop_label_4)
+    self.drop_hor_layout_2.addWidget(self.drop_label_5)
+    self.drop_hor_layout_2.setSpacing(4)
+    self.drop_vert_layout.addLayout(self.drop_hor_layout_2)
     self.drop_grid_layout.addLayout(self.drop_vert_layout, 1, 1, 1, 1)
     self.drop_grid_layout.addItem(QtWidgets.QSpacerItem(55, 20, QtWidgets.QSizePolicy.Expanding,
                                                         QtWidgets.QSizePolicy.Minimum), 1, 2, 1, 1)
@@ -465,17 +494,26 @@ def create_quick_access_menu(self):
     self.menuQuick_access.clear()
     self.menuQuick_access.setEnabled(True)
     font = font_creation_function('normal')
-    icon = icon_creation_function('quick_access_icon.svg')
+    icon1 = icon_creation_function('quick_access_icon.svg')
+    icon2 = icon_creation_function('small_warning_icon.svg')
     f = open(str(pathlib.Path(self.user_path).joinpath('user_folder_list.xml')), 'r')
     doc = xml.dom.minidom.parse(f)
     folders = doc.getElementsByTagName('Folders')[0]
     nodes = folders.getElementsByTagName('Folder')
     for node in nodes:
+        if pathlib.Path(get_element_value(node, 'Path')).exists():
+            path_exist = True
+        else:
+            path_exist = False
         quick_folder = QtWidgets.QAction(self)
-        quick_folder.setIcon(icon)
         quick_folder.setFont(font)
         quick_folder.setText(get_element_value(node, 'Name'))
-        quick_folder.setToolTip(get_element_value(node, 'Path'))
+        if path_exist:
+            quick_folder.setIcon(icon1)
+            quick_folder.setToolTip(get_element_value(node, 'Path'))
+        else:
+            quick_folder.setIcon(icon2)
+            quick_folder.setToolTip('not valid')
         quick_folder.triggered.connect(lambda: quick_access_open_folder(self))
         quick_folder.setObjectName(get_element_value(node, 'Name'))
         self.menuQuick_access.addAction(quick_folder)
@@ -484,9 +522,15 @@ def create_quick_access_menu(self):
 
 def quick_access_open_folder(self):
     path = self.sender().toolTip()
-    file_name, _ = self.get_file_name('open', path)
-    if file_name:
-        self.open_file(file_name)
+    if path == 'not valid':
+        text = ('EGADS can\'t find the following folder:\n\n\t\t\t' + str(self.sender().text())
+                + '\n\nPlease check that the folder exists before trying to open it.')
+        info_window = MyInfo(text)
+        info_window.exec_()
+    else:
+        file_name, _ = self.get_file_name('open', path)
+        if file_name:
+            self.open_file(file_name)
 
 
 def create_recent_file_menu(self):
@@ -494,11 +538,16 @@ def create_recent_file_menu(self):
     self.menuOpen_recent.setEnabled(True)
     if self.opened_file_list:
         font = font_creation_function('normal')
-        icon = icon_creation_function('del_icon.svg')
+        icon1 = icon_creation_function('del_icon.svg')
+        icon2 = icon_creation_function('small_warning_icon.svg')
         for i, file in enumerate(self.opened_file_list):
             recent_file = QtWidgets.QAction(self)
             recent_file.setFont(font)
-            recent_file.setToolTip(file)
+            if pathlib.Path(file).exists():
+                recent_file.setToolTip(file)
+            else:
+                recent_file.setToolTip('not valid')
+                recent_file.setIcon(icon2)
             recent_file.setObjectName(file)
             if len(file) > 65:
                 file = file[:30] + ' ... ' + file[-30:]
@@ -508,7 +557,7 @@ def create_recent_file_menu(self):
         self.menuOpen_recent.addSeparator()
         del_action = QtWidgets.QAction(self)
         del_action.setFont(font)
-        del_action.setIcon(icon)
+        del_action.setIcon(icon1)
         del_action.setText('Clear the list...')
         del_action.triggered.connect(lambda: clear_file_list_in_menu(self))
         del_action.setObjectName('del_action')
