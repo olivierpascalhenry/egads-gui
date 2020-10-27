@@ -1008,7 +1008,9 @@ class MyBatchProcessing(QtWidgets.QDialog, Ui_batchProcessingWindow):
 
     def add_options_tab(self, text):
         if self.tabWidget.count() == 3:
+            self.tabWidget.removeTab(2)
             self.tabWidget.insertTab(2, self.tab_3, text)
+            self.tabWidget.insertTab(3, self.tab_4, 'Destination')
 
     def add_metadata_variable_to_list(self):
         logging.debug('gui - batch_processing_window_functions.py - MyBatchProcessing - '
@@ -1349,11 +1351,13 @@ class MyBatchInfo(QtWidgets.QDialog, Ui_batchInfoWindow):
             else:
                 file = egads.input.EgadsHdf(self.file_path, 'r')
             var_list = {}
-            for var_dict in file.get_variable_list(group_walk=True, details=True):
-                for key, path in var_dict.items():
-                    if path == '/':
-                        path = ''
-                    var_list[path + '/' + key] = [file.get_attribute_list(path + '/' + key), 'dataset']
+            dim_list = [dim_path for dim_path in file.get_dimension_list(group_walk=True, details=True)]
+
+            for var_path in file.get_variable_list(group_walk=True, details=True):
+                if var_path in dim_list:
+                    var_list[var_path] = [file.get_attribute_list(var_path), 'dimension']
+                else:
+                    var_list[var_path] = [file.get_attribute_list(var_path), 'dataset']
 
             for group_dict in file.get_group_list(details=True):
                 var_list[group_dict['path']] = [file.get_attribute_list(group_dict['path']), 'group']

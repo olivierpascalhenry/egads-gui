@@ -8,6 +8,7 @@ from functions.thread_functions.file_functions import ExportThread
 from functions.window_functions.other_windows_functions import MyInfo, MyColorbarTicks
 from functions.help_functions import export_information_text
 from functions.material_functions import cmap_dict
+from functions.utils import stylesheet_creation_function
 
 
 class MyExport(QtWidgets.QDialog, Ui_exportWindow):
@@ -21,6 +22,7 @@ class MyExport(QtWidgets.QDialog, Ui_exportWindow):
         self.ew_vertical_layout_2.setAlignment(QtCore.Qt.AlignTop)
         self.ew_vertical_layout_3.setAlignment(QtCore.Qt.AlignTop)
         self.ew_vertical_layout_4.setAlignment(QtCore.Qt.AlignTop)
+        # self.ew_combobox_1.setStyleSheet(stylesheet_creation_function('qcombobox'))
         self.ew_combobox_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.ew_combobox_2.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.ew_combobox_3.setItemDelegate(QtWidgets.QStyledItemDelegate())
@@ -72,6 +74,8 @@ class MyExport(QtWidgets.QDialog, Ui_exportWindow):
         self.var_list = []
         self.cbar_ticks_options = []
         self.ew_combobox_1.removeItem(2)
+        self.ew_label_24.setVisible(False)
+        self.ew_combobox_9.setVisible(False)
         logging.info('gui - export_window_functions.py - MyExport - ready')
 
     def populate_export_options(self):

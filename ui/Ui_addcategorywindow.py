@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'addcategory.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -65,7 +65,7 @@ class Ui_Addcategory(object):
         self.ac_line.setStyleSheet("QLineEdit {\n"
 "    border-radius: 3px;\n"
 "    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
+"    background-color:  rgb(255, 255, 255);\n"
 "    color: rgb(45,45,45);\n"
 "}")
         self.ac_line.setFrame(False)
@@ -78,8 +78,6 @@ class Ui_Addcategory(object):
         self.gridLayout.addItem(spacerItem3, 3, 0, 1, 1)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem4)
         self.ac_submitButton = QtWidgets.QToolButton(Addcategory)
         self.ac_submitButton.setMinimumSize(QtCore.QSize(93, 27))
         self.ac_submitButton.setMaximumSize(QtCore.QSize(93, 27))
@@ -114,8 +112,8 @@ class Ui_Addcategory(object):
 "}")
         self.ac_submitButton.setObjectName("ac_submitButton")
         self.horizontalLayout.addWidget(self.ac_submitButton)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem5)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem4)
         self.ac_cancelButton = QtWidgets.QToolButton(Addcategory)
         self.ac_cancelButton.setMinimumSize(QtCore.QSize(93, 27))
         self.ac_cancelButton.setMaximumSize(QtCore.QSize(93, 27))
@@ -150,8 +148,8 @@ class Ui_Addcategory(object):
 "}")
         self.ac_cancelButton.setObjectName("ac_cancelButton")
         self.horizontalLayout.addWidget(self.ac_cancelButton)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem6)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem5)
         self.gridLayout.addLayout(self.horizontalLayout, 4, 0, 1, 1)
 
         self.retranslateUi(Addcategory)

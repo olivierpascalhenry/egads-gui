@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'mainwindow3.ui'
+# Form implementation generated from reading ui file 'mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
 #
@@ -295,7 +295,7 @@ class Ui_MainWindow(object):
         self.information_scroll_area.setWidgetResizable(True)
         self.information_scroll_area.setObjectName("information_scroll_area")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 914, 380))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 910, 372))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_4.setObjectName("gridLayout_4")
@@ -486,7 +486,7 @@ class Ui_MainWindow(object):
         self.information_scroll_area_2.setWidgetResizable(True)
         self.information_scroll_area_2.setObjectName("information_scroll_area_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 914, 380))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 910, 372))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_5.setObjectName("gridLayout_5")
@@ -504,197 +504,6 @@ class Ui_MainWindow(object):
         self.information_scroll_area_2.setWidget(self.scrollAreaWidgetContents_2)
         self.gridLayout_3.addWidget(self.information_scroll_area_2, 0, 0, 1, 1)
         self.tab_view.addTab(self.tab_2, "")
-        self.tab_3 = QtWidgets.QWidget()
-        self.tab_3.setObjectName("tab_3")
-        self.gridLayout_7 = QtWidgets.QGridLayout(self.tab_3)
-        self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_7.setObjectName("gridLayout_7")
-        self.information_scroll_area_3 = QtWidgets.QScrollArea(self.tab_3)
-        self.information_scroll_area_3.setStyleSheet("QScrollArea { background: transparent; }\n"
-"\n"
-"QScrollArea > QWidget > QWidget { background: transparent; }\n"
-"\n"
-"QScrollBar:vertical {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  margin: 21px 0px 21px 0px;\n"
-"}\n"
-"\n"
-"QScrollBar:horizontal {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  margin: 0px 21px 0px 21px;\n"
-"}\n"
-"\n"
-"QScrollBar::handle:vertical {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-height: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::handle:horizontal {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-width: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical {\n"
-"  border-top: 0px solid rgb(240,240,240);\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: bottom;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid rgb(240,240,240);\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: top;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical {\n"
-"  image: url(icons/up_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical {\n"
-"  image: url(icons/down_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid rgb(240,240,240);\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: right;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid rgb(240,240,240);\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: left;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal {\n"
-"  image: url(icons/left_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal {\n"
-"  image: url(icons/right_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}")
-        self.information_scroll_area_3.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.information_scroll_area_3.setWidgetResizable(True)
-        self.information_scroll_area_3.setObjectName("information_scroll_area_3")
-        self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 914, 380))
-        self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
-        self.gridLayout_10 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_3)
-        self.gridLayout_10.setObjectName("gridLayout_10")
-        self.newvariable_widget_container = QtWidgets.QVBoxLayout()
-        self.newvariable_widget_container.setObjectName("newvariable_widget_container")
-        self.gridLayout_10.addLayout(self.newvariable_widget_container, 1, 1, 1, 1)
-        spacerItem8 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_10.addItem(spacerItem8, 0, 1, 1, 1)
-        spacerItem9 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_10.addItem(spacerItem9, 1, 2, 1, 1)
-        spacerItem10 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_10.addItem(spacerItem10, 2, 1, 1, 1)
-        spacerItem11 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_10.addItem(spacerItem11, 1, 0, 1, 1)
-        self.information_scroll_area_3.setWidget(self.scrollAreaWidgetContents_3)
-        self.gridLayout_7.addWidget(self.information_scroll_area_3, 0, 0, 1, 1)
-        self.tab_view.addTab(self.tab_3, "")
         self.gridLayout.addWidget(self.tab_view, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtWidgets.QMenuBar(MainWindow)
@@ -739,7 +548,7 @@ class Ui_MainWindow(object):
 "\n"
 "QMenu::item:selected {\n"
 "    background-color: rgb(200,200,200);\n"
-"    color: rgb(45,45,45);\n"
+"    color: black;\n"
 "    border: 0px solid black;\n"
 "    \n"
 "}\n"
@@ -757,7 +566,6 @@ class Ui_MainWindow(object):
 "   margin-bottom: 2px;\n"
 "}\n"
 "")
-        self.menuBar.setNativeMenuBar(True)
         self.menuBar.setObjectName("menuBar")
         self.menuFile = QtWidgets.QMenu(self.menuBar)
         font = QtGui.QFont()
@@ -771,8 +579,8 @@ class Ui_MainWindow(object):
         self.menuOpen_recent = QtWidgets.QMenu(self.menuFile)
         self.menuOpen_recent.setEnabled(False)
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(11)
+        font.setFamily("FreeSans")
+        font.setPointSize(10)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.menuOpen_recent.setFont(font)
@@ -842,6 +650,11 @@ class Ui_MainWindow(object):
 "   padding: 10px;\n"
 "   background: rgb(240,240,240);\n"
 "   border-bottom: 1px solid rgb(220,220,220);\n"
+"}\n"
+"\n"
+"QToolBar QToolButton:hover {\n"
+"   background-color: rgb(220,220,220);\n"
+"   border: none;\n"
 "}")
         self.toolBar.setMovable(False)
         self.toolBar.setIconSize(QtCore.QSize(35, 35))
@@ -851,7 +664,7 @@ class Ui_MainWindow(object):
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
-        font.setPointSize(10)
+        font.setPointSize(11)
         font.setItalic(True)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -860,8 +673,8 @@ class Ui_MainWindow(object):
 "    background: rgb(240,240,240);\n"
 "}\n"
 "\n"
-"QStatusBar QLabel {\n"
-"    color: rgb(45,45,45);\n"
+"QStatusBar::item {\n"
+"    border: 0px solid black;\n"
 "}")
         self.statusBar.setSizeGripEnabled(False)
         self.statusBar.setObjectName("statusBar")
@@ -918,23 +731,11 @@ class Ui_MainWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.actionCreateVariableBar.setFont(font)
         self.actionCreateVariableBar.setObjectName("actionCreateVariableBar")
-        self.actionMigrateVariableBar = QtWidgets.QAction(MainWindow)
-        self.actionMigrateVariableBar.setEnabled(False)
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap("icons/migrate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionMigrateVariableBar.setIcon(icon7)
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(11)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.actionMigrateVariableBar.setFont(font)
-        self.actionMigrateVariableBar.setObjectName("actionMigrateVariableBar")
         self.actionDeleteVariableBar = QtWidgets.QAction(MainWindow)
         self.actionDeleteVariableBar.setEnabled(False)
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionDeleteVariableBar.setIcon(icon8)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionDeleteVariableBar.setIcon(icon7)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -944,9 +745,9 @@ class Ui_MainWindow(object):
         self.actionDeleteVariableBar.setObjectName("actionDeleteVariableBar")
         self.actionGlobalAttributesBar = QtWidgets.QAction(MainWindow)
         self.actionGlobalAttributesBar.setEnabled(False)
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap("icons/glo_metadata_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionGlobalAttributesBar.setIcon(icon9)
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap("icons/glo_metadata_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionGlobalAttributesBar.setIcon(icon8)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -956,9 +757,9 @@ class Ui_MainWindow(object):
         self.actionGlobalAttributesBar.setObjectName("actionGlobalAttributesBar")
         self.actionVariableAttributesBar = QtWidgets.QAction(MainWindow)
         self.actionVariableAttributesBar.setEnabled(False)
-        icon10 = QtGui.QIcon()
-        icon10.addPixmap(QtGui.QPixmap("icons/var_metadata_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionVariableAttributesBar.setIcon(icon10)
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap("icons/var_metadata_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionVariableAttributesBar.setIcon(icon9)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -968,9 +769,9 @@ class Ui_MainWindow(object):
         self.actionVariableAttributesBar.setObjectName("actionVariableAttributesBar")
         self.actionPlotBar = QtWidgets.QAction(MainWindow)
         self.actionPlotBar.setEnabled(False)
-        icon11 = QtGui.QIcon()
-        icon11.addPixmap(QtGui.QPixmap("icons/plot_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionPlotBar.setIcon(icon11)
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(QtGui.QPixmap("icons/plot_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionPlotBar.setIcon(icon10)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -979,9 +780,9 @@ class Ui_MainWindow(object):
         self.actionPlotBar.setFont(font)
         self.actionPlotBar.setObjectName("actionPlotBar")
         self.actionBatch_processing = QtWidgets.QAction(MainWindow)
-        icon12 = QtGui.QIcon()
-        icon12.addPixmap(QtGui.QPixmap("icons/batch_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionBatch_processing.setIcon(icon12)
+        icon11 = QtGui.QIcon()
+        icon11.addPixmap(QtGui.QPixmap("icons/batch_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionBatch_processing.setIcon(icon11)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -990,9 +791,9 @@ class Ui_MainWindow(object):
         self.actionBatch_processing.setFont(font)
         self.actionBatch_processing.setObjectName("actionBatch_processing")
         self.actionExit = QtWidgets.QAction(MainWindow)
-        icon13 = QtGui.QIcon()
-        icon13.addPixmap(QtGui.QPixmap("icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionExit.setIcon(icon13)
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(QtGui.QPixmap("icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionExit.setIcon(icon12)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -1001,9 +802,9 @@ class Ui_MainWindow(object):
         self.actionExit.setFont(font)
         self.actionExit.setObjectName("actionExit")
         self.actionHelp = QtWidgets.QAction(MainWindow)
-        icon14 = QtGui.QIcon()
-        icon14.addPixmap(QtGui.QPixmap("icons/help_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionHelp.setIcon(icon14)
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(QtGui.QPixmap("icons/help_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionHelp.setIcon(icon13)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -1012,9 +813,9 @@ class Ui_MainWindow(object):
         self.actionHelp.setFont(font)
         self.actionHelp.setObjectName("actionHelp")
         self.actionAbout_EGADS = QtWidgets.QAction(MainWindow)
-        icon15 = QtGui.QIcon()
-        icon15.addPixmap(QtGui.QPixmap("icons/about_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionAbout_EGADS.setIcon(icon15)
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(QtGui.QPixmap("icons/about_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionAbout_EGADS.setIcon(icon14)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -1024,30 +825,30 @@ class Ui_MainWindow(object):
         self.actionAbout_EGADS.setObjectName("actionAbout_EGADS")
         self.actionSeparator = QtWidgets.QAction(MainWindow)
         self.actionSeparator.setEnabled(False)
-        icon16 = QtGui.QIcon()
-        icon16.addPixmap(QtGui.QPixmap("icons/separator_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon16.addPixmap(QtGui.QPixmap("icons/separator_icon.png"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
-        self.actionSeparator.setIcon(icon16)
+        icon15 = QtGui.QIcon()
+        icon15.addPixmap(QtGui.QPixmap("icons/separator_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon15.addPixmap(QtGui.QPixmap("icons/separator_icon.png"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        self.actionSeparator.setIcon(icon15)
         self.actionSeparator.setObjectName("actionSeparator")
         self.actionSeparator2 = QtWidgets.QAction(MainWindow)
         self.actionSeparator2.setEnabled(False)
-        self.actionSeparator2.setIcon(icon16)
+        self.actionSeparator2.setIcon(icon15)
         self.actionSeparator2.setVisible(True)
         self.actionSeparator2.setIconVisibleInMenu(True)
         self.actionSeparator2.setObjectName("actionSeparator2")
         self.actionSeparator3 = QtWidgets.QAction(MainWindow)
         self.actionSeparator3.setEnabled(False)
-        self.actionSeparator3.setIcon(icon16)
+        self.actionSeparator3.setIcon(icon15)
         self.actionSeparator3.setObjectName("actionSeparator3")
         self.actionSeparator4 = QtWidgets.QAction(MainWindow)
         self.actionSeparator4.setEnabled(False)
-        self.actionSeparator4.setIcon(icon16)
+        self.actionSeparator4.setIcon(icon15)
         self.actionSeparator4.setObjectName("actionSeparator4")
         self.actionSaveAsBar = QtWidgets.QAction(MainWindow)
         self.actionSaveAsBar.setEnabled(False)
-        icon17 = QtGui.QIcon()
-        icon17.addPixmap(QtGui.QPixmap("icons/save_as_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionSaveAsBar.setIcon(icon17)
+        icon16 = QtGui.QIcon()
+        icon16.addPixmap(QtGui.QPixmap("icons/save_as_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionSaveAsBar.setIcon(icon16)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -1057,9 +858,9 @@ class Ui_MainWindow(object):
         self.actionSaveAsBar.setObjectName("actionSaveAsBar")
         self.actionDisplayBar = QtWidgets.QAction(MainWindow)
         self.actionDisplayBar.setEnabled(False)
-        icon18 = QtGui.QIcon()
-        icon18.addPixmap(QtGui.QPixmap("icons/data_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionDisplayBar.setIcon(icon18)
+        icon17 = QtGui.QIcon()
+        icon17.addPixmap(QtGui.QPixmap("icons/data_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionDisplayBar.setIcon(icon17)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -1068,9 +869,9 @@ class Ui_MainWindow(object):
         self.actionDisplayBar.setFont(font)
         self.actionDisplayBar.setObjectName("actionDisplayBar")
         self.actionOptions = QtWidgets.QAction(MainWindow)
-        icon19 = QtGui.QIcon()
-        icon19.addPixmap(QtGui.QPixmap("icons/option_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionOptions.setIcon(icon19)
+        icon18 = QtGui.QIcon()
+        icon18.addPixmap(QtGui.QPixmap("icons/option_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionOptions.setIcon(icon18)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -1080,12 +881,12 @@ class Ui_MainWindow(object):
         self.actionOptions.setObjectName("actionOptions")
         self.actionSeparator5 = QtWidgets.QAction(MainWindow)
         self.actionSeparator5.setEnabled(False)
-        self.actionSeparator5.setIcon(icon16)
+        self.actionSeparator5.setIcon(icon15)
         self.actionSeparator5.setObjectName("actionSeparator5")
         self.actionUpdate = QtWidgets.QAction(MainWindow)
-        icon20 = QtGui.QIcon()
-        icon20.addPixmap(QtGui.QPixmap("icons/egads_update_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionUpdate.setIcon(icon20)
+        icon19 = QtGui.QIcon()
+        icon19.addPixmap(QtGui.QPixmap("icons/egads_update_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionUpdate.setIcon(icon19)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -1095,9 +896,9 @@ class Ui_MainWindow(object):
         self.actionUpdate.setObjectName("actionUpdate")
         self.actionExport = QtWidgets.QAction(MainWindow)
         self.actionExport.setEnabled(False)
-        icon21 = QtGui.QIcon()
-        icon21.addPixmap(QtGui.QPixmap("icons/export_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionExport.setIcon(icon21)
+        icon20 = QtGui.QIcon()
+        icon20.addPixmap(QtGui.QPixmap("icons/export_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionExport.setIcon(icon20)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -1106,10 +907,10 @@ class Ui_MainWindow(object):
         self.actionExport.setFont(font)
         self.actionExport.setObjectName("actionExport")
         self.actionClear_list = QtWidgets.QAction(MainWindow)
-        self.actionClear_list.setIcon(icon8)
+        self.actionClear_list.setIcon(icon7)
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(11)
+        font.setFamily("FreeSans")
+        font.setPointSize(10)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.actionClear_list.setFont(font)
@@ -1120,9 +921,13 @@ class Ui_MainWindow(object):
         self.actionTMP.setObjectName("actionTMP")
         self.actionCreate_group = QtWidgets.QAction(MainWindow)
         self.actionCreate_group.setEnabled(False)
-        icon22 = QtGui.QIcon()
-        icon22.addPixmap(QtGui.QPixmap("icons/create_group_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionCreate_group.setIcon(icon22)
+        icon21 = QtGui.QIcon()
+        icon21.addPixmap(QtGui.QPixmap("icons/create_group_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionCreate_group.setIcon(icon21)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(11)
+        self.actionCreate_group.setFont(font)
         self.actionCreate_group.setObjectName("actionCreate_group")
         self.menuOpen_recent.addSeparator()
         self.menuFile.addAction(self.actionOpenBar)
@@ -1153,7 +958,6 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionSeparator3)
         self.toolBar.addAction(self.actionCreate_group)
         self.toolBar.addAction(self.actionCreateVariableBar)
-        self.toolBar.addAction(self.actionMigrateVariableBar)
         self.toolBar.addAction(self.actionDeleteVariableBar)
         self.toolBar.addAction(self.actionSeparator4)
         self.toolBar.addAction(self.actionAlgorithmsBar)
@@ -1173,7 +977,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "EGADS"))
         self.tab_view.setTabText(self.tab_view.indexOf(self.tab), _translate("MainWindow", "Global Metadata"))
         self.tab_view.setTabText(self.tab_view.indexOf(self.tab_2), _translate("MainWindow", "Variables"))
-        self.tab_view.setTabText(self.tab_view.indexOf(self.tab_3), _translate("MainWindow", "New Variables"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuOpen_recent.setTitle(_translate("MainWindow", "Open recent..."))
         self.menuQuick_access.setTitle(_translate("MainWindow", "Quick access..."))
@@ -1192,8 +995,6 @@ class Ui_MainWindow(object):
         self.actionCreatealgorithmBar.setToolTip(_translate("MainWindow", "Create a new algorithm"))
         self.actionCreateVariableBar.setText(_translate("MainWindow", "Create Variable"))
         self.actionCreateVariableBar.setToolTip(_translate("MainWindow", "Create a new simple variable"))
-        self.actionMigrateVariableBar.setText(_translate("MainWindow", "Migrate Variable"))
-        self.actionMigrateVariableBar.setToolTip(_translate("MainWindow", "Migrate the selected variable to the main workspace"))
         self.actionDeleteVariableBar.setText(_translate("MainWindow", "Delete Variable"))
         self.actionDeleteVariableBar.setToolTip(_translate("MainWindow", "Delete the selected variable(s) / group(s)"))
         self.actionGlobalAttributesBar.setText(_translate("MainWindow", "Global Attributes"))

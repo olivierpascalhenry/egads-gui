@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'plottypewindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.6
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_plottypeWindow(object):
     def setupUi(self, plottypeWindow):
         plottypeWindow.setObjectName("plottypeWindow")
-        plottypeWindow.resize(721, 211)
+        plottypeWindow.resize(721, 208)
         plottypeWindow.setMinimumSize(QtCore.QSize(0, 0))
         plottypeWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
@@ -187,9 +187,8 @@ class Ui_plottypeWindow(object):
 "  bottom: -1px;\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(plottypeWindow)
+        self.gridLayout.setVerticalSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.label = QtWidgets.QLabel(plottypeWindow)
         self.label.setMinimumSize(QtCore.QSize(0, 0))
         self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
@@ -210,9 +209,9 @@ class Ui_plottypeWindow(object):
         self.label.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignTop)
         self.label.setWordWrap(True)
         self.label.setObjectName("label")
-        self.verticalLayout_2.addWidget(self.label)
+        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.verticalLayout_2.addItem(spacerItem)
+        self.gridLayout.addItem(spacerItem, 1, 0, 1, 1)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
@@ -257,13 +256,11 @@ class Ui_plottypeWindow(object):
         self.horizontalLayout.addLayout(self.verticalLayout)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem2)
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
-        spacerItem3 = QtWidgets.QSpacerItem(17, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_2.addItem(spacerItem3)
+        self.gridLayout.addLayout(self.horizontalLayout, 2, 0, 1, 1)
+        spacerItem3 = QtWidgets.QSpacerItem(694, 30, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacerItem3, 3, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem4)
         self.button = QtWidgets.QToolButton(plottypeWindow)
         self.button.setMinimumSize(QtCore.QSize(100, 27))
         self.button.setMaximumSize(QtCore.QSize(100, 27))
@@ -297,10 +294,9 @@ class Ui_plottypeWindow(object):
 "}")
         self.button.setObjectName("button")
         self.horizontalLayout_2.addWidget(self.button)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem5)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
-        self.gridLayout.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem4)
+        self.gridLayout.addLayout(self.horizontalLayout_2, 4, 0, 1, 1)
 
         self.retranslateUi(plottypeWindow)
         QtCore.QMetaObject.connectSlotsByName(plottypeWindow)

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'process_window.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -11,13 +11,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_processingWindow(object):
     def setupUi(self, processingWindow):
         processingWindow.setObjectName("processingWindow")
-        processingWindow.resize(700, 565)
+        processingWindow.resize(700, 550)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(processingWindow.sizePolicy().hasHeightForWidth())
         processingWindow.setSizePolicy(sizePolicy)
-        processingWindow.setMinimumSize(QtCore.QSize(700, 565))
+        processingWindow.setMinimumSize(QtCore.QSize(0, 0))
         processingWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
@@ -29,8 +29,9 @@ class Ui_processingWindow(object):
         icon.addPixmap(QtGui.QPixmap("icons/new_algo_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         processingWindow.setWindowIcon(icon)
         processingWindow.setStyleSheet("")
-        self.gridLayout_4 = QtWidgets.QGridLayout(processingWindow)
-        self.gridLayout_4.setObjectName("gridLayout_4")
+        self.gridLayout_10 = QtWidgets.QGridLayout(processingWindow)
+        self.gridLayout_10.setVerticalSpacing(0)
+        self.gridLayout_10.setObjectName("gridLayout_10")
         self.tabWidget = QtWidgets.QTabWidget(processingWindow)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
@@ -134,8 +135,8 @@ class Ui_processingWindow(object):
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.aw_label_1 = QtWidgets.QLabel(self.tab_1)
-        self.aw_label_1.setMinimumSize(QtCore.QSize(0, 27))
-        self.aw_label_1.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.aw_label_1.setMinimumSize(QtCore.QSize(0, 0))
+        self.aw_label_1.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -149,7 +150,7 @@ class Ui_processingWindow(object):
         self.aw_label_1.setWordWrap(True)
         self.aw_label_1.setObjectName("aw_label_1")
         self.verticalLayout.addWidget(self.aw_label_1)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout.addItem(spacerItem2)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -186,20 +187,19 @@ class Ui_processingWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
 "QComboBox:disabled {\n"
 "    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
 "}\n"
 "\n"
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -219,15 +219,34 @@ class Ui_processingWindow(object):
 "    height: 16px\n"
 "}\n"
 "\n"
-"QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
-"    background: #f0f0f0;\n"
-"    border: 0px solid #f0f0f0;\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.aw_combobox_1.setFrame(False)
         self.aw_combobox_1.setObjectName("aw_combobox_1")
@@ -261,8 +280,7 @@ class Ui_processingWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
@@ -274,8 +292,7 @@ class Ui_processingWindow(object):
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -302,14 +319,27 @@ class Ui_processingWindow(object):
 "}\n"
 "\n"
 "QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
 "    background: #f0f0f0;\n"
 "    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.aw_combobox_2.setFrame(False)
         self.aw_combobox_2.setObjectName("aw_combobox_2")
@@ -318,7 +348,7 @@ class Ui_processingWindow(object):
         spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem4)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout.addItem(spacerItem5)
         self.line_2 = QtWidgets.QFrame(self.tab_1)
         self.line_2.setStyleSheet("QFrame {\n"
@@ -330,7 +360,7 @@ class Ui_processingWindow(object):
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
         self.verticalLayout.addWidget(self.line_2)
-        spacerItem6 = QtWidgets.QSpacerItem(20, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout.addItem(spacerItem6)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -368,29 +398,13 @@ class Ui_processingWindow(object):
         self.aw_label_5.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTop|QtCore.Qt.AlignTrailing)
         self.aw_label_5.setObjectName("aw_label_5")
         self.gridLayout_2.addWidget(self.aw_label_5, 1, 0, 1, 1)
-        self.aw_edit_2 = QtWidgets.QTextEdit(self.tab_1)
-        self.aw_edit_2.setMinimumSize(QtCore.QSize(470, 110))
-        self.aw_edit_2.setMaximumSize(QtCore.QSize(16777215, 110))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(10)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.aw_edit_2.setFont(font)
-        self.aw_edit_2.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
-        self.aw_edit_2.setStyleSheet("QTextEdit {\n"
-"    border-radius: 3px;\n"
-"    padding: 1px 0px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
-"    color: rgb(45,45,45);\n"
-"}\n"
-"    \n"
-"QTextEdit:disabled {\n"
-"    background-color:  rgb(240, 240, 240);\n"
-"}\n"
+        self.scroll_area_1 = QtWidgets.QScrollArea(self.tab_1)
+        self.scroll_area_1.setStyleSheet("QScrollArea { background: transparent; }\n"
+"\n"
+"QScrollArea > QWidget > QWidget { background: transparent; }\n"
 "\n"
 "QScrollBar:vertical {\n"
-"  border-left: 0px solid white;\n"
+"  border: 0px solid white;\n"
 "  background-color: rgb(240, 240, 240);\n"
 "  width: 20px;\n"
 "  margin: 21px 0px 21px 0px;\n"
@@ -409,7 +423,7 @@ class Ui_processingWindow(object):
 "}\n"
 "\n"
 "QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
+"  background-color: rgb(167, 167, 167);\n"
 "}\n"
 "\n"
 "QScrollBar:handle:vertical:pressed {\n"
@@ -422,7 +436,7 @@ class Ui_processingWindow(object):
 "}\n"
 "\n"
 "QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
+"  background-color: rgb(167, 167, 167);\n"
 "}\n"
 "\n"
 "QScrollBar:handle:horizontal:pressed {\n"
@@ -438,11 +452,10 @@ class Ui_processingWindow(object):
 "  height: 20px;\n"
 "  subcontrol-position: bottom;\n"
 "  subcontrol-origin: margin;\n"
-"  border-bottom-right-radius: 3px;\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
+"  background-color: rgb(219, 219, 219);\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:vertical:pressed {\n"
@@ -458,11 +471,10 @@ class Ui_processingWindow(object):
 "  height: 20px;\n"
 "  subcontrol-position: top;\n"
 "  subcontrol-origin: margin;\n"
-"  border-top-right-radius: 3px;\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
+"  background-color: rgb(219, 219, 219);\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:vertical:pressed {\n"
@@ -500,11 +512,10 @@ class Ui_processingWindow(object):
 "  width: 20px;\n"
 "  subcontrol-position: right;\n"
 "  subcontrol-origin: margin;\n"
-"  border-bottom-right-radius: 3px;\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
+"  background-color: rgb(219, 219, 219);\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:horizontal:pressed {\n"
@@ -520,11 +531,10 @@ class Ui_processingWindow(object):
 "  width: 20px;\n"
 "  subcontrol-position: left;\n"
 "  subcontrol-origin: margin;\n"
-"border-bottom-left-radius: 3px;\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
+"  background-color: rgb(219, 219, 219);\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:horizontal:pressed {\n"
@@ -552,31 +562,56 @@ class Ui_processingWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}")
-        self.aw_edit_2.setObjectName("aw_edit_2")
-        self.gridLayout_2.addWidget(self.aw_edit_2, 1, 1, 1, 1)
-        self.aw_edit_1 = QtWidgets.QTextEdit(self.tab_1)
-        self.aw_edit_1.setMinimumSize(QtCore.QSize(470, 110))
-        self.aw_edit_1.setMaximumSize(QtCore.QSize(16777215, 110))
+        self.scroll_area_1.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scroll_area_1.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
+        self.scroll_area_1.setWidgetResizable(True)
+        self.scroll_area_1.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.scroll_area_1.setObjectName("scroll_area_1")
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 502, 110))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.gridLayout_4 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+        self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_4.setObjectName("gridLayout_4")
+        self.aw_edit_1 = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+        self.aw_edit_1.setMinimumSize(QtCore.QSize(0, 0))
+        self.aw_edit_1.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(10)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.aw_edit_1.setFont(font)
-        self.aw_edit_1.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
-        self.aw_edit_1.setStyleSheet("QTextEdit {\n"
+        self.aw_edit_1.setStyleSheet("QLabel {\n"
 "    border-radius: 3px;\n"
-"    padding: 1px 0px 1px 4px;\n"
+"    padding-left: 4px;\n"
+"    padding-right: 4px;\n"
 "    background-color:  rgb(240, 240, 240);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "    \n"
-"QTextEdit:disabled {\n"
+"QLabel:disabled {\n"
 "    background-color:  rgb(240, 240, 240);\n"
-"}\n"
+"}")
+        self.aw_edit_1.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.aw_edit_1.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.aw_edit_1.setLineWidth(0)
+        self.aw_edit_1.setMidLineWidth(0)
+        self.aw_edit_1.setText("")
+        self.aw_edit_1.setTextFormat(QtCore.Qt.AutoText)
+        self.aw_edit_1.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignTop)
+        self.aw_edit_1.setWordWrap(True)
+        self.aw_edit_1.setObjectName("aw_edit_1")
+        self.gridLayout_4.addWidget(self.aw_edit_1, 0, 0, 1, 1)
+        self.scroll_area_1.setWidget(self.scrollAreaWidgetContents)
+        self.gridLayout_2.addWidget(self.scroll_area_1, 0, 1, 1, 1)
+        self.scroll_area_2 = QtWidgets.QScrollArea(self.tab_1)
+        self.scroll_area_2.setStyleSheet("QScrollArea { background: transparent; }\n"
+"\n"
+"QScrollArea > QWidget > QWidget { background: transparent; }\n"
 "\n"
 "QScrollBar:vertical {\n"
-"  border-left: 0px solid white;\n"
+"  border: 0px solid white;\n"
 "  background-color: rgb(240, 240, 240);\n"
 "  width: 20px;\n"
 "  margin: 21px 0px 21px 0px;\n"
@@ -595,7 +630,7 @@ class Ui_processingWindow(object):
 "}\n"
 "\n"
 "QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
+"  background-color: rgb(167, 167, 167);\n"
 "}\n"
 "\n"
 "QScrollBar:handle:vertical:pressed {\n"
@@ -608,7 +643,7 @@ class Ui_processingWindow(object):
 "}\n"
 "\n"
 "QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
+"  background-color: rgb(167, 167, 167);\n"
 "}\n"
 "\n"
 "QScrollBar:handle:horizontal:pressed {\n"
@@ -624,11 +659,10 @@ class Ui_processingWindow(object):
 "  height: 20px;\n"
 "  subcontrol-position: bottom;\n"
 "  subcontrol-origin: margin;\n"
-"  border-bottom-right-radius: 3px;\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
+"  background-color: rgb(219, 219, 219);\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:vertical:pressed {\n"
@@ -644,11 +678,10 @@ class Ui_processingWindow(object):
 "  height: 20px;\n"
 "  subcontrol-position: top;\n"
 "  subcontrol-origin: margin;\n"
-"  border-top-right-radius: 3px;\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
+"  background-color: rgb(219, 219, 219);\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:vertical:pressed {\n"
@@ -686,11 +719,10 @@ class Ui_processingWindow(object):
 "  width: 20px;\n"
 "  subcontrol-position: right;\n"
 "  subcontrol-origin: margin;\n"
-"  border-bottom-right-radius: 3px;\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
+"  background-color: rgb(219, 219, 219);\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:horizontal:pressed {\n"
@@ -706,11 +738,10 @@ class Ui_processingWindow(object):
 "  width: 20px;\n"
 "  subcontrol-position: left;\n"
 "  subcontrol-origin: margin;\n"
-"border-bottom-left-radius: 3px;\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
+"  background-color: rgb(219, 219, 219);\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:horizontal:pressed {\n"
@@ -738,8 +769,49 @@ class Ui_processingWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}")
-        self.aw_edit_1.setObjectName("aw_edit_1")
-        self.gridLayout_2.addWidget(self.aw_edit_1, 0, 1, 1, 1)
+        self.scroll_area_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scroll_area_2.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
+        self.scroll_area_2.setWidgetResizable(True)
+        self.scroll_area_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.scroll_area_2.setObjectName("scroll_area_2")
+        self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 502, 109))
+        self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
+        self.gridLayout_9 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
+        self.gridLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_9.setObjectName("gridLayout_9")
+        self.aw_edit_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
+        self.aw_edit_2.setMinimumSize(QtCore.QSize(0, 0))
+        self.aw_edit_2.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(10)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.aw_edit_2.setFont(font)
+        self.aw_edit_2.setStyleSheet("QLabel {\n"
+"    border-radius: 3px;\n"
+"    padding-left: 4px;\n"
+"    padding-right: 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"    \n"
+"QLabel:disabled {\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"}")
+        self.aw_edit_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.aw_edit_2.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.aw_edit_2.setLineWidth(0)
+        self.aw_edit_2.setMidLineWidth(0)
+        self.aw_edit_2.setText("")
+        self.aw_edit_2.setTextFormat(QtCore.Qt.AutoText)
+        self.aw_edit_2.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignTop)
+        self.aw_edit_2.setWordWrap(True)
+        self.aw_edit_2.setObjectName("aw_edit_2")
+        self.gridLayout_9.addWidget(self.aw_edit_2, 0, 0, 1, 1)
+        self.scroll_area_2.setWidget(self.scrollAreaWidgetContents_2)
+        self.gridLayout_2.addWidget(self.scroll_area_2, 1, 1, 1, 1)
         self.horizontalLayout_2.addLayout(self.gridLayout_2)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.gridLayout_3.addLayout(self.verticalLayout, 1, 1, 2, 2)
@@ -954,7 +1026,7 @@ class Ui_processingWindow(object):
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollArea_4.setObjectName("scrollArea_4")
         self.scrollAreaWidgetContents_4 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 676, 353))
+        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 676, 363))
         self.scrollAreaWidgetContents_4.setObjectName("scrollAreaWidgetContents_4")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_5.setContentsMargins(0, 0, 0, 0)
@@ -1182,7 +1254,7 @@ class Ui_processingWindow(object):
         self.scrollArea_5.setWidgetResizable(True)
         self.scrollArea_5.setObjectName("scrollArea_5")
         self.scrollAreaWidgetContents_5 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 665, 329))
+        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 665, 340))
         self.scrollAreaWidgetContents_5.setObjectName("scrollAreaWidgetContents_5")
         self.gridLayout_7 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
@@ -1202,13 +1274,11 @@ class Ui_processingWindow(object):
         self.scrollArea_5.setWidget(self.scrollAreaWidgetContents_5)
         self.gridLayout_8.addWidget(self.scrollArea_5, 3, 0, 1, 1)
         self.tabWidget.addTab(self.tab_3, "")
-        self.gridLayout_4.addWidget(self.tabWidget, 0, 0, 1, 1)
-        spacerItem26 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_4.addItem(spacerItem26, 1, 0, 1, 1)
+        self.gridLayout_10.addWidget(self.tabWidget, 0, 0, 1, 1)
+        spacerItem26 = QtWidgets.QSpacerItem(20, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_10.addItem(spacerItem26, 1, 0, 1, 1)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        spacerItem27 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem27)
         self.aw_okButton = QtWidgets.QToolButton(processingWindow)
         self.aw_okButton.setEnabled(False)
         self.aw_okButton.setMinimumSize(QtCore.QSize(180, 27))
@@ -1248,8 +1318,8 @@ class Ui_processingWindow(object):
 "}")
         self.aw_okButton.setObjectName("aw_okButton")
         self.horizontalLayout_3.addWidget(self.aw_okButton)
-        spacerItem28 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem28)
+        spacerItem27 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem27)
         self.aw_cancelButton = QtWidgets.QToolButton(processingWindow)
         self.aw_cancelButton.setMinimumSize(QtCore.QSize(100, 27))
         self.aw_cancelButton.setMaximumSize(QtCore.QSize(100, 27))
@@ -1283,9 +1353,9 @@ class Ui_processingWindow(object):
 "}")
         self.aw_cancelButton.setObjectName("aw_cancelButton")
         self.horizontalLayout_3.addWidget(self.aw_cancelButton)
-        spacerItem29 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem29)
-        self.gridLayout_4.addLayout(self.horizontalLayout_3, 2, 0, 1, 1)
+        spacerItem28 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem28)
+        self.gridLayout_10.addLayout(self.horizontalLayout_3, 2, 0, 1, 1)
 
         self.retranslateUi(processingWindow)
         self.tabWidget.setCurrentIndex(0)

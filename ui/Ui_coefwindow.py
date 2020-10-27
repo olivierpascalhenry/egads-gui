@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'coefwindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -235,6 +235,7 @@ class Ui_coefWindow(object):
 "  bottom: -1px;\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(coefWindow)
+        self.gridLayout.setVerticalSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -321,9 +322,9 @@ class Ui_coefWindow(object):
         self.horizontalLayout_3.addWidget(self.combobox)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem2)
-        self.gridLayout.addLayout(self.horizontalLayout_3, 1, 0, 1, 2)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout.addItem(spacerItem3, 2, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout_3, 2, 0, 1, 2)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout.addItem(spacerItem3, 6, 1, 1, 1)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.label_2 = QtWidgets.QLabel(coefWindow)
@@ -343,7 +344,7 @@ class Ui_coefWindow(object):
         self.horizontalLayout_4.addWidget(self.label_2)
         spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem4)
-        self.gridLayout.addLayout(self.horizontalLayout_4, 3, 0, 1, 2)
+        self.gridLayout.addLayout(self.horizontalLayout_4, 4, 0, 1, 2)
         self.table = QtWidgets.QTableWidget(coefWindow)
         self.table.setMinimumSize(QtCore.QSize(0, 0))
         self.table.setMaximumSize(QtCore.QSize(16777215, 16777215))
@@ -533,13 +534,11 @@ class Ui_coefWindow(object):
         self.table.verticalHeader().setDefaultSectionSize(30)
         self.table.verticalHeader().setHighlightSections(False)
         self.table.verticalHeader().setMinimumSectionSize(30)
-        self.gridLayout.addWidget(self.table, 4, 0, 1, 2)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout.addItem(spacerItem5, 5, 1, 1, 1)
+        self.gridLayout.addWidget(self.table, 5, 0, 1, 2)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout.addItem(spacerItem5, 3, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem6 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem6)
         self.ok_button = QtWidgets.QToolButton(coefWindow)
         self.ok_button.setMinimumSize(QtCore.QSize(100, 27))
         self.ok_button.setMaximumSize(QtCore.QSize(100, 27))
@@ -564,9 +563,6 @@ class Ui_coefWindow(object):
 "                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
-"QToolButton:disabled {\n"
-"    background-color:  rgb(200,200,200);\n"
-"}\n"
 "\n"
 "QToolButton:pressed {\n"
 "    border: 1px solid #579de5;\n"
@@ -576,8 +572,8 @@ class Ui_coefWindow(object):
 "}")
         self.ok_button.setObjectName("ok_button")
         self.horizontalLayout_2.addWidget(self.ok_button)
-        spacerItem7 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem7)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem6)
         self.cancel_button = QtWidgets.QToolButton(coefWindow)
         self.cancel_button.setMinimumSize(QtCore.QSize(100, 27))
         self.cancel_button.setMaximumSize(QtCore.QSize(100, 27))
@@ -611,9 +607,11 @@ class Ui_coefWindow(object):
 "}")
         self.cancel_button.setObjectName("cancel_button")
         self.horizontalLayout_2.addWidget(self.cancel_button)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem8)
-        self.gridLayout.addLayout(self.horizontalLayout_2, 6, 0, 1, 2)
+        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem7)
+        self.gridLayout.addLayout(self.horizontalLayout_2, 7, 0, 1, 2)
+        spacerItem8 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout.addItem(spacerItem8, 1, 0, 1, 1)
 
         self.retranslateUi(coefWindow)
         QtCore.QMetaObject.connectSlotsByName(coefWindow)

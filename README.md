@@ -1,7 +1,7 @@
 Version:
 -------
 
-EGADS Lineage GUI 1.3.0 (Python 3).
+EGADS Lineage GUI 1.4.0 (Python 3).
 
 
 Developments:
@@ -34,6 +34,7 @@ Features:
 ---------
 
 * read/write NetCDF files
+* read/write Hdf5 files
 * read/write NASA/Ames files
 * use of algorithms
 * creation of new algorithms

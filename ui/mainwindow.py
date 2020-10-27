@@ -12,38 +12,41 @@ import tempfile
 import xml
 import datetime
 import collections
-from ui._version import _gui_version
+from copy import deepcopy
+from ui._version import _gui_version, _python_version, _pyqt5_version
 from PyQt5 import QtWidgets, QtCore, QtGui
 from ui.Ui_mainwindow import Ui_MainWindow
 from functions.window_functions.option_window_functions import MyOptions
 from functions.window_functions.plot_window_functions import PlotWindow
+from functions.window_functions.algorithm_windows_functions import MyProcessing, MyAlgorithm
+from functions.window_functions.batch_processing_window_functions import MyBatchProcessing
+from functions.window_functions.export_window_functions import MyExport
+from functions.window_functions.other_windows_functions import MyDimensionSave
+from functions.window_functions.other_windows_functions import (MyAbout, MyDisplay, MyInfo, MyUpdate, MyAsk,
+                                                                MyUpdateAvailable, MyExistingVariable,
+                                                                MyWarningUpdate, MyDeletingDimension)
+from functions.window_functions.metadata_windows_functions import (MyGlobalAttributes, MyVariableAttributes,
+                                                                   MyNAVariableAttributes, MyGroupAttributes,
+                                                                   MyNAGlobalAttributes)
 from functions.file_functions.reading_file_functions import reading_file
 from functions.material_functions import setup_fonts, extension_filetype_dict_function
 from functions.thread_functions.other_functions import StatusbarMsgThread
 from functions.thread_functions.update_functions import CheckEGADSGuiUpdateOnline, CheckEGADSVersion
-from functions.window_functions.algorithm_windows_functions import MyProcessing, MyAlgorithm
-from functions.window_functions.batch_processing_window_functions import MyBatchProcessing
-from functions.window_functions.export_window_functions import MyExport
 from functions.gui_functions.gui_menu_functions import algorithm_menu_initialization
 from functions.gui_functions.gui_support_functions import add_variable_to_widget_tree
 from functions.file_functions.saving_file_functions import saving_file
-from functions.window_functions.other_windows_functions import (MyAbout, MyDisplay, MyInfo, MyUpdate, MyAsk,
-                                                                MyUpdateAvailable, MyExistingVariable,
-                                                                MyWarningUpdate)
-from functions.window_functions.metadata_windows_functions import (MyGlobalAttributes, MyVariableAttributes,
-                                                                   MyNAVariableAttributes, MyGroupAttributes)
 from functions.gui_functions.gui_global_functions import (gui_reset_function, file_drop_layout, status_bar_update,
                                                           clear_var_metadata_layout, update_icons_state,
-                                                          create_quick_access_menu, create_recent_file_menu)
+                                                          create_quick_access_menu, create_recent_file_menu,
+                                                          update_tree_widget, populate_tree_widget)
 from functions.gui_functions.gui_netcdf_functions import (update_nc_global_attribute_gui, nc_tree_var_reading,
                                                           update_nc_variable_attribute_gui)
-from functions.gui_functions.gui_newvariable_functions import (add_new_variable_tab, populate_newvariable_tree_widget,
-                                                               new_tree_var_reading)
 from functions.gui_functions.gui_nasaames_functions import (na_tree_var_reading, update_na_global_attribute_gui,
                                                             update_na_variable_attribute_gui)
 from functions.utils import (prepare_algorithm_categories, prepare_output_categories, create_algorithm_dict,
                              add_element, get_element_value, full_path_name_from_treewidget, icon_creation_function,
-                             multi_full_path_name_from_treewidget, clear_layout)
+                             multi_full_path_name_from_treewidget, clear_layout, font_creation_function,
+                             stylesheet_creation_function, treewidget_item_from_path, delete_treewidget_item_from_path)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -59,11 +62,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.system = system
         self.installed_app = installed
         self.egads_config_dict = egads.config_dict
-
         QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-Regular.ttf')
         QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-SemiBold.ttf')
-
-
         self.setupUi(self)
         self.font_list, self.default_font = setup_fonts()
         self.list_of_algorithms = create_algorithm_dict()
@@ -76,16 +76,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         gui_reset_function(self)
         file_drop_layout(self)
         algorithm_menu_initialization(self)
-        self.list_of_dimensions = {}
         self.list_of_global_attributes = {}
         self.list_of_variables_and_attributes = {}
-        self.list_of_new_variables_and_attributes = {}
         self.list_of_unread_variables = {}
-        self.x_axis_variable_set = False
-        self.x_axis_variable_name = None
         self.new_variables = False
-        self.x_variable = None
-        self.first_time_x_variable = True
         self.gui_update_url = None
         self.statusbar_msg_thread = None
         self.min_egads_version = '1.2.7'
@@ -93,14 +87,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.variable_menu = None
         self.check_egads_version_thread = None
         self.check_gui_update_thread = None
-        self.make_window_title()
+        self.copied_object = []
         self.opened_file_list = []
+        self.make_window_title()
         self.create_quick_access()
         self.create_recent_access()
         self.check_egads_version()
         self.check_egads_gui_update()
+        self.statusbar_label = None
+        self.set_status_bar_widgets()
+
         self.actionCreateVariableBar.setVisible(False)
-        self.actionCreate_group.setVisible(False)
+
         self.start_status_bar_msg_thread('Welcome to the EGADS Lineage GUI !')
         logging.info('gui - mainwindow.py - MainWindow ready')
 
@@ -153,10 +151,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.create_group()
 
     @QtCore.pyqtSlot()
-    def on_actionMigrateVariableBar_triggered(self):
-        self.migrate_variable()
-
-    @QtCore.pyqtSlot()
     def on_actionDeleteVariableBar_triggered(self):
         self.delete_variable()
 
@@ -182,6 +176,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def right_click_menu(self, relative_position):
         logging.debug('gui - mainwindow.py - MainWindow - right_click_menu')
+        font = font_creation_function('normal')
         if self.tab_view.currentIndex() == 1:
             if self.file_ext in ['NetCDF Files (*.nc *.cdf)', 'Hdf Files (*.h5 *.hdf5 *.he5)']:
                 nc_tree_var_reading(self)
@@ -190,27 +185,50 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         elif self.tab_view.currentIndex() == 2:
             new_tree_var_reading(self)
         self.variable_menu = QtWidgets.QMenu()
-        if 'dataset' in self.variable_list.selectedItems()[0].toolTip(0):
-            display_variable = self.variable_menu.addAction("Display variable")
-            plot_variable = self.variable_menu.addAction("Plot variable")
-            self.x_variable = self.variable_menu.addAction("Use variable as X axis in plot window")
-            if self.x_axis_variable_name is not None:
-                if self.x_axis_variable_name[0] == full_path_name_from_treewidget(self.variable_list)[0]:
-                    self.x_variable.setIcon(icon_creation_function('activated_icon.svg'))
-                else:
-                    self.x_variable.setIcon(icon_creation_function('none_icon.svg'))
+        tooltip = self.variable_list.selectedItems()[0].toolTip(0)
+        if 'dataset' in tooltip or 'dimension' in tooltip:
+            if 'dataset' in tooltip:
+                disp_var_str = 'Display variable'
+                plot_var_str = 'Plot variable'
+                del_var_str = 'Delete variable'
+                cpy_var_str = 'Copy variable'
             else:
-                self.x_variable.setIcon(icon_creation_function('none_icon.svg'))
+                disp_var_str = 'Display dimension'
+                plot_var_str = 'Plot dimension'
+                del_var_str = 'Delete dimension'
+                cpy_var_str = 'Copy dimension'
+            copy_variable = self.variable_menu.addAction(cpy_var_str)
+            copy_variable.setIcon(icon_creation_function('copy_icon.svg'))
+            if self.copied_object:
+                if not self.copied_object[1]:
+                    pst_var_str = 'Paste variable'
+                else:
+                    pst_var_str = 'Paste dimension'
+                paste_variable = self.variable_menu.addAction(pst_var_str)
+                paste_variable.triggered.connect(self.paste_variable)
+                paste_variable.setIcon(icon_creation_function('paste_icon.svg'))
+            display_variable = self.variable_menu.addAction(disp_var_str)
+            plot_variable = self.variable_menu.addAction(plot_var_str)
             display_variable.setIcon(icon_creation_function('data_icon.svg'))
             plot_variable.setIcon(icon_creation_function('plot_icon.svg'))
+            copy_variable.triggered.connect(self.copy_variable)
             display_variable.triggered.connect(self.display_variable)
             plot_variable.triggered.connect(self.plot_variable)
-            self.x_variable.triggered.connect(self.set_x_variable)
-            delete_variable = self.variable_menu.addAction("Delete variable")
+            delete_variable = self.variable_menu.addAction(del_var_str)
         else:
+            if self.copied_object:
+                if not self.copied_object[1]:
+                    pst_var_str = 'Paste variable'
+                else:
+                    pst_var_str = 'Paste dimension'
+                paste_variable = self.variable_menu.addAction(pst_var_str)
+                paste_variable.triggered.connect(self.paste_variable)
+                paste_variable.setIcon(icon_creation_function('paste_icon.svg'))
             delete_variable = self.variable_menu.addAction("Delete group")
         delete_variable.setIcon(icon_creation_function('del_icon.svg'))
         delete_variable.triggered.connect(self.delete_variable)
+        self.variable_menu.setFont(font)
+        self.variable_menu.setStyleSheet(stylesheet_creation_function('qmenu'))
         parent_position = self.variable_list.mapToGlobal(QtCore.QPoint(0, 0))
         self.variable_menu.popup(parent_position + relative_position)
 
@@ -255,28 +273,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def save_file(self):
         logging.debug('gui - mainwindow.py - MainWindow - save_file')
-        if self.new_variables:
-            text = ('New variables exist in the New variables workspace. If they are not migrated into the '
-                    'Variables workspace, they won\'t be saved in the new file.')
-            info_window = MyInfo(text)
-            info_window.exec_()
-        save_file_name, save_file_ext = self.get_file_name('save')
-        if save_file_name:
-            supported_formats = ['NetCDF Files (*.nc *.cdf)', 'NASA Ames Files (*.na)', 'Hdf Files (*.h5 *.hdf5 *.he5)']
-            unsupported_formats = ['CSV Files (*.csv *.dat *.txt)']
-            if save_file_ext in supported_formats:
-                if save_file_ext == 'NASA Ames Files (*.na)':
-                    if not self.check_nasaames_compatibility():
-                        info_text = ('The actual NASA Ames file class can only handle FFI equal to 1001. Thus it is '
-                                     'not possible at this time to save file with more than one dimension or '
-                                     'including groups.')
-                        info_window = MyInfo(info_text)
-                        info_window.exec_()
-                        return
-                saving_file(self, save_file_name, save_file_ext, self.file_ext)
-            elif save_file_ext in unsupported_formats:
-                info_window = MyInfo('This format ' + save_file_ext + ' is not supported actually.')
-                info_window.exec_()
+        if self.check_variable_dimension():
+            save_file_name, save_file_ext = self.get_file_name('save')
+            if save_file_name:
+                supported_formats = ['NetCDF Files (*.nc *.cdf)', 'NASA Ames Files (*.na)',
+                                     'Hdf Files (*.h5 *.hdf5 *.he5)']
+                unsupported_formats = ['CSV Files (*.csv *.dat *.txt)']
+                if save_file_ext in supported_formats:
+                    if save_file_ext == 'NASA Ames Files (*.na)':
+                        if not self.check_nasaames_compatibility():
+                            info_text = ('The actual NASA Ames file class can only handle FFI equal to 1001. Thus it '
+                                         'is not possible at this time to save file with more than one dimension or '
+                                         'including groups.')
+                            info_window = MyInfo(info_text)
+                            info_window.exec_()
+                            return
+                    saving_file(self, save_file_name, save_file_ext, self.file_ext)
+                elif save_file_ext in unsupported_formats:
+                    info_window = MyInfo('This format ' + save_file_ext + ' is not supported actually.')
+                    info_window.exec_()
 
     def check_nasaames_compatibility(self):
         na_pass = True
@@ -291,6 +306,49 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             na_pass = False
         return na_pass
 
+    def check_variable_dimension(self):
+        var_with_missing_dim = []
+        var_with_wrgpath_dim = []
+        result = True
+        for var_name, var_dict in self.list_of_variables_and_attributes.items():
+            if not var_dict[2] and isinstance(var_dict[0], egads.EgadsData):
+                if var_dict[1] is None:
+                    if var_name not in var_with_missing_dim:
+                        var_with_missing_dim.append(var_name)
+                else:
+                    for dim in var_dict[1]:
+                        if 'no dimension' in dim:
+                            if var_name not in var_with_missing_dim:
+                                var_with_missing_dim.append(var_name)
+                        else:
+                            if os.path.dirname(var_name) != os.path.dirname(dim):
+                                if var_name not in var_with_wrgpath_dim:
+                                    var_with_wrgpath_dim.append(var_name)
+
+        if var_with_missing_dim or var_with_wrgpath_dim:
+            text_missing_dim = ''
+            text_wrgpath_dim = ''
+            if var_with_missing_dim:
+                text_missing_dim = 'The following variables do not have a dimension or are missing a dimension:<ul>'
+                for var in var_with_missing_dim:
+                    text_missing_dim += '<li>' + var + '</li>'
+                text_missing_dim += '</ul><br>'
+            if var_with_wrgpath_dim:
+                text_wrgpath_dim = ('The following variables have one or more dimensions which are not in the same '
+                                    'folder:<ul>')
+                for var in var_with_wrgpath_dim:
+                    text_wrgpath_dim += '<li>' + var + '</li>'
+                text_wrgpath_dim += '</ul><br>'
+            full_text = (text_missing_dim + text_wrgpath_dim + 'Variables with no dimension, with one or more missing '
+                         'dimensions or linked to one or more dimensions in another folder won\'t be saved. Click on '
+                         'Cancel to correct the different issues, or click on Save to save the file without the '
+                         'listed variables.')
+            save_window = MyDimensionSave(full_text)
+            save_window.exec_()
+            result = save_window.save
+
+        return result
+
     def export_variables(self):
         logging.debug('gui - mainwindow.py - MainWindow - export_variables')
         export_window = MyExport(self.list_of_variables_and_attributes)
@@ -298,17 +356,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def global_attributes(self):
         logging.debug('gui - mainwindow.py - MainWindow - global_attributes')
-        glob_attr_window = MyGlobalAttributes(self.list_of_global_attributes, self.file_ext)
+        if self.file_ext == 'NetCDF Files (*.nc *.cdf)' or self.file_ext == 'Hdf Files (*.h5 *.hdf5 *.he5)':
+            glob_attr_window = MyGlobalAttributes(self.list_of_global_attributes, self.file_ext)
+        else:
+            glob_attr_window = MyNAGlobalAttributes(self.list_of_global_attributes, self.file_ext)
         glob_attr_window.exec_()
         if glob_attr_window.global_attributes is not None:
             self.list_of_global_attributes = glob_attr_window.global_attributes
-            if self.file_ext == 'NetCDF Files (*.nc *.cdf)':
+            if self.file_ext == 'NetCDF Files (*.nc *.cdf)' or self.file_ext == 'Hdf Files (*.h5 *.hdf5 *.he5)':
                 update_nc_global_attribute_gui(self)
-
-            elif self.file_ext == 'Hdf Files (*.h5 *.hdf5 *.he5)':
-                update_nc_global_attribute_gui(self)
-
-            elif self.file_ext == 'NASA Ames Files (*.na)':
+            else:
                 update_na_global_attribute_gui(self)
             self.modified = True
             self.make_window_title()
@@ -316,24 +373,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def variable_attributes(self):
         logging.debug('gui - mainwindow.py - MainWindow - variable_attributes')
-        dataset = False
-        if self.tab_view.currentIndex() == 1:
-            variable_tree = self.variable_list
-            variable_list = self.list_of_variables_and_attributes
+        path, name = full_path_name_from_treewidget(self.variable_list)
+        if isinstance(self.list_of_variables_and_attributes[path][0], egads.EgadsData):
+            variable_attributes = self.list_of_variables_and_attributes[path][0].metadata
         else:
-            variable_tree = self.new_variable_list
-            variable_list = self.list_of_new_variables_and_attributes
-        path, name = full_path_name_from_treewidget(variable_tree)
-        if isinstance(variable_list[path][0], egads.EgadsData):
-            dataset = True
-        if dataset:
-            variable_attributes = variable_list[path][0].metadata
-        else:
-            variable_attributes = variable_list[path][1]
+            variable_attributes = self.list_of_variables_and_attributes[path][0]
         if self.file_ext == 'NASA Ames Files (*.na)':
             var_attr_window = MyNAVariableAttributes(path, variable_attributes)
         else:
-            if dataset:
+            if isinstance(self.list_of_variables_and_attributes[path][0], egads.EgadsData):
                 var_attr_window = MyVariableAttributes(path, variable_attributes)
             else:
                 var_attr_window = MyGroupAttributes(path, variable_attributes)
@@ -349,15 +397,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def display_variable(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_variable')
-        var_object = None
-        var_path = None
-        var_name = None
-        if self.tab_view.currentIndex() == 1:
-            var_path, var_name = full_path_name_from_treewidget(self.variable_list)
-            var_object = self.list_of_variables_and_attributes[var_path]
-        elif self.tab_view.currentIndex() == 2:
-            var_path, var_name = full_path_name_from_treewidget(self.new_variable_list)
-            var_object = self.list_of_new_variables_and_attributes[var_path]
+        var_path, var_name = full_path_name_from_treewidget(self.variable_list)
+        var_object = self.list_of_variables_and_attributes[var_path]
         var_units = var_object[0].metadata['units']
         fill_value = None
         try:
@@ -370,11 +411,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         var_values = var_object[0].value
         dimensions = collections.OrderedDict()
         i = 0
-        for key, value in var_object[1].items():
-            dimensions[key] = {'length': value, 'axis': i,
-                               'values': self.list_of_variables_and_attributes[key][0].value,
-                               'units': self.list_of_variables_and_attributes[key][0].metadata['units']}
-            i += 1
+        if var_object[1] is not None:
+            for dim, shape in var_object[1].items():
+                if 'no dimension' in dim:
+                    dimensions[dim] = {'length': shape, 'axis': i,
+                                       'values': range(1, shape + 1),
+                                       'units': 'dimensionless'}
+                else:
+                    dimensions[dim] = {'length': shape, 'axis': i,
+                                       'values': self.list_of_variables_and_attributes[dim][0].value,
+                                       'units': self.list_of_variables_and_attributes[dim][0].metadata['units']}
+                i += 1
+        else:
+            if var_object[2]:
+                dimensions[var_path] = {'length': var_object[0].shape[0], 'axis': 0,
+                                        'values': var_object[0].value,
+                                        'units': var_object[0].metadata['units']}
+            else:
+                for i, shape in enumerate(var_object[0].shape):
+                    dimensions['no dimension ' + str(i)] = {'length': shape, 'axis': i,
+                                                            'values': range(1, shape + 1),
+                                                            'units': 'dimensionless'}
+
         logging.debug('gui - mainwindow.py - MainWindow - display_variable : tab index '
                       + str(self.tab_view.currentIndex()) + ', variable ' + var_path)
         display_window = MyDisplay(var_path, var_units, fill_value, var_values, dimensions)
@@ -382,24 +440,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def plot_variable(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_variable')
-        list_of_variables_and_attributes = None
-        varible_tree = None
-        if self.tab_view.currentIndex() == 1:
-            varible_tree = self.variable_list
-            list_of_variables_and_attributes = self.list_of_variables_and_attributes
-        elif self.tab_view.currentIndex() == 2:
-            varible_tree = self.new_variable_list
-            list_of_variables_and_attributes = self.list_of_new_variables_and_attributes
-        variable_list = multi_full_path_name_from_treewidget(varible_tree)
+        variable_list = multi_full_path_name_from_treewidget(self.variable_list)
         variables = collections.OrderedDict()
         dimensions = {}
+        no_dim = False
         for sublist in variable_list:
             var_path, var_name = sublist[0], sublist[1]
-            var_units = list_of_variables_and_attributes[var_path][0].metadata['units']
-            egads_units = list_of_variables_and_attributes[var_path][0].units
-            var = list_of_variables_and_attributes[var_path][0].value
+            var_units = self.list_of_variables_and_attributes[var_path][0].metadata['units']
+            egads_units = self.list_of_variables_and_attributes[var_path][0].units
+            var = self.list_of_variables_and_attributes[var_path][0].value
             try:
-                fill_value = list_of_variables_and_attributes[var_path][0].metadata['_FillValue']
+                fill_value = self.list_of_variables_and_attributes[var_path][0].metadata['_FillValue']
                 try:
                     var[var == fill_value] = numpy.nan
                 except ValueError:
@@ -407,7 +458,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                   'values by NaN, check variable type for integers')
             except KeyError:
                 try:
-                    fill_value = list_of_variables_and_attributes[var_path][0].metadata['missing_value']
+                    fill_value = self.list_of_variables_and_attributes[var_path][0].metadata['missing_value']
                     try:
                         var[var == fill_value] = numpy.nan
                     except ValueError:
@@ -419,50 +470,108 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             var_dimensions = []
             i = 0
             orig_var_list = self.list_of_variables_and_attributes
-            if self.x_axis_variable_name is None:
-                for key in list_of_variables_and_attributes[var_path][1]:
-                    var_dimensions.append(key)
-                    try:
-                        dimensions[key]
-                    except KeyError:
-                        dimensions[key] = {'units': orig_var_list[key][0].metadata['units'], 'axis': i,
-                                           'values': orig_var_list[key][0].value, 'name': key}
-                    i += 1
+            if (self.list_of_variables_and_attributes[var_path][1] is None and
+                    not self.list_of_variables_and_attributes[var_path][2]):
+                no_dim = True
+            elif (self.list_of_variables_and_attributes[var_path][1] is None and
+                    self.list_of_variables_and_attributes[var_path][2]):
+                var_dimensions.append(var_path)
+                dimensions[var_path] = {'units': var_units, 'axis': 0, 'values': var, 'name': var_path}
             else:
-                var_dimensions.append(self.x_axis_variable_name[0])
-                try:
-                    dimensions[self.x_axis_variable_name[0]]
-                except KeyError:
-                    dimensions[self.x_axis_variable_name[0]] = {
-                        'units': orig_var_list[self.x_axis_variable_name[0]][0].metadata['units'], 'axis': i,
-                        'values': orig_var_list[self.x_axis_variable_name[0]][0].value,
-                        'name': self.x_axis_variable_name[1]}
-                i += 1
+                for key in self.list_of_variables_and_attributes[var_path][1]:
+                    if 'no dimension' in key:
+                        no_dim = True
+                        break
+                    else:
+                        var_dimensions.append(key)
+                        try:
+                            dimensions[key]
+                        except KeyError:
+                            dimensions[key] = {'units': orig_var_list[key][0].metadata['units'], 'axis': i,
+                                               'values': orig_var_list[key][0].value, 'name': key}
+                        i += 1
             variables[var_path] = {'units': var_units, 'egads_units': egads_units, 'values': var,
                                    'dimensions': var_dimensions, 'name': var_name}
-
-        plot_window = PlotWindow(variables, dimensions, self.x_axis_variable_name, self.font_list, self.default_font,
-                                 self.config_dict, self.gui_path)
-        plot_window.setModal(True)
-        plot_window.exec_()
+        if not no_dim:
+            plot_window = PlotWindow(variables, dimensions, self.font_list, self.default_font, self.config_dict,
+                                     self.gui_path)
+            plot_window.setModal(True)
+            plot_window.exec_()
+        else:
+            text = ('One or more variables is missing a dimension. Thus it is not possible to plot it. Please check '
+                    'the variable list and review the different dimensions attached to variables.')
+            warning_window = MyInfo(text)
+            warning_window.exec_()
 
     def process_variable(self):
         logging.debug('gui - mainwindow.py - MainWindow - process_variable')
-        processing_window = MyProcessing(self.list_of_algorithms, self.list_of_variables_and_attributes,
-                                         self.list_of_new_variables_and_attributes)
+        processing_window = MyProcessing(self.list_of_algorithms, self.list_of_variables_and_attributes)
         processing_window.exec_()
         if processing_window.new_var_list is not None:
-            self.list_of_new_variables_and_attributes.update(processing_window.new_var_list)
-            if not self.new_variables:
-                self.new_variables = True
-                add_new_variable_tab(self)
-            populate_newvariable_tree_widget(self)
+            new_var_list = processing_window.new_var_list
+            self.list_of_variables_and_attributes.update(processing_window.new_var_list)
+            for var in new_var_list:
+                widget = QtWidgets.QTreeWidgetItem()
+                widget.setText(0, var[1:])
+                widget.setToolTip(0, 'dataset: ' + var[1:])
+                widget.setIcon(0, icon_creation_function('variable_icon.svg'))
+                self.variable_list.addTopLevelItem(widget)
+            update_tree_widget(self.variable_list, self.list_of_variables_and_attributes)
             self.modified = True
             self.make_window_title()
             self.start_status_bar_msg_thread('New variables have been created...')
 
     def create_group(self):
-        pass
+        logging.debug('gui - mainwindow.py - MainWindow - create_group')
+        items = self.variable_list.selectedItems()
+        if len(items) == 0:
+            base_name = '/new_folder'
+            if base_name in self.list_of_variables_and_attributes:
+                i = 2
+                folder_name = base_name + '_' + str(i)
+                while folder_name in self.list_of_variables_and_attributes:
+                    i += 1
+                    folder_name = base_name + '_' + str(i)
+                base_name = folder_name
+            self.list_of_variables_and_attributes[base_name] = [{}, None, False]
+            widget = QtWidgets.QTreeWidgetItem()
+            widget.setText(0, base_name[1:])
+            widget.setToolTip(0, 'group: ' + base_name[1:])
+            widget.setIcon(0, icon_creation_function('folder_icon.svg'))
+            self.variable_list.addTopLevelItem(widget)
+        else:
+            item = items[0]
+            path, _ = full_path_name_from_treewidget(parent=item)
+            if 'group' not in item.toolTip(0):
+                path = os.path.dirname(path)
+                if path == '/':
+                    path = ''
+                    parent = None
+                else:
+                    parent = item
+            else:
+                parent = item
+            base_name = path + '/new_folder'
+            if base_name in self.list_of_variables_and_attributes:
+                i = 2
+                folder_name = base_name + '_' + str(i)
+                while folder_name in self.list_of_variables_and_attributes:
+                    i += 1
+                    folder_name = base_name + '_' + str(i)
+                base_name = folder_name
+            self.list_of_variables_and_attributes[base_name] = [{}, None, False]
+            widget = QtWidgets.QTreeWidgetItem()
+            widget.setText(0, os.path.basename(base_name))
+            widget.setToolTip(0, 'group: ' + base_name[1:])
+            widget.setIcon(0, icon_creation_function('folder_icon.svg'))
+            if parent is None:
+                self.variable_list.addTopLevelItem(widget)
+            else:
+                parent.addChild(widget)
+        update_tree_widget(self.variable_list, self.list_of_variables_and_attributes)
+        self.modified = True
+        self.make_window_title()
+        self.start_status_bar_msg_thread('A new group has been created...')
 
     def create_algorithm(self):
         logging.debug('gui - mainwindow.py - MainWindow - create_algorithm')
@@ -493,119 +602,114 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 logging.exception('gui - mainwindow.py - MainWindow - create_algorithm: an exception occurred during '
                                   'the initialization of the algorithm information window.')
 
-    def migrate_variable(self):
-        logging.debug('gui - mainwindow.py - MainWindow - migrate_variable')
-        var_list = list(self.list_of_variables_and_attributes.keys())
-        selected_items = self.new_variable_list.selectedItems()
-        filtered_list = []
-        for item in selected_items:
-            var = self.list_of_new_variables_and_attributes['/' + item.text(0)][2] + item.text(0)
-            if var in var_list:
-                filtered_list.append(var)
-        if filtered_list:
-            if len(filtered_list) > 1:
-                text = 'The following variables already exist in the Variables workspace:<ul>'
-                for var in filtered_list:
-                    text += '<li>' + var + '</li>'
-                text += ('</ul>Please confirm the overwriting by clicking on <b>Overwrite</b>. Click on <b>Cancel</b> '
-                         'to cancel the processing.')
+    def delete_variable(self):
+        logging.debug('gui - mainwindow.py - MainWindow - delete_variable')
+        delete_dimension = True
+        selected_objects = [sublist[0] for sublist in multi_full_path_name_from_treewidget(self.variable_list,
+                                                                                           include_child=True)]
+        selected_objects = sorted(list(set(selected_objects)))
+        dimension_list = [key for key, value in self.list_of_variables_and_attributes.items() if value[2]]
+        if (list(set(dimension_list).intersection(selected_objects)) and self.config_dict['GENERAL'].getboolean(
+                'dimension_warning')):
+            warning_window = MyDeletingDimension()
+            warning_window.exec_()
+            if not warning_window.delete:
+                delete_dimension = False
+        deleted_dimensions = []
+        if delete_dimension:
+            for path in reversed(selected_objects):
+                if self.list_of_variables_and_attributes[path][2]:
+                    deleted_dimensions.append(path)
+                del self.list_of_variables_and_attributes[path]
+                delete_treewidget_item_from_path(self.variable_list, path)
+            if deleted_dimensions:
+                for dim in deleted_dimensions:
+                    for var, var_dict in self.list_of_variables_and_attributes.items():
+                        dim_dict = var_dict[1]
+                        if dim_dict is not None:
+                            if dim in dim_dict:
+                                if len(dim_dict) > 1:
+                                    new_dict = collections.OrderedDict()
+                                    dim_deleted = False
+                                    for old_dim, shape in dim_dict.items():
+                                        if dim == old_dim:
+                                            new_dict['no dimension'] = shape
+                                            dim_deleted = True
+                                        else:
+                                            new_dict[old_dim] = shape
+                                    if dim_deleted:
+                                        variables_and_attributes[var][1] = new_dict
+                                else:
+                                    self.list_of_variables_and_attributes[var][1] = None
+            update_tree_widget(self.variable_list, self.list_of_variables_and_attributes)
+            clear_var_metadata_layout(self)
+            self.make_window_title()
+            update_icons_state(self)
+            self.start_status_bar_msg_thread('The selected variables/groups have been deleted...')
+
+    def copy_variable(self):
+        logging.debug('gui - mainwindow.py - MainWindow - copy_variable')
+        var_path, _ = full_path_name_from_treewidget(self.variable_list)
+        is_dim = self.list_of_variables_and_attributes[var_path][2]
+        self.copied_object = [var_path, is_dim]
+
+    def paste_variable(self):
+        logging.debug('gui - mainwindow.py - MainWindow - paste_variable')
+        object_path, var_name = full_path_name_from_treewidget(self.variable_list)
+        var_path = self.copied_object[0]
+        if isinstance(self.list_of_variables_and_attributes[object_path][0], egads.EgadsData):
+            path = os.path.dirname(object_path)
+        else:
+            path = object_path
+        if path == '/':
+            new_name = '/' + os.path.basename(var_path)
+        else:
+            new_name = path + '/' + os.path.basename(var_path)
+
+        if new_name in self.list_of_variables_and_attributes:
+            copy_num = 1
+            while new_name + '_copy' + str(copy_num) in self.list_of_variables_and_attributes:
+                copy_num += 1
+            new_name += '_copy' + str(copy_num)
+
+        if var_path in self.list_of_variables_and_attributes:
+            data_copy = self.list_of_variables_and_attributes[var_path][0].copy()
+            is_dim_copy = deepcopy(self.list_of_variables_and_attributes[var_path][2])
+            if is_dim_copy:
+                dim_copy = None
             else:
-                text = ('The following variable, ' + filtered_list[0] + ', already exists in the Variables '
-                        'workspace. Please confirm the overwriting by clicking on <b>Overwrite</b>. Click on '
-                        '<b>Cancel</b> to cancel the processing.')
-            existing_window = MyExistingVariable(text)
-            existing_window.exec_()
-            if not existing_window.overwrite:
-                return
-        for item in selected_items:
-            var_name = str(item.text(0))
-            sublist = self.list_of_new_variables_and_attributes['/' + var_name]
-            self.list_of_variables_and_attributes[sublist[2] + var_name] = sublist[:2]
-            self.list_of_new_variables_and_attributes.pop('/' + var_name, 0)
-            add_variable_to_widget_tree(self.variable_list, var_name, sublist[2])
-            self.new_variable_list.takeTopLevelItem(self.new_variable_list.indexOfTopLevelItem(item))
+                dim_copy = deepcopy(self.list_of_variables_and_attributes[var_path][1])
+            self.list_of_variables_and_attributes[new_name] = [data_copy, dim_copy, is_dim_copy]
+            parent = treewidget_item_from_path(self.variable_list, path)
+            item = QtWidgets.QTreeWidgetItem()
+            item.setText(0, os.path.basename(new_name))
+            if not self.copied_object[1]:
+                item.setToolTip(0, 'dataset: ' + new_name)
+            else:
+                item.setToolTip(0, 'dimension: ' + new_name)
+            try:
+                parent.addChild(item)
+            except AttributeError:
+                self.variable_list.addTopLevelItem(item)
+            update_tree_widget(self.variable_list, self.list_of_variables_and_attributes)
             self.modified = True
             self.make_window_title()
-        self.start_status_bar_msg_thread('The selected variables have been migrated to the main workspace...')
-        if self.new_variable_list.topLevelItemCount() == 0:
-            clear_layout(self.newvariable_widget_container)
-            self.tab_view.removeTab(2)
-            self.new_variables = False
-
-    def delete_variable(self):
-        logging.debug('gui - mainwindow.py - MainWindow - delete_variable - tab index ' + str(
-            self.tab_view.currentIndex()))
-        variables_and_attributes = None
-        list_object = None
-        new_tab = False
-        if self.tab_view.currentIndex() == 1:
-            new_tab = False
-            list_object = self.variable_list
-            variables_and_attributes = self.list_of_variables_and_attributes
-        elif self.tab_view.currentIndex() == 2:
-            new_tab = True
-            list_object = self.new_variable_list
-            variables_and_attributes = self.list_of_new_variables_and_attributes
-        undeleted_list = []
-        for var in list_object.selectedItems():
-            var_path, var_name = full_path_name_from_treewidget(list_object, var)
-            if self.file_ext == 'NASA Ames Files (*.na)':
-                var_comp_dim = var_name
-            else:
-                var_comp_dim = var_name + ' (' + var_path[: - len(var_name) - 1] + ')'
-            if var_comp_dim not in self.list_of_dimensions:
-                if not isinstance(variables_and_attributes[var_path][0], egads.EgadsData):
-                    for key in list(variables_and_attributes.keys()):
-                        if key.find(var_path) == 0:
-                            del variables_and_attributes[key]
-                    var.takeChildren()
-                    parent = var.parent()
-                    if parent is None:
-                        list_object.takeTopLevelItem(list_object.indexFromItem(var).row())
-                    else:
-                        var.parent().removeChild(var)
-                else:
-                    try:
-                        del variables_and_attributes[var_path]
-                        parent = var.parent()
-                        if parent is None:
-                            list_object.takeTopLevelItem(list_object.indexFromItem(var).row())
-                        else:
-                            var.parent().removeChild(var)
-                    except TypeError:
-                        logging.exception('gui - mainwindow.py - MainWindow - delete_variable: an exception occured '
-                                          'during the deletion of the variable ' + var_name)
-                self.modified = True
-            else:
-                undeleted_list.append(var_name)
-        clear_var_metadata_layout(self)
-        if new_tab:
-            if list_object.topLevelItemCount() == 0:
-                clear_layout(self.newvariable_widget_container)
-                self.tab_view.removeTab(2)
-                self.new_variables = False
-        self.make_window_title()
-        update_icons_state(self)
-        self.start_status_bar_msg_thread('The selected variables/groups have been deleted...')
-        if undeleted_list:
-            if len(undeleted_list) > 1:
-                text = 'Because they are considered as dimensions, the following variables couldn\'t be deleted:<ul>'
-                for var in undeleted_list:
-                    text += '<li>' + var + '</li>'
-            else:
-                text = ('Because it is considered as a dimension, the following variable couldn\'t be '
-                        'deleted:<ul>''<li>' + undeleted_list[0] + '</li>')
-            undeleted_window = MyInfo(text)
-            undeleted_window.exec_()
+            self.start_status_bar_msg_thread('A variable has been copied...')
+        else:
+            text = ('The following variable <b>' + var_path + '</b> doesn\'t exist anymore. It could have been '
+                    'deleted, renamed or moved.')
+            info_window = MyInfo(text)
+            info_window.exec_()
+            self.copied_object.clear()
 
     @staticmethod
     def about_egads():
         logging.debug('gui - mainwindow.py - MainWindow - about_egads')
         egads_version = egads.__version__
-        text = ('<p align=\"justify\">EGADS (EUFAR General Airborne Data-processing Software, v' + egads_version
-                + ') and its GUI (v' + _gui_version + ') are both Python-based toolboxes for processing airborne '
-                + 'atmospheric data and data visualization. <p align=\"justify\">Based on Python 3.5.4 '
-                + ' and PyQt 5.11.3, EGADS and its GUI provide a framework for researchers to apply '
+        text = ('<p align=\"justify\">EGADS (EUFAR General Airborne Data-processing Software, v{egads_version}'
+                + ') and its GUI (v{gui_version}) are both Python-based toolboxes for processing airborne '
+                + 'atmospheric data and data visualization. <p align=\"justify\">Based on Python {python_version} '
+                + ' and PyQt {pyqt5_version}, EGADS and its GUI provide a framework for researchers to apply '
                 + 'expert-contributed algorithms to data files, and acts as a platform for data intercomparison. '
                 + 'Algorithms in EGADS will be contributed by members of the EUFAR Expert Working Group if they are '
                 + 'found to be mature and well-established in the scientific community.</p><p align=\"justify\">EGADS '
@@ -615,7 +719,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 + 'ds for use within the EUFAR community. A compilation of these standards and other Standards & Protoc'
                 + 'ols products is available on the EUFAR website: <a http://www.eufar.net/tools><span style=\" text-de'
                 + 'coration: underline; color:#0000ff;\">http://www.eufar.net/tools/</a></p>')
-        about_window = MyAbout(text)
+        about_window = MyAbout(text.format(egads_version=egads_version, gui_version=_gui_version,
+                                           python_version=_python_version, pyqt5_version=_pyqt5_version))
         about_window.exec_()
     
     def show_options(self):
@@ -652,6 +757,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.config_dict['FILES_FOLDERS'].getboolean('keep_opened_files'):
                 self.menuOpen_recent.clear()
                 self.menuOpen_recent.setEnabled(True)
+                create_recent_file_menu(self)
             else:
                 self.menuOpen_recent.clear()
                 self.menuOpen_recent.setEnabled(False)
@@ -796,41 +902,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.file_ext = ''
         self.default_message = ''
         self.file_is_opened = False
-        self.list_of_dimensions = {}
         self.list_of_global_attributes = {}
         self.list_of_variables_and_attributes = {}
-        self.list_of_new_variables_and_attributes = {}
         self.list_of_unread_variables = {}
-        self.x_axis_variable_set = False
-        self.x_axis_variable_name = None
         self.new_variables = False
-        self.x_variable = None
-        self.first_time_x_variable = True
+        self.copied_object = []
         status_bar_update(self)
         gui_reset_function(self)
         file_drop_layout(self)
         self.make_window_title()
         self.start_status_bar_msg_thread('The file ' + pathlib.PurePath(filename).name + ' has been closed...')
-
-    def set_x_variable(self):
-        logging.debug('gui - mainwindow.py - MainWindow - set_x_variable')
-        if self.x_axis_variable_set:
-            self.x_axis_variable_set = False
-            self.x_axis_variable_name = None
-            self.start_status_bar_msg_thread('No variable set as a temporary dimension...')
-        else:
-            self.x_axis_variable_set = True
-            self.x_axis_variable_name = full_path_name_from_treewidget(self.variable_list)
-            if self.first_time_x_variable:
-                self.first_time_x_variable = False
-                if not self.config_dict['PLOTS'].getboolean('x_info_disabled'):
-                    info_text = ('You have replaced the default dimension by another variable for the first time. '
-                                 'Please note that this option only works for time series (one dimension) and not for '
-                                 + 'gridded data (two or more dimensions).')
-                    info_window = MyInfo(info_text)
-                    info_window.exec_()
-            msg = 'The variable ' + self.x_axis_variable_name[0] + ' has been set as a temporary dimension...'
-            self.start_status_bar_msg_thread(msg)
 
     def make_window_title(self):
         logging.debug('gui - mainwindow.py - MainWindow - make_window_title : modified ' + str(self.modified))
@@ -848,7 +929,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.statusbar_msg_thread.start()
 
     def display_status_bar_msg(self, string):
-        self.statusBar.showMessage(string)
+        self.statusbar_label.setText(string)
+
+    def set_status_bar_widgets(self):
+        self.statusbar_label = QtWidgets.QLabel()
+        self.statusbar_label.setFont(font_creation_function('small-italic'))
+        self.statusbar_label.setMinimumSize(QtCore.QSize(0, 0))
+        self.statusbar_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.statusbar_label.setObjectName('statusbar_label')
+        self.statusbar_label.setStyleSheet(stylesheet_creation_function('qlabel'))
+        self.statusBar.addWidget(self.statusbar_label)
 
     @staticmethod
     def open_help():

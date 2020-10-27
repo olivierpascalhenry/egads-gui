@@ -25,6 +25,7 @@ class Ui_batchProcessingWindow(object):
         batchProcessingWindow.setWindowIcon(icon)
         batchProcessingWindow.setStyleSheet("")
         self.gridLayout_2 = QtWidgets.QGridLayout(batchProcessingWindow)
+        self.gridLayout_2.setVerticalSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.tabWidget = QtWidgets.QTabWidget(batchProcessingWindow)
         font = QtGui.QFont()
@@ -159,20 +160,19 @@ class Ui_batchProcessingWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
 "QComboBox:disabled {\n"
 "    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
 "}\n"
 "\n"
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -192,15 +192,34 @@ class Ui_batchProcessingWindow(object):
 "    height: 16px\n"
 "}\n"
 "\n"
-"QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
-"    background: #f0f0f0;\n"
-"    border: 0px solid #f0f0f0;\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.bw_combobox_1.setFrame(False)
         self.bw_combobox_1.setObjectName("bw_combobox_1")
@@ -289,20 +308,19 @@ class Ui_batchProcessingWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
 "QComboBox:disabled {\n"
 "    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
 "}\n"
 "\n"
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -322,15 +340,34 @@ class Ui_batchProcessingWindow(object):
 "    height: 16px\n"
 "}\n"
 "\n"
-"QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
-"    background: #f0f0f0;\n"
-"    border: 0px solid #f0f0f0;\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.bw_combobox_4.setFrame(False)
         self.bw_combobox_4.setObjectName("bw_combobox_4")
@@ -1159,7 +1196,7 @@ class Ui_batchProcessingWindow(object):
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setObjectName("scroll_area")
         self.scrollAreaWidgetContents_4 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 810, 485))
+        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 810, 506))
         self.scrollAreaWidgetContents_4.setObjectName("scrollAreaWidgetContents_4")
         self.gridLayout_7 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
@@ -1552,8 +1589,7 @@ class Ui_batchProcessingWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
@@ -1565,8 +1601,7 @@ class Ui_batchProcessingWindow(object):
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -1593,14 +1628,27 @@ class Ui_batchProcessingWindow(object):
 "}\n"
 "\n"
 "QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
 "    background: #f0f0f0;\n"
 "    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.bw_combobox_5.setFrame(False)
         self.bw_combobox_5.setObjectName("bw_combobox_5")
@@ -1738,8 +1786,7 @@ class Ui_batchProcessingWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
@@ -1751,8 +1798,7 @@ class Ui_batchProcessingWindow(object):
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -1779,14 +1825,27 @@ class Ui_batchProcessingWindow(object):
 "}\n"
 "\n"
 "QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
 "    background: #f0f0f0;\n"
 "    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.bw_combobox_6.setFrame(False)
         self.bw_combobox_6.setObjectName("bw_combobox_6")
@@ -1924,8 +1983,7 @@ class Ui_batchProcessingWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
@@ -1937,8 +1995,7 @@ class Ui_batchProcessingWindow(object):
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -1965,14 +2022,27 @@ class Ui_batchProcessingWindow(object):
 "}\n"
 "\n"
 "QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
 "    background: #f0f0f0;\n"
 "    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.bw_combobox_7.setFrame(False)
         self.bw_combobox_7.setObjectName("bw_combobox_7")
@@ -2110,8 +2180,7 @@ class Ui_batchProcessingWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
@@ -2123,8 +2192,7 @@ class Ui_batchProcessingWindow(object):
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -2151,14 +2219,27 @@ class Ui_batchProcessingWindow(object):
 "}\n"
 "\n"
 "QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
 "    background: #f0f0f0;\n"
 "    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.bw_combobox_8.setFrame(False)
         self.bw_combobox_8.setObjectName("bw_combobox_8")
@@ -2296,8 +2377,7 @@ class Ui_batchProcessingWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
@@ -2309,8 +2389,7 @@ class Ui_batchProcessingWindow(object):
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -2337,14 +2416,27 @@ class Ui_batchProcessingWindow(object):
 "}\n"
 "\n"
 "QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
 "    background: #f0f0f0;\n"
 "    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.bw_combobox_9.setFrame(False)
         self.bw_combobox_9.setObjectName("bw_combobox_9")
@@ -2382,12 +2474,10 @@ class Ui_batchProcessingWindow(object):
         self.gridLayout_6.addItem(spacerItem42, 3, 2, 1, 1)
         self.tabWidget.addTab(self.tab_4, "")
         self.gridLayout_2.addWidget(self.tabWidget, 0, 0, 1, 1)
-        spacerItem43 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem43 = QtWidgets.QSpacerItem(20, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.gridLayout_2.addItem(spacerItem43, 1, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem44 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem44)
         self.bw_button_ok = QtWidgets.QToolButton(batchProcessingWindow)
         self.bw_button_ok.setEnabled(False)
         self.bw_button_ok.setMinimumSize(QtCore.QSize(180, 27))
@@ -2424,8 +2514,8 @@ class Ui_batchProcessingWindow(object):
 "}")
         self.bw_button_ok.setObjectName("bw_button_ok")
         self.horizontalLayout_2.addWidget(self.bw_button_ok)
-        spacerItem45 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem45)
+        spacerItem44 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem44)
         self.bw_button_cancel = QtWidgets.QToolButton(batchProcessingWindow)
         self.bw_button_cancel.setMinimumSize(QtCore.QSize(100, 27))
         self.bw_button_cancel.setMaximumSize(QtCore.QSize(100, 27))
@@ -2459,8 +2549,8 @@ class Ui_batchProcessingWindow(object):
 "}")
         self.bw_button_cancel.setObjectName("bw_button_cancel")
         self.horizontalLayout_2.addWidget(self.bw_button_cancel)
-        spacerItem46 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem46)
+        spacerItem45 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem45)
         self.gridLayout_2.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
 
         self.retranslateUi(batchProcessingWindow)

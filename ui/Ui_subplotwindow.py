@@ -2,17 +2,16 @@
 
 # Form implementation generated from reading ui file 'subplotwindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from functions.gui_functions.gui_widgets import MyTableWidget
 
 class Ui_subplotWindow(object):
     def setupUi(self, subplotWindow):
         subplotWindow.setObjectName("subplotWindow")
-        subplotWindow.resize(362, 418)
+        subplotWindow.resize(362, 407)
         subplotWindow.setMinimumSize(QtCore.QSize(0, 0))
         subplotWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
@@ -188,6 +187,7 @@ class Ui_subplotWindow(object):
 "  bottom: -1px;\n"
 "}")
         self.gridLayout_2 = QtWidgets.QGridLayout(subplotWindow)
+        self.gridLayout_2.setVerticalSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -363,13 +363,13 @@ class Ui_subplotWindow(object):
         self.scroll_area.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area.setObjectName("scroll_area")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 300, 293))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 300, 303))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        self.sw_table = MyTableWidget(self.scrollAreaWidgetContents)
+        self.sw_table = QtWidgets.QTableWidget(self.scrollAreaWidgetContents)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -471,12 +471,10 @@ class Ui_subplotWindow(object):
         self.horizontalLayout.addItem(spacerItem1)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
         self.gridLayout_2.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.gridLayout_2.addItem(spacerItem2, 1, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem3)
         self.sw_ok_button = QtWidgets.QToolButton(subplotWindow)
         self.sw_ok_button.setMinimumSize(QtCore.QSize(100, 27))
         self.sw_ok_button.setMaximumSize(QtCore.QSize(100, 27))
@@ -510,8 +508,8 @@ class Ui_subplotWindow(object):
 "}")
         self.sw_ok_button.setObjectName("sw_ok_button")
         self.horizontalLayout_2.addWidget(self.sw_ok_button)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem4)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem3)
         self.sw_cancel_button = QtWidgets.QToolButton(subplotWindow)
         self.sw_cancel_button.setMinimumSize(QtCore.QSize(100, 27))
         self.sw_cancel_button.setMaximumSize(QtCore.QSize(100, 27))
@@ -545,8 +543,8 @@ class Ui_subplotWindow(object):
 "}")
         self.sw_cancel_button.setObjectName("sw_cancel_button")
         self.horizontalLayout_2.addWidget(self.sw_cancel_button)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem5)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem4)
         self.gridLayout_2.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
 
         self.retranslateUi(subplotWindow)

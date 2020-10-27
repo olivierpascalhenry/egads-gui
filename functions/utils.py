@@ -5,6 +5,7 @@ import datetime
 import inspect
 import pathlib
 import os
+import collections
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -27,6 +28,7 @@ def create_option_file(user_path):
     config_dict.add_section('PLOTS')
     config_dict.add_section('OPTIONS')
     config_dict.add_section('FILES_FOLDERS')
+    config_dict.add_section('GENERAL')
     config_dict.set('LOG', 'level', 'DEBUG')
     config_dict.set('LOG', 'path', str(user_path))
     config_dict.set('SYSTEM', 'read_as_float', 'False')
@@ -43,6 +45,7 @@ def create_option_file(user_path):
     config_dict.set('OPTIONS', 'check_update', 'False')
     config_dict.set('FILES_FOLDERS', 'keep_opened_files', 'True')
     config_dict.set('FILES_FOLDERS', 'enable_user_folders', 'True')
+    config_dict.set('GENERAL', 'dimension_warning', 'True')
     config_dict.write(ini_file)
     ini_file.close()
 
@@ -56,6 +59,11 @@ def update_config_file(user_path):
     except KeyError:
         option_missing = True
         config_dict.add_section('FILES_FOLDERS')
+    try:
+        config_dict['GENERAL']
+    except KeyError:
+        option_missing = True
+        config_dict.add_section('GENERAL')
     if config_dict['FILES_FOLDERS'].getboolean('keep_opened_files') is None:
         option_missing = True
         config_dict.set('FILES_FOLDERS', 'keep_opened_files', 'True')
@@ -69,6 +77,9 @@ def update_config_file(user_path):
         config_dict.set('PLOTS', 'second_dimension_axis', '0')
         config_dict.set('PLOTS', 'third_dimension_axis', '0')
         config_dict.set('PLOTS', 'geo_as_standard', 'False')
+    if config_dict['GENERAL'].getboolean('dimension_warning') is None:
+        option_missing = True
+        config_dict.set('GENERAL', 'dimension_warning', 'True')
     if option_missing:
         ini_file = open(str(pathlib.Path(user_path, 'egads_gui.ini')), 'w')
         config_dict.write(ini_file)
@@ -490,26 +501,57 @@ def full_path_name_from_treewidget(treewidget=None, parent=None):
     return path, var
 
 
-def multi_full_path_name_from_treewidget(treewidget):
+def multi_full_path_name_from_treewidget(treewidget=None, parent=None, include_child=False):
     multi_list = []
-    for parent in treewidget.selectedItems():
-        path = parent.text(0)
-        var = parent.text(0)
-        while parent:
-            parent = parent.parent()
-            if parent is not None:
-                path = parent.text(0) + '/' + path
-        path = '/' + path
+
+    if parent is None:
+        selected_items = treewidget.selectedItems()
+    else:
+        selected_items = [parent]
+
+    for origin in selected_items:
+        path, var = full_path_name_from_treewidget(parent=origin)
         multi_list.append([path, var])
+        if include_child:
+            child_list = []
+
+            def _walktree(orig):
+                childs = [orig.child(i) for i in range(orig.childCount())]
+                for child in childs:
+                    child_path, child_var = full_path_name_from_treewidget(parent=child)
+                    child_list.append([child_path, child_var])
+                    _walktree(child)
+
+            _walktree(origin)
+            multi_list += child_list
     return multi_list
 
 
 def replace_old_path_by_new_path(var_dict, old_path, new_path):
-    for key in list(var_dict.keys()):
+    modified_keys = []
+    modified_dims = []
+    for key in var_dict:
         if key.find(old_path) == 0 and key != new_path:
-            new_key = new_path + key[len(old_path):]
-            var_dict[new_key] = var_dict.pop(key)
-    return var_dict
+            modified_keys.append([key, new_path + key[len(old_path):]])
+
+        dim_dict = var_dict[key][1]
+        if dim_dict is not None:
+            for dim_key in dim_dict:
+                if dim_key.find(old_path) == 0 and dim_key != new_path:
+                    modified_dims.append([key, dim_key, new_path + dim_key[len(old_path):]])
+
+    for sublist in modified_dims:
+        new_dim_dict = collections.OrderedDict()
+        dim_dict = var_dict[sublist[0]][1]
+        for key, value in dim_dict.items():
+            if key == sublist[1]:
+                new_dim_dict[sublist[2]] = value
+            else:
+                new_dim_dict[key] = value
+        var_dict[sublist[0]][1] = new_dim_dict
+
+    for sublist in modified_keys:
+        var_dict[sublist[1]] = var_dict.pop(sublist[0])
 
 
 def replace_old_path_by_new_path_tooltip(treewidget, new_path):
@@ -518,8 +560,10 @@ def replace_old_path_by_new_path_tooltip(treewidget, new_path):
         for i in range(parent.childCount()):
             if 'group' in parent.child(i).toolTip(0):
                 tooltip = 'group: ' + parent.toolTip(0)[7:] + '/' + parent.child(i).text(0)
-            else:
+            elif 'dataset' in parent.child(i).toolTip(0):
                 tooltip = 'dataset: ' + parent.toolTip(0)[7:] + '/' + parent.child(i).text(0)
+            else:
+                tooltip = 'dimension: ' + parent.toolTip(0)[7:] + '/' + parent.child(i).text(0)
             parent.child(i).setToolTip(0, tooltip)
             replace_old_path(parent.child(i))
 
@@ -527,7 +571,51 @@ def replace_old_path_by_new_path_tooltip(treewidget, new_path):
     old_tooltip = item.toolTip(0)
     if 'group' in old_tooltip:
         new_tooltip = 'group: ' + new_path[1:]
-    else:
+    elif 'dataset' in old_tooltip:
         new_tooltip = 'dataset: ' + new_path[1:]
+    else:
+        new_tooltip = 'dimension: ' + new_path[1:]
     item.setToolTip(0, new_tooltip)
     replace_old_path(item)
+
+
+def treewidget_item_from_path(treewidget, path):
+    if path[0] == '/':
+        path = path[1:]
+    elems = path.split('/')
+    first_elem = elems[0]
+    elems.pop(0)
+    child = None
+    for i in range(treewidget.topLevelItemCount()):
+        item = treewidget.topLevelItem(i)
+        if first_elem == item.text(0):
+            child = item
+            break
+
+    if child is not None:
+        for elem in elems:
+            for i in range(child.childCount()):
+                if elem == child.child(i).text(0):
+                    child = child.child(i)
+                    break
+
+    return child
+
+
+def delete_treewidget_item_from_path(treewidget, path):
+    item = treewidget_item_from_path(treewidget, path)
+    parent = item.parent()
+    if parent is None:
+        treewidget.takeTopLevelItem(treewidget.indexFromItem(item).row())
+    else:
+        item.parent().removeChild(item)
+
+
+def dimensions_in_same_folder(dim_list, var_name):
+
+    var_path = os.path.dirname(var_name)
+    same_folder = True
+    for dim in dim_list:
+        if var_path != os.path.dirname(dim):
+            same_folder = False
+    return same_folder

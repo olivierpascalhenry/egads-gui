@@ -8,6 +8,8 @@ import platform
 import time
 import os
 import copy
+import collections
+from collections import OrderedDict
 from PyQt5 import QtCore, QtGui, QtWidgets
 from ui.Ui_infowindow import Ui_infoWindow
 from ui.Ui_displaywindow import Ui_displayWindow
@@ -29,6 +31,9 @@ from ui.Ui_tickslabelswindow import Ui_tickslabelsWindow
 from ui.Ui_tickscolorbarwindow import Ui_tickscolorbarWindow
 from ui.Ui_mapextentwindow import Ui_mapextentWindow
 from ui.Ui_layerorderwindow import Ui_layerorderWindow
+from ui.Ui_dimensionselectionwindow import Ui_dimensionselectionWindow
+from ui.Ui_deletingdimensionwindow import Ui_deletingdimensionWindow
+from ui.Ui_dimensionsavewindow import Ui_dimensionsaveWindow
 from functions.gui_functions.gui_widgets import QtWaitingSpinner
 from functions.utils import font_creation_function, icon_creation_function, stylesheet_creation_function
 from functions.thread_functions.update_functions import DownloadFile
@@ -380,8 +385,8 @@ class MyDisplay(QtWidgets.QDialog, Ui_displayWindow):
                 for y in range(self.current_row - 20, self.current_row + 20):
                     try:
                         if not self.dw_table.item(y, x):
-                            self.dw_table.setItem(y, x, QtWidgets.QTableWidgetItem(str(self.var[self.current_lay, y,
-                                                                                                x])))
+                            self.dw_table.setItem(y, x,
+                                                  QtWidgets.QTableWidgetItem(str(self.var[self.current_lay, y, x])))
                     except IndexError:
                         pass
         else:
@@ -407,10 +412,15 @@ class MyDisplay(QtWidgets.QDialog, Ui_displayWindow):
                             value['values'] = [str((datetime.datetime(int(date[:4]), int(date[5:7]), int(date[8:10]),
                                                                       0, 0) + datetime.timedelta(i - 1)).strftime(
                                 "%Y-%m-%d")) for i in value['values']]
-                elif dim.lower() in ['longitude', 'lon', 'long']:
+                elif 'longitude' in dim.lower() or 'lon' in dim.lower() or 'long' in dim.lower():
                     self.dw_label_4.setText('Longitude')
-                elif dim.lower() in ['latitude', 'lat']:
+                elif 'latitude' in dim.lower() or 'lat' in dim.lower():
                     self.dw_label_4.setText('Latitude')
+                else:
+                    if 'no dimension' in dim:
+                        self.dw_label_4.setText('no dimension')
+                    else:
+                        self.dw_label_4.setText(dim)
                 val_list = [str(i) for i in value['values']]
                 self.dw_table.setHorizontalHeaderLabels(val_list)
         elif self.shape_length == 2:
@@ -422,7 +432,7 @@ class MyDisplay(QtWidgets.QDialog, Ui_displayWindow):
                 if 'time' in dim.lower():
                     time_in = True
                     time_name = dim
-                if dim.lower() in ['longitude', 'lon', 'long']:
+                if 'longitude' in dim.lower() or 'lon' in dim.lower() or 'long' in dim.lower():
                     lon_in = True
                     lon_name = dim
             if time_in:
@@ -439,7 +449,7 @@ class MyDisplay(QtWidgets.QDialog, Ui_displayWindow):
                 for key, value in self.dimensions.items():
                     val_list = [str(i) for i in value['values']]
                     self.dw_table.setVerticalHeaderLabels(val_list)
-                    self.set_row_label(key.title())
+                    self.set_row_label(key)
             else:
                 if lon_in:
                     if self.dimensions[lon_name]['axis'] == 0:
@@ -455,11 +465,21 @@ class MyDisplay(QtWidgets.QDialog, Ui_displayWindow):
                     for key, value in self.dimensions.items():
                         val_list = [str(i) for i in value['values']]
                         self.dw_table.setVerticalHeaderLabels(val_list)
-                        self.set_row_label(key.title())
+                        self.set_row_label(key)
                 else:
                     row_size, col_size = self.var.shape
                     self.dw_table.setColumnCount(col_size)
                     self.dw_table.setRowCount(row_size)
+                    self.dw_label_4.setVisible(True)
+                    dim_list = list(self.dimensions.keys())
+                    if 'no dimension' in dim_list[0]:
+                        self.set_row_label('no dimension')
+                    else:
+                        self.set_row_label(dim_list[0])
+                    if 'no dimension' in dim_list[1]:
+                        self.dw_label_4.setText('no dimension')
+                    else:
+                        self.dw_label_4.setText(dim_list[0])
         elif self.shape_length == 3:
             time_in, lon_in, lat_in = False, False, False
             dim_list = list(self.dimensions.keys())
@@ -483,11 +503,17 @@ class MyDisplay(QtWidgets.QDialog, Ui_displayWindow):
             if lon_in:
                 self.dw_label_4.setText('Longitude')
             else:
-                self.dw_label_4.setText(dim_list[2])
+                if 'no dimension' in dim_list[2]:
+                    self.dw_label_4.setText('no dimension')
+                else:
+                    self.dw_label_4.setText(dim_list[2])
             if lat_in:
                 self.set_row_label('Latitude')
             else:
-                self.set_row_label(dim_list[1])
+                if 'no dimension' in dim_list[1]:
+                    self.set_row_label('no dimension')
+                else:
+                    self.set_row_label(dim_list[1])
             if time_in:
                 self.set_layer_options([str(i) for i in lay['values']], str(lay['values'][0]), lay_size - 1, 'Time:',
                                        'Time:')
@@ -1407,4 +1433,240 @@ class MyLayer(QtWidgets.QDialog, Ui_layerorderWindow):
         logging.debug('gui - other_windows_functions.py - MyLayer - closeEvent')
         if self.cancel:
             self.new_option_dict = None
+        self.close()
+
+
+class MyDimensionSelection(QtWidgets.QDialog, Ui_dimensionselectionWindow):
+    def __init__(self, dim_list, var, path, dim_exist=False):
+        logging.debug('gui - other_windows_functions.py - MyDimensionSelection - __init__')
+        QtWidgets.QWidget.__init__(self)
+        self.setupUi(self)
+        self.dim_list = dim_list
+        self.variable = var
+        self.variable_name = path
+        self.dim_exist = dim_exist
+        self.cancel = True
+        self.cancel_button.clicked.connect(self.close_window)
+        self.ok_button.clicked.connect(self.confirm_dimension)
+        self.info_button.clicked.connect(self.display_information)
+        self.label_list = []
+        self.combobox_list = []
+        self.set_dimension_list()
+        logging.info('gui - other_windows_functions.py - MyDimensionSelection - ready')
+
+    def set_dimension_list(self):
+        logging.debug('gui - other_windows_functions.py - MyDimensionSelection - set_dimension_list')
+        font1 = font_creation_function('normal')
+        font2 = font_creation_function('small')
+        for i in range(len(self.variable[0].shape)):
+            self.label_list.append(QtWidgets.QLabel())
+            self.label_list[i].setMinimumSize(QtCore.QSize(0, 27))
+            self.label_list[i].setMaximumSize(QtCore.QSize(16777215, 27))
+            self.label_list[i].setFont(font1)
+            self.label_list[i].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+            self.label_list[i].setObjectName('label_' + str(i))
+            self.label_list[i].setText('Dimension ' + str(i + 1) + ':')
+            self.gridLayout.addWidget(self.label_list[i], i, 0, 1, 1)
+            self.combobox_list.append(QtWidgets.QComboBox())
+            self.combobox_list[i].setMinimumSize(QtCore.QSize(300, 27))
+            self.combobox_list[i].setMaximumSize(QtCore.QSize(300, 27))
+            self.combobox_list[i].setFont(font2)
+            self.combobox_list[i].setStyleSheet(stylesheet_creation_function('qcombobox'))
+            self.combobox_list[i].setObjectName('combobox_' + str(i))
+            self.combobox_list[i].setFocusPolicy(QtCore.Qt.NoFocus)
+            self.combobox_list[i].setItemDelegate(QtWidgets.QStyledItemDelegate())
+            self.gridLayout.addWidget(self.combobox_list[i], i, 1, 1, 1)
+            spacer_item = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+            self.gridLayout.addItem(spacer_item, i, 2, 1, 1)
+            self.combobox_list[i].addItems(['Make a choice...', 'No dimension'] + sorted(self.dim_list))
+            if self.variable[1] is not None:
+                dim = list(self.variable[1].keys())[i]
+                if not 'no dimension' in dim:
+                    idx = self.combobox_list[i].findText(dim)
+                    if idx == -1:
+                        self.combobox_list[i].setCurrentIndex(0)
+                    else:
+                        self.combobox_list[i].setCurrentIndex(idx)
+                else:
+                    self.combobox_list[i].setCurrentIndex(1)
+            else:
+                if self.variable[2]:
+                    self.combobox_list[i].setCurrentIndex(self.combobox_list[i].findText(self.variable_name))
+                else:
+                    self.combobox_list[i].setCurrentIndex(1)
+        if len(self.variable[0].shape) > 1:
+            self.checkbox_1.setEnabled(False)
+        else:
+            if self.variable[2]:
+                self.checkbox_1.setText('Convert the dimension to a standard variable')
+                self.label_list[0].setEnabled(False)
+                self.combobox_list[0].setEnabled(False)
+                self.checkbox_1.clicked.connect(self.set_dim_conversion)
+            else:
+                if self.dim_exist:
+                    self.checkbox_1.setEnabled(False)
+                self.checkbox_1.clicked.connect(self.set_var_conversion)
+
+    def confirm_dimension(self):
+        logging.debug('gui - other_windows_functions.py - MyDimensionSelection - confirm_dimension')
+
+        if self.variable[2]:
+            if self.checkbox_1.isChecked():
+                if self.combobox_list[0].currentText() == 'Make a choice...':
+                    text = ('When converting a dimension to a standard variable, another dimension, or at least No '
+                            'dimension, must be selected in the Dimension 1 combobox.')
+                    warning_window = MyInfo(text)
+                    warning_window.exec_()
+                elif self.combobox_list[0].currentText() == 'No dimension':
+                    self.variable[1] = None
+                    self.variable[2] = False
+                    self.cancel = False
+                    self.close_window()
+                else:
+                    new_dim = str(self.combobox_list[0].currentText())
+                    new_shape = self.dim_list[new_dim]
+                    if new_shape != self.variable[0].shape[0]:
+                        text = ('When converting a dimension to a standard variable, the selected dimension must have '
+                                'the same shape than the new standard variable.')
+                        warning_window = MyInfo(text)
+                        warning_window.exec_()
+                    else:
+                        new_dict = collections.OrderedDict()
+                        new_dict[new_dim] = new_shape
+                        self.variable[1] = new_dict
+                        self.variable[2] = False
+                        self.cancel = False
+                        self.close_window()
+            else:
+                self.close_window()
+        else:
+            if self.checkbox_1.isChecked():
+                self.variable[1] = None
+                self.variable[2] = True
+                self.cancel = False
+                self.close_window()
+            else:
+                if 'Make a choice...' in [str(item.currentText()) for item in self.combobox_list]:
+                    text = ('When converting a dimension to a standard variable, another dimension, or at least No '
+                            'dimension, must be selected in the Dimension 1 combobox.')
+                    warning_window = MyInfo(text)
+                    warning_window.exec_()
+                else:
+                    new_dict = collections.OrderedDict()
+                    new_dim_list = [str(item.currentText()) for item in self.combobox_list]
+                    wrong_shape = []
+
+                    if len(new_dim_list) == 1:
+                        if new_dim_list[0] == 'No dimension':
+                            new_dict = None
+                        else:
+                            if self.dim_list[new_dim_list[0]] != self.variable[0].shape[0]:
+                                wrong_shape.append(new_dim_list[0])
+                            else:
+                                new_dict[new_dim_list[0]] = self.dim_list[new_dim_list[0]]
+                    else:
+
+                        for i, dim in enumerate(new_dim_list):
+                            if dim == 'No dimension':
+                                new_dict['no dimension ' + str(i)] = self.variable[0].shape[i]
+                            else:
+                                if self.dim_list[dim] != self.variable[0].shape[i]:
+                                    wrong_shape.append(dim)
+                                else:
+                                    new_dict[dim] = self.dim_list[dim]
+
+                    if wrong_shape:
+                        text = ('When selecting one or more dimensions, each dimension must have the same shape than '
+                                'the variable dimension.')
+                        warning_window = MyInfo(text)
+                        warning_window.exec_()
+                    else:
+                        self.variable[1] = new_dict
+                        self.cancel = False
+                        self.close_window()
+
+    def set_var_conversion(self):
+        if self.checkbox_1.isChecked():
+            for i, _ in enumerate(self.label_list):
+                self.label_list[i].setEnabled(False)
+                self.combobox_list[i].setEnabled(False)
+        else:
+            for i, _ in enumerate(self.label_list):
+                self.label_list[i].setEnabled(True)
+                self.combobox_list[i].setEnabled(True)
+
+    def set_dim_conversion(self):
+        if self.checkbox_1.isChecked():
+            self.label_list[0].setEnabled(True)
+            self.combobox_list[0].setEnabled(True)
+            self.combobox_list[0].clear()
+            self.combobox_list[0].addItem('Make a choice...')
+            self.combobox_list[0].addItem('No dimension')
+            for dim in sorted(self.dim_list):
+                if dim != self.variable_name:
+                    self.combobox_list[0].addItem(dim)
+        else:
+            self.label_list[0].setEnabled(False)
+            self.combobox_list[0].setEnabled(False)
+            self.combobox_list[0].clear()
+            self.combobox_list[0].addItem('Make a choice...')
+            self.combobox_list[0].addItem('No dimension')
+            for dim in sorted(self.dim_list):
+                self.combobox_list[0].addItem(dim)
+            self.combobox_list[0].setCurrentIndex(self.combobox_list[0].findText(self.variable_name))
+
+    @staticmethod
+    def display_information():
+        text = ('From this window, it is possible to control all dimensions linked to a variable. Dimensions can '
+                'be selected from the different comboboxes. It is possible to select "No dimensions" in order to '
+                'remove a dimension from a variable. And it is possible to convert a variable to a new dimension, or a '
+                'dimension to a new variable by clicking on the option above. <br>For information, if a variable is '
+                'missing a dimension or has no dimension, this variable will trigger a warning message when trying to '
+                'save a file.')
+        info_window = MyInfo(text)
+        info_window.exec_()
+
+    def close_window(self):
+        logging.debug('gui - other_windows_functions.py - MyDimensionSelection - close_window')
+        self.close()
+
+
+class MyDeletingDimension(QtWidgets.QDialog, Ui_deletingdimensionWindow):
+    def __init__(self):
+        QtWidgets.QWidget.__init__(self)
+        logging.debug('gui - other_windows_functions.py - MyDeletingDimension - __init__')
+        self.setupUi(self)
+        self.cancel_button.clicked.connect(self.close_window)
+        self.delete_button.clicked.connect(self.confirm_delete)
+        self.delete = False
+        logging.info('gui - other_windows_functions.py - MyDeletingDimension - ready')
+
+    def confirm_delete(self):
+        logging.debug('gui - other_windows_functions.py - MyDeletingDimension - confirm_delete')
+        self.delete = True
+        self.close_window()
+
+    def close_window(self):
+        logging.debug('gui - other_windows_functions.py - MyDeletingDimension - close_window')
+        self.close()
+
+
+class MyDimensionSave(QtWidgets.QDialog, Ui_dimensionsaveWindow):
+    def __init__(self, text):
+        logging.debug('gui - other_windows_functions.py - MyDimensionSave - __init__')
+        QtWidgets.QWidget.__init__(self)
+        self.setupUi(self)
+        self.label.setText(text)
+        self.save = False
+        self.save_button.clicked.connect(self.set_save)
+        self.cancel_button.clicked.connect(self.close_window)
+        logging.info('gui - other_windows_functions.py - MyDimensionSave - ready')
+
+    def set_save(self):
+        logging.debug('gui - other_windows_functions.py - MyDimensionSave - set_save')
+        self.save = True
+        self.close_window()
+
+    def close_window(self):
+        logging.debug('gui - other_windows_functions.py - MyDimensionSave - close_window')
         self.close()

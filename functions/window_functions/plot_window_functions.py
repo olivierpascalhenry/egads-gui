@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 
 
 class PlotWindow(QtWidgets.QDialog, Ui_plotWindow):
-    def __init__(self, variables, dimensions, x_axis_variable, font_list, default_font, config_dict, gui_path):
+    def __init__(self, variables, dimensions, font_list, default_font, config_dict, gui_path):
         logging.debug('gui - plot_window_functions.py - PlotWindow - __init__')
         QtWidgets.QDialog.__init__(self, parent=None)
         self.setupUi(self)
@@ -33,7 +33,6 @@ class PlotWindow(QtWidgets.QDialog, Ui_plotWindow):
         self.pw_plotWindow_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.variables = variables
         self.dimensions = dimensions
-        self.x_axis_variable = x_axis_variable
         self.font_list = font_list
         self.default_font = default_font
         self.config_dict = config_dict

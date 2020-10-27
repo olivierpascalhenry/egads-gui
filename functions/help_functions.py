@@ -51,6 +51,8 @@ def option_information_text():
                                    'With this option, the user can decide how the plot function will consider each '
                                    'dimension.',
                  'info_button_16': 'With this option, georeferenced gridded data are considered like standard data.',
+                 'info_button_17': 'When deleting a dimension, if this option is checked, a warning message will '
+                                   'be displayed.'
                  }
     return info_dict
 

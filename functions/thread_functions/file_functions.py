@@ -9,6 +9,7 @@ import numpy
 import zipfile
 import tempfile
 import sys
+import collections
 from PyQt5 import QtCore
 import matplotlib as mpl
 from functions.material_functions import transparency_hexa_dict_function
@@ -33,7 +34,7 @@ class ReadFileThread(QtCore.QThread):
         rfv = self.config_dict['SYSTEM'].getboolean('replace_fill_value')
         sfv = self.config_dict['SYSTEM'].getboolean('switch_fill_value')
         f = None
-        dim_list = []
+        # dim_list = []
         group_list = []
         var_attr_list = {}
         var_list = []
@@ -52,7 +53,7 @@ class ReadFileThread(QtCore.QThread):
                 for attribute in f.get_attribute_list():
                     if attribute != 'V' and attribute != 'X':
                         glob_attr_list[attribute] = f.get_attribute_value(attribute)
-                dim_list = f.get_dimension_list()
+                # dim_list = f.get_dimension_list()
             elif self.file_ext == 'Hdf Files (*.h5 *.hdf5 *.he5)':
                 f = egads.input.EgadsHdf(self.file_path, 'r')
                 var_list = f.get_variable_list(group_walk=True, details=True)
@@ -73,11 +74,18 @@ class ReadFileThread(QtCore.QThread):
                         if len(var_dim_list) == 1:
                             if var == list(var_dim_list.keys())[0]:
                                 is_dim = True
-                        var_attr_list[var] = [egads_instance, var_dim_list, is_dim]
+                        if is_dim:
+                            var_attr_list[var] = [egads_instance, None, is_dim]
+                        else:
+                            var_attr_list[var] = [egads_instance, var_dim_list, is_dim]
                     else:
-                        if var in list(dim_list.keys()):
-                            is_dim = True
-                        var_attr_list['/' + var] = [egads_instance, f.get_dimension_list(), is_dim]
+                        if var in f.get_dimension_list():
+                            var_attr_list['/' + var] = [egads_instance, None, True]
+                        else:
+                            var_dim_list = collections.OrderedDict()
+                            for dim, shape in f.get_dimension_list().items():
+                                var_dim_list['/' + dim] = shape
+                            var_attr_list['/' + var] = [egads_instance, var_dim_list, False]
 
                 except Exception as e:
                     if 'dimensionality' in str(e):
@@ -104,6 +112,10 @@ class ReadFileThread(QtCore.QThread):
                         else:
                             reason = 'integer can\'t be converted to NaN in INT-type variable'
                     else:
+
+                        # add error type
+
+
                         reason = 'no reason detected'
                     unread_var[var] = reason
                     logging.exception('gui - file_functions.py - ReadFileThread : an error occured during the '
@@ -113,7 +125,7 @@ class ReadFileThread(QtCore.QThread):
 
             if group_list:
                 for group in group_list:
-                    var_attr_list[group] = [f.get_attribute_list(group), f.get_dimension_list(group, details=True),
+                    var_attr_list[group] = [f.get_attribute_list(group), None,
                                             False]
 
             final_dict = {'unread_var': unread_var, 'opened_file': f, 'var_attr_list': var_attr_list,
@@ -182,7 +194,7 @@ class SaveFileThread(QtCore.QThread):
                 self.progress.emit(['Adding dimensions...', int(prog_val)])
                 for var_name, var_sublist in self.var_dict.items():
                     if var_sublist[2]:
-                        size = var_sublist[1][var_name]
+                        size = var_sublist[0].shape[0]
                         new_file.add_dim(var_name, size)
 
                 # global attributes
@@ -213,12 +225,31 @@ class SaveFileThread(QtCore.QThread):
                         prog_val += step_val
                         self.progress.emit(['Adding variable ' + var_name + '...', int(prog_val)])
                         data = var_sublist[0]
-                        dim_tuple = tuple([os.path.basename(key) for key in var_sublist[1]])
-                        try:
-                            var_format = format_dict[str(data.value.dtype)]
-                        except KeyError:
-                            var_format = 'double'
-                        new_file.write_variable(data, var_name, dim_tuple, var_format)
+
+                        create_variable = True
+
+                        if var_sublist[2]:
+                            dim_tuple = tuple([os.path.basename(var_name)])
+                        else:
+                            if var_sublist[1] is None:
+                                create_variable = False
+                            else:
+                                for dim in var_sublist[1]:
+                                    if 'no dimension' in dim:
+                                        create_variable = False
+                                    else:
+                                        if os.path.dirname(var_name) != os.path.dirname(dim):
+                                            create_variable = False
+
+                            if create_variable:
+                                dim_tuple = tuple([os.path.basename(key) for key in var_sublist[1]])
+
+                        if create_variable:
+                            try:
+                                var_format = format_dict[str(data.value.dtype)]
+                            except KeyError:
+                                var_format = 'double'
+                            new_file.write_variable(data, var_name, dim_tuple, var_format)
 
                 # close file
                 prog_val += step_val
@@ -280,19 +311,44 @@ class SaveFileThread(QtCore.QThread):
                 new_file.add_attribute('data_date_of_revision', rev_date)
                 prog_val += step_val
                 self.progress.emit(['Adding dimensions...', int(prog_val)])
-                for var, sublist in self.var_dict.items():
-                    if sublist[2]:
-                        size = sublist[1][list(sublist[1].keys())[0]]
-                        new_file.add_dim(var, size)
-                for var_name, var in self.var_dict.items():
+                for var_name, var_dict in self.var_dict.items():
+                    if var_dict[2]:
+                        new_file.add_dim(var_name, var_dict[0].shape[0])
+                for var_name, var_dict in self.var_dict.items():
                     prog_val += step_val
                     self.progress.emit(['Adding variable ' + var_name + '...', int(prog_val)])
-                    dimensions_tuple = tuple(var[1].keys())
-                    try:
-                        var_format = format_dict[str(var[0].value.dtype)]
-                    except KeyError:
-                        var_format = 'double'
-                    new_file.write_variable(var[0], var_name, dimensions_tuple, var_format)
+
+                    create_variable = True
+
+                    if var_dict[2]:
+                        dim_tuple = tuple([os.path.basename(var_name)])
+                    else:
+                        if var_dict[1] is None:
+                            create_variable = False
+                        else:
+                            for dim in var_dict[1]:
+                                if 'no dimension' in dim:
+                                    create_variable = False
+                                else:
+                                    if os.path.dirname(var_name) != os.path.dirname(dim):
+                                        create_variable = False
+
+                        if create_variable:
+                            dim_tuple = []
+                            for dim in var_dict[1].keys():
+                                if '/' in dim:
+                                    dim_tuple.append(dim[1:])
+                                else:
+                                    dim_tuple.append(dim)
+
+                            dim_tuple = tuple(dim_tuple)
+                    if create_variable:
+                        try:
+                            var_format = format_dict[str(var_dict[0].value.dtype)]
+                        except KeyError:
+                            var_format = 'double'
+                        new_file.write_variable(var_dict[0], var_name, dim_tuple, var_format)
+
                 prog_val += step_val
                 self.progress.emit(['Closing NetCdf file...', int(prog_val)])
                 new_file.close()
@@ -321,7 +377,7 @@ class SaveFileThread(QtCore.QThread):
                 for var_name, var_sublist in sorted(self.var_dict.items()):
                     if not isinstance(var_sublist[0], egads.EgadsData):
                         new_file.add_group(var_name)
-                        for attr_name, attr_value in self.var_dict[var_name][0].items():
+                        for attr_name, attr_value in var_sublist[0].items():
                             new_file.add_attribute(attr_name, attr_value, var_name)
 
                 prog_val += step_val
@@ -349,12 +405,27 @@ class SaveFileThread(QtCore.QThread):
                     if isinstance(var_sublist[0], egads.EgadsData) and not var_sublist[2]:
                         prog_val += step_val
                         self.progress.emit(['Adding variable ' + var_name + '...', int(prog_val)])
-                        dimensions_tuple = tuple([os.path.basename(key) for key in var_sublist[1]])
-                        try:
-                            var_format = format_dict[str(var_sublist[0].value.dtype)]
-                        except KeyError:
-                            var_format = 'double'
-                        new_file.write_variable(var_sublist[0], var_name, dimensions_tuple, var_format)
+
+                        create_variable = True
+
+                        if var_sublist[1] is None:
+                            create_variable = False
+                        else:
+                            for dim in var_sublist[1]:
+                                if 'no dimension' in dim:
+                                    create_variable = False
+                                else:
+                                    if os.path.dirname(var_name) != os.path.dirname(dim):
+                                        create_variable = False
+
+                        if create_variable:
+
+                            dimensions_tuple = tuple([os.path.basename(key) for key in var_sublist[1]])
+                            try:
+                                var_format = format_dict[str(var_sublist[0].value.dtype)]
+                            except KeyError:
+                                var_format = 'double'
+                            new_file.write_variable(var_sublist[0], var_name, dimensions_tuple, var_format)
                 prog_val += step_val
                 self.progress.emit(['Closing Hdf file...', int(prog_val)])
                 new_file.close()
@@ -421,12 +492,30 @@ class SaveFileThread(QtCore.QThread):
                     if not sublist[2]:
                         prog_val += step_val
                         self.progress.emit(['Adding variable ' + var + '...', int(prog_val)])
-                        dimensions_tuple = tuple(sublist[1].keys())
-                        try:
-                            var_format = format_dict[str(sublist[0].value.dtype)]
-                        except KeyError:
-                            var_format = 'double'
-                        new_file.write_variable(sublist[0], var, dimensions_tuple, var_format)
+
+                        create_variable = True
+
+                        if sublist[2]:
+                            dim_tuple = tuple([os.path.basename(var)])
+                        else:
+                            if sublist[1] is None:
+                                create_variable = False
+                            else:
+                                for dim in sublist[1]:
+                                    if 'no dimension' in dim:
+                                        create_variable = False
+                                    else:
+                                        if os.path.dirname(var) != os.path.dirname(dim):
+                                            create_variable = False
+
+                            if create_variable:
+                                dim_tuple = tuple(sublist[1].keys())
+                        if create_variable:
+                            try:
+                                var_format = format_dict[str(sublist[0].value.dtype)]
+                            except KeyError:
+                                var_format = 'double'
+                            new_file.write_variable(sublist[0], var, dim_tuple, var_format)
                 self.progress.emit(['Closing Hdf file...', int(prog_val)])
                 new_file.close()
                 self.finished.emit()
@@ -532,18 +621,33 @@ class SaveFileThread(QtCore.QThread):
                     if not sublist[2]:
                         prog_val += step_val
                         self.progress.emit(['Adding variable ' + var + '...', int(prog_val)])
-                        if var[0] == '/':
-                            var = var[1:]
-                        new_file.write_variable(sublist[0], var, na_dict=na_dict)
-                        first_line = True
-                        for metadata in sublist[0].metadata:
-                            if metadata != '_FillValue' and metadata != 'scale_factor' and metadata != \
-                                    'units' and metadata != 'var_name':
-                                if first_line:
-                                    first_line = False
-                                    scom.append('  Variable ' + var + ':')
-                                scom.append('    ' + metadata + ' = ' + str(sublist[0].metadata[metadata]))
-                        name_string += var + '    '
+
+                        create_variable = True
+
+                        if sublist[1] is None:
+                            create_variable = False
+                        else:
+                            for dim in sublist[1]:
+                                if 'no dimension' in dim:
+                                    create_variable = False
+                                else:
+                                    if os.path.dirname(var) != os.path.dirname(dim):
+                                        create_variable = False
+
+                        if create_variable:
+
+                            if var[0] == '/':
+                                var = var[1:]
+                            new_file.write_variable(sublist[0], var, na_dict=na_dict)
+                            first_line = True
+                            for metadata in sublist[0].metadata:
+                                if metadata != '_FillValue' and metadata != 'scale_factor' and metadata != \
+                                        'units' and metadata != 'var_name':
+                                    if first_line:
+                                        first_line = False
+                                        scom.append('  Variable ' + var + ':')
+                                    scom.append('    ' + metadata + ' = ' + str(sublist[0].metadata[metadata]))
+                            name_string += var + '    '
                 prog_val += step_val
                 self.progress.emit(['Adding last global attributes...', int(prog_val)])
                 name_string = name_string[:-4]
@@ -595,7 +699,22 @@ class SaveFileThread(QtCore.QThread):
                     else:
                         prog_val += step_val
                         self.progress.emit(['Adding variable ' + name + '...', int(prog_val)])
-                        new_file.write_variable(sublist[0], vartype="main", na_dict=na_dict)
+
+                        create_variable = True
+
+                        if sublist[1] is None:
+                            create_variable = False
+                        else:
+                            for dim in sublist[1]:
+                                if 'no dimension' in dim:
+                                    create_variable = False
+                                else:
+                                    if os.path.dirname(name) != os.path.dirname(dim):
+                                        create_variable = False
+
+                        if create_variable:
+
+                            new_file.write_variable(sublist[0], vartype="main", na_dict=na_dict)
                 self.progress.emit(['Closing NasaAmes file...', 100])
                 new_file.save_na_file(self.file_name, na_dict)
                 new_file.close()

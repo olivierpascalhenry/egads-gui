@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 130 130" style="enable-background:new 0 0 130 130;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#4C4B4B;stroke-width:10;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#4C4B4B;stroke-width:5;stroke-miterlimit:10;}
+	.st2{fill:#4C4B4B;}
+</style>
+<circle class="st0" cx="65" cy="65" r="60"/>
+<g>
+	<polyline class="st1" points="65,88 65,53.8 86.1,46.5 65,53.8 43.9,46.5 	"/>
+	<polygon class="st1" points="65,39.3 86.1,46.5 86.1,80.7 65,88 43.9,80.7 43.9,46.5 	"/>
+	<g>
+		<g>
+			<line class="st1" x1="86.1" y1="80.7" x2="95.8" y2="84.1"/>
+			<g>
+				<path class="st2" d="M107.2,88c-6.1,0.1-13.9,1.2-19.3,3.4l6.4-7.9l-0.2-10.1C97,78.5,102.5,84.2,107.2,88z"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<path class="st1" d="M34.2,84.1c5-1.7,9.7-3.3,9.7-3.3"/>
+			<g>
+				<path class="st2" d="M22.8,88c6.1,0.1,13.9,1.2,19.3,3.4l-6.4-7.9l0.2-10.1C33,78.5,27.5,84.2,22.8,88z"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<line class="st1" x1="65" y1="39.3" x2="65" y2="28.6"/>
+			<g>
+				<path class="st2" d="M65,16.5c2.1,5.7,5.7,12.7,9.5,17.1L65,30.2l-9.5,3.4C59.3,29.3,62.9,22.2,65,16.5z"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>

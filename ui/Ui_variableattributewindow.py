@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_variableAttributeWindow(object):
     def setupUi(self, variableAttributeWindow):
         variableAttributeWindow.setObjectName("variableAttributeWindow")
-        variableAttributeWindow.resize(670, 509)
+        variableAttributeWindow.resize(670, 487)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -189,20 +189,19 @@ class Ui_variableAttributeWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
 "QComboBox:disabled {\n"
 "    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
 "}\n"
 "\n"
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -222,17 +221,37 @@ class Ui_variableAttributeWindow(object):
 "    height: 16px\n"
 "}\n"
 "\n"
-"QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
-"    background: #f0f0f0;\n"
-"    border: 0px solid #f0f0f0;\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.gridLayout_2 = QtWidgets.QGridLayout(variableAttributeWindow)
+        self.gridLayout_2.setVerticalSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.splitter = QtWidgets.QSplitter(variableAttributeWindow)
         self.splitter.setStyleSheet("QSplitter::handle {\n"
@@ -777,20 +796,19 @@ class Ui_variableAttributeWindow(object):
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
 "QComboBox:disabled {\n"
 "    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
 "}\n"
 "\n"
 "QComboBox:hover {\n"
 "    border: 1px solid #7eb4ea;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
 "}\n"
 "\n"
 "QComboBox::drop-down {\n"
@@ -810,15 +828,34 @@ class Ui_variableAttributeWindow(object):
 "    height: 16px\n"
 "}\n"
 "\n"
-"QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
-"    background: #f0f0f0;\n"
-"    border: 0px solid #f0f0f0;\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
 "}\n"
 "\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
 "QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.vw_addAttribute_rl.setObjectName("vw_addAttribute_rl")
         self.horizontalLayout_6.addWidget(self.vw_addAttribute_rl)
@@ -1024,12 +1061,10 @@ class Ui_variableAttributeWindow(object):
         self.add_attribute_scroll.setWidget(self.scrollAreaWidgetContents_2)
         self.verticalLayout_3.addWidget(self.add_attribute_scroll)
         self.gridLayout_2.addWidget(self.splitter, 0, 0, 1, 1)
-        spacerItem15 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem15 = QtWidgets.QSpacerItem(20, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.gridLayout_2.addItem(spacerItem15, 1, 0, 1, 1)
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        spacerItem16 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem16)
         self.vw_okButton = QtWidgets.QToolButton(variableAttributeWindow)
         self.vw_okButton.setMinimumSize(QtCore.QSize(100, 27))
         self.vw_okButton.setMaximumSize(QtCore.QSize(100, 27))
@@ -1065,8 +1100,8 @@ class Ui_variableAttributeWindow(object):
 "}")
         self.vw_okButton.setObjectName("vw_okButton")
         self.horizontalLayout_7.addWidget(self.vw_okButton)
-        spacerItem17 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem17)
+        spacerItem16 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem16)
         self.vw_cancelButton = QtWidgets.QToolButton(variableAttributeWindow)
         self.vw_cancelButton.setMinimumSize(QtCore.QSize(100, 27))
         self.vw_cancelButton.setMaximumSize(QtCore.QSize(100, 27))
@@ -1102,8 +1137,8 @@ class Ui_variableAttributeWindow(object):
 "}")
         self.vw_cancelButton.setObjectName("vw_cancelButton")
         self.horizontalLayout_7.addWidget(self.vw_cancelButton)
-        spacerItem18 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem18)
+        spacerItem17 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem17)
         self.gridLayout_2.addLayout(self.horizontalLayout_7, 2, 0, 1, 1)
 
         self.retranslateUi(variableAttributeWindow)

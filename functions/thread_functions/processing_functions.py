@@ -32,18 +32,18 @@ class VariableProcessingThread(QtCore.QThread):
             args = []
             dimension_out = None
             path_out = None
-            first_var = True
+            # first_var = True
             for index, item in enumerate(self.list_combobox_input):
                 if isinstance(item, QtWidgets.QComboBox):
                     sublist = self.list_of_variables_and_attributes['/' + item.currentText()]
                     args.append(sublist[0])
-                    if first_var:
-                        dimension_out = sublist[1]
-                        if os.path.dirname(item.currentText()) == '/':
-                            path_out = '/'
-                        else:
-                            path_out = os.path.dirname(item.currentText()) + '/'
-                        first_var = False
+                    # if first_var:
+                    #     dimension_out = sublist[1]
+                    #     if os.path.dirname(item.currentText()) == '/':
+                    #         path_out = '/'
+                    #     else:
+                    #         path_out = os.path.dirname(item.currentText()) + '/'
+                    #     first_var = False
                 elif isinstance(item, QtWidgets.QLineEdit):
                     try:
                         args.append(float(item.text()))
@@ -55,10 +55,12 @@ class VariableProcessingThread(QtCore.QThread):
             if isinstance(output, tuple):
                 for index, var_out in enumerate(output):
                     var_name = '/' + str(self.list_edit_output[index].text())
-                    self.list_of_new_variables_and_attributes[var_name] = [var_out, dimension_out, path_out]
+                    # self.list_of_new_variables_and_attributes[var_name] = [var_out, dimension_out, path_out]
+                    self.list_of_new_variables_and_attributes[var_name] = [var_out, None, path_out]
             else:
                 var_name = '/' + str(self.list_edit_output[0].text())
-                self.list_of_new_variables_and_attributes[var_name] = [output, dimension_out, path_out]
+                # self.list_of_new_variables_and_attributes[var_name] = [output, dimension_out, path_out]
+                self.list_of_new_variables_and_attributes[var_name] = [output, None, path_out]
             self.finished.emit(self.list_of_new_variables_and_attributes)
         except Exception:
             logging.exception('gui - file_functions.py - VariableProcessingThread - an exception occurred')

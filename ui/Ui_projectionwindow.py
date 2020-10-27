@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'projection_option_window.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -188,6 +188,7 @@ class Ui_projectionWindow(object):
 "}")
         self.gridLayout_2 = QtWidgets.QGridLayout(projectionWindow)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_2.setVerticalSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.option_scroll = QtWidgets.QScrollArea(projectionWindow)
         self.option_scroll.setStyleSheet("QScrollArea { background: transparent; }\n"
@@ -359,7 +360,7 @@ class Ui_projectionWindow(object):
         self.option_scroll.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.option_scroll.setObjectName("option_scroll")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 459, 204))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 459, 234))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setContentsMargins(10, 10, 10, 10)
@@ -369,11 +370,11 @@ class Ui_projectionWindow(object):
         self.gridLayout.addLayout(self.option_layout, 0, 0, 1, 1)
         self.option_scroll.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout_2.addWidget(self.option_scroll, 0, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem = QtWidgets.QSpacerItem(20, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.gridLayout_2.addItem(spacerItem, 1, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(11, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.option_ok = QtWidgets.QToolButton(projectionWindow)
         self.option_ok.setMinimumSize(QtCore.QSize(100, 27))
@@ -446,7 +447,7 @@ class Ui_projectionWindow(object):
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem3)
         self.gridLayout_2.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 11, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.gridLayout_2.addItem(spacerItem4, 3, 0, 1, 1)
 
         self.retranslateUi(projectionWindow)

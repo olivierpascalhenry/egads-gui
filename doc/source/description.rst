@@ -20,8 +20,6 @@ The simplest way to start working with EGADS GUI is to run it from the terminal 
 
 Or by double clicking on the executable if using the stand-alone package (egads_gui.exe for Windows and egads_gui for Linux).
 
-The EGADS GUI is easy to use and self explaining by the presence of information button (once a button is clicked, a popup will appear with text to explain the purpose of the area actually used) and tool tips.
-
 The EGADS GUI is composed of different windows, designed to display information to the user and accept interactions, and functions linking different parts of the GUI with EGADS. At the end of this section, information are also given about the option window, used to control EGADS and the GUI options.
 
 
@@ -32,6 +30,13 @@ Current GUI limitations
 Actually, the GUI has few limitations based on the development time and the number of person working on this project. First the file formats handled by the GUI. Even if EGADS can handle text files (raw, ASCII and csv), the GUI can handle only NetCDF and NASA Ames file format (FFI 1001) at this time. 
 
 
+-----------------------
+Buttons and information
+-----------------------
+
+In the different windows of the Graphical User Interface, information buttons, composed of an orange information icon, have been placed to display information and/or help about different sections of a window. A left click on those buttons will display a popup window with text to explain the purpose of the area currently used.
+
+
 ---------------
 The main window
 ---------------
@@ -40,16 +45,16 @@ The main window of the GUI is what the user will see first once he has launched 
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_000.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
 The main window is composed of four parts, from top to bottom:
 
 * the first one is a menu bar with three menus - ``File``, ``Processing`` and ``About`` - allowing the user to open/save a file, launch a processing on more than one file, quit the software, display the different algorithms imbedded in EGADS, and display information about the software.
-* the second one is a bar containing 12 icons and giving access to different kind of functions and windows as the plot window or the metadata window.
+* the second one is a bar containing 11 icons and giving access to different kind of functions and windows as the plot window or the metadata window.
 * the third one is a central widget whose purpose is to welcome the interface dedicated to NetCDF, NASA Ames and text files.
-* the last one is a footbar, used to display few information about the file actually loaded, like the name, the weight and the file conventions.
+* the last one is a footbar, used to display few information about the file actually loaded, like the name, the weight and the file conventions, and messages to confirm actions made by users.
 
 
 ------------
@@ -66,7 +71,7 @@ File is a submenu of the menu bar.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_002.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -81,7 +86,7 @@ Processing is a submenu of the menu bar.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_003.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -96,7 +101,7 @@ About is a submenu of the menu bar.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_004.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -107,7 +112,7 @@ The user will find here information about the software, options and link to the 
 The icon bar and the windows
 ----------------------------
 
-12 icons are embedded in the icon bar, 6 of them give access to the GUI functions and 6 of them are directly linked to sub windows.
+11 icons are embedded in the icon bar, 6 of them give access to the GUI functions and 6 of them are directly linked to sub windows.
 
 
 ^^^^^^^^^^^^^^^^^^
@@ -123,54 +128,116 @@ The three first icons of the icon bar give access to few basic functions to cont
 .. |open| image:: images/icons/open_popup_icon.png
    :width: 130px
    :height: 130px
-   :scale: 25 %
-   :align: middle
+   :scale: 12 %
+   :align: top
 
 .. |save_as| image:: images/icons/save_as_icon.png
    :width: 130px
    :height: 130px
-   :scale: 25 %
-   :align: middle
+   :scale: 12 %
+   :align: top
 
 .. |close| image:: images/icons/off_icon.png
    :width: 130px
    :height: 130px
-   :scale: 25 %
-   :align: middle
+   :scale: 12 %
+   :align: top
+
+
+^^^^^^^^^^^^^^^^^^
+The metadata icons
+^^^^^^^^^^^^^^^^^^
+
+The fourth and fifth icons give the possibility to display, modify, create global metadata, or metadata linked to a variable/group if a variable/group has been selected.
+
+* |global_metadata| : This icon open the global metadata window, to display, modify, create global metadata associated to a file.
+* |variable_metadata| : This icon open the variable metadata window, to display, modify, create metadata associated to a variable/group.
+
+.. |global_metadata| image:: images/icons/glo_metadata_icon.png
+   :width: 130px
+   :height: 130px
+   :scale: 12 %
+   :align: top
+
+.. |variable_metadata| image:: images/icons/var_metadata_icon.png
+   :width: 130px
+   :height: 130px
+   :scale: 12 %
+   :align: top
 
 
 ^^^^^^^^^^^^^^
 The data icons
 ^^^^^^^^^^^^^^
 
-The sixth and seventh icons are here to manipulate data:
+The sixth and seventh icons:
 
-* |migrate| :   In EGADS GUI, once a variable is processed through an algorithm, the result is a new variable displayed in the ``New variables`` tab of the central widget. In this tab, a variable can't be saved in a file, only variables in the ``Variable`` tab are saved. The user has to migrate the new variable to the ``Variables`` tab. And he can do that with this function.
-* |delete| :    The purpose of this function is to delete a variable. If the file is saved after a deletion, obviously the deleted variable won't appear in the file anymore.
+* |create_group| :   EGADS can handle groups in NetCDF and HDF files, thus it is possible to create groups within the GUI. Obviously, it won't work with NASA Ames file format and trying to save a NASA Ames file with a group created in the GUI will lead to an error message.
 
-.. |migrate| image:: images/icons/migrate_icon.png
+* |delete| :    The purpose of this function is to delete a variable/group. If the file is saved after a deletion, obviously the deleted variable won't appear in the file anymore.
+
+.. |create_group| image:: images/icons/create_group_icon.png
    :width: 130px
    :height: 130px
-   :scale: 25 %
-   :align: middle
+   :scale: 12 %
+   :align: top
 
 .. |delete| image:: images/icons/del_icon.png
    :width: 130px
    :height: 130px
-   :scale: 25 %
-   :align: middle
+   :scale: 12 %
+   :align: top
+
+
+^^^^^^^^^^^^^^^^^^^^
+The processing icons
+^^^^^^^^^^^^^^^^^^^^
+
+The eighth and nineth icons:
+
+* |algo_processing| : This icon is used to display the process window, from where the user can select an algorithm and apply it to one ore more variables.
+* |algo_creation| : From here, the GUI give the possibility to the users to create their own algorithms.
+
+.. |algo_processing| image:: images/icons/new_algo_icon.png
+   :width: 130px
+   :height: 130px
+   :scale: 12 %
+   :align: top
+
+.. |algo_creation| image:: images/icons/create_algo_icon.png
+   :width: 130px
+   :height: 130px
+   :scale: 12 %
+   :align: top
+
+
+^^^^^^^^^^^^^^^^^
+The display icons
+^^^^^^^^^^^^^^^^^
+
+The tenth and eleventh icons:
+
+* |display| : The user can take a look in data by clicking on this icon.
+* |plot| : This icon opens the plot window to plot time series and gridded data.
+
+.. |display| image:: images/icons/data_icon.png
+   :width: 130px
+   :height: 130px
+   :scale: 12 %
+   :align: top
+
+.. |plot| image:: images/icons/plot_icon.png
+   :width: 130px
+   :height: 130px
+   :scale: 12 %
+   :align: top
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The global attributes window
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The user has to click on the icon |global attributes| to open the global attributes window.
-
-.. |global attributes| image:: images/icons/glo_metadata_icon.png
-   :width: 130px
-   :height: 130px
-   :scale: 12 %
+The user has to click on the icon |global_metadata| to open the global attributes window.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_009.png
    :width: 673px
@@ -178,19 +245,14 @@ The user has to click on the icon |global attributes| to open the global attribu
    :scale: 45 %
    :align: center
 
-All global attributes embedded in a NASA Ames or NetCDF files are loaded in this window. The user has the possibility to modify, create and delete them. As EGADS GUI follows the EUFAR Standards & Protocols recommendations, few global attributes are thus mandatory and displayed above others. They can be modified, but they can't be deleted.
+All global attributes embedded in a NASA Ames, NetCDF and Hdf5 files are loaded in this window. The user has the possibility to modify, create and delete them. As EGADS GUI follows the EUFAR Standards & Protocols recommendations, few global attributes are thus mandatory and displayed above others. They can be modified, but they can't be deleted.
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The variable attributes window
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Accessible by clicking on the icon |variable attributes|, the user has to select first a variable from the ``Variables`` tab of the main window.
-
-.. |variable attributes| image:: images/icons/var_metadata_icon.png
-   :width: 130px
-   :height: 130px
-   :scale: 12 %
+Accessible by clicking on the icon |variable_metadata|, the user has to select first a variable from the ``Variables`` tab of the main window.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_010.png
    :width: 673px
@@ -198,18 +260,13 @@ Accessible by clicking on the icon |variable attributes|, the user has to select
    :scale: 45 %
    :align: center
 
-All attributes linked to the selected variable, coming from a NetCDF or a NASA Ames file, are loaded in this window. As for the global attributes window, the user can create/modify/delete attributes. Following the EUFAR Standards & Protocols recommendations, two attributes can't be deleted and modified: ``units`` and ``_FillValue``.
+All attributes associated to the selected variable, coming from a NetCDF, Hdf5 or a NASA Ames file, are loaded in this window. As for the global attributes window, the user can create/modify/delete attributes. Following the EUFAR Standards & Protocols recommendations, two attributes can't be deleted and modified: ``units`` and ``_FillValue``.
 
 ^^^^^^^^^^^^^^^^^^^^^
 The processing window
 ^^^^^^^^^^^^^^^^^^^^^
 
-Accessible by clicking on the icon |launch process|, a variable can be processed with an algorithm already embedded in EGADS or created by a user.
-
-.. |launch process| image:: images/icons/new_algo_icon.png
-   :width: 130px
-   :height: 130px
-   :scale: 12 %
+Accessible by clicking on the icon |algo_processing|, a variable can be processed with an algorithm already embedded in EGADS or created by a user.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_012.png
    :width: 702px
@@ -224,12 +281,7 @@ Here the user has the possibility to select an algorithm from the EGADS algorith
 The algorithm creation window
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-One of the main goal of EGADS is to let the user creates his own algorithms. Accessible by clicking on the icon |create algorithm|, this window is an automated system to create algorithm from the user inputs.
-
-.. |create algorithm| image:: images/icons/create_algo_icon.png
-   :width: 130px
-   :height: 130px
-   :scale: 12 %
+One of the main goal of EGADS is to let the user creates his own algorithms. Accessible by clicking on the icon |algo_creation|, this window is an automated system to create algorithm from the user inputs.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_017.png
    :width: 1002px
@@ -237,7 +289,7 @@ One of the main goal of EGADS is to let the user creates his own algorithms. Acc
    :scale: 45 %
    :align: center
 
-The window is composed of three tabs. The first tab is dedicated to the metadata of the algorithm and, the most important, to the mathematic formula. The second tab is dedicated to the input(s). The user will fill the different text boxes to prepare the input variable(s). The last tab is dedicated to the output(s). As the window follows the EGADS convention, few tips have to be used here and will be explained later.  Once the user click on ``Save``, an automated task will check every item in the window, in particular units, and will display a warning popup is something went wrong. The algorithm is then saved in the ``user`` sub-folder of the EGADS/Algorithms folder. For help purpose, few info buttons are present.
+The window is composed of three tabs. The first tab is dedicated to the metadata of the algorithm and, the most important, to the mathematic formula. The second tab is dedicated to the input(s). The user will fill the different text boxes to prepare the input variable(s). The last tab is dedicated to the output(s). As the window follows the EGADS convention, few tips have to be used here and will be explained later. Once the user click on ``Save``, an automated task will check every item in the window, in particular units, and will display a warning popup is something went wrong. The algorithm is then saved in the ``user_algorithms`` sub-folder of EGADS in $HOME directory. For help purpose, few info buttons are present.
 The system doesn't test the algorithm created by the user, it is expected to work, and the user has to give his greatest attention when writing the algorithm using Python 3. If a complex algorithm needs to be written, the use of a text editor and the manual declaration of the algorithm in EGADS are strongly encouraged.
 
 .. NOTE ::
@@ -251,12 +303,7 @@ The system doesn't test the algorithm created by the user, it is expected to wor
 The data display window
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Accessible by clicking on the icon |display data|, the user has to select first a variable from the ``Variables`` tab of the main window.
-
-.. |display data| image:: images/icons/data_icon.png
-   :width: 130px
-   :height: 130px
-   :scale: 12 %
+Accessible by clicking on the icon |display|, the user has to select first a variable from the ``Variables`` tab of the main window.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_011.png
    :width: 652px
@@ -271,12 +318,7 @@ Here the user can take a look directly in the variable.
 The plot window
 ^^^^^^^^^^^^^^^
 
-Accessible by clicking on the icon |plot data| or by the right click menu, the user has to select a variable to enable the window. The purpose of that window is to give the user the possibility to plot all kind of data and to save the corresponding figure. It is possible to plot multiple variables by selecting them in the list using ctrl + left click.
-
-.. |plot data| image:: images/icons/plot_icon.png
-   :width: 130px
-   :height: 130px
-   :scale: 12 %
+Accessible by clicking on the icon |plot| or by the right click menu, the user has to select a variable to display the window. The purpose of that window is to give the user the possibility to plot all kind of data and to save the corresponding figure. It is possible to plot multiple variables by selecting them in the list using ctrl + left click.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_018.png
    :width: 1252px
@@ -298,28 +340,28 @@ The plot window is composed of an icon bar including six icons and four differen
 .. |move| image:: images/icons/pan_icon.png
    :width: 130px
    :height: 130px
-   :scale: 25 %
-   :align: middle
+   :scale: 12 %
+   :align: top
 
 .. |zoom| image:: images/icons/zoom_icon.png
    :width: 130px
    :height: 130px
-   :scale: 25 %
-   :align: middle
+   :scale: 12 %
+   :align: top
 
 .. |origin| image:: images/icons/origin_icon.png
    :width: 130px
    :height: 130px
-   :scale: 25 %
-   :align: middle
+   :scale: 12 %
+   :align: top
 
 .. |quit| image:: images/icons/exit_icon.png
    :width: 130px
    :height: 130px
-   :scale: 25 %
-   :align: middle
+   :scale: 12 %
+   :align: top
 
-The design of the plot window is based on the access to as many options as possible to let the user modify the figure to his heart content, quickly and easily. Obviously, if the user wants to create complex figures, it is strongly encouraged to use EGADS and Matplotlib from script.
+The design of the plot window is based on the access to as many options as possible to let the user modify the figure to his heart content, quickly and easily. Obviously, if the user wants to create complex figures, it is strongly encouraged to use EGADS and Matplotlib from a script.
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -372,16 +414,15 @@ Once a NetCDF or NASA Ames file has been opened in the GUI, a new interface obje
 The global attributes tab
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The purpose of the first tab is to display the main global attributes of a NetCDF or NASA Ames. Concerning NetCDF, the tab is following the EUFAR Standards & Protocols NetCDF convention and few attributes are automatically displayed. Important information about the dataset is usually recorded in the global attributes.
+The purpose of the first tab is to display the main global attributes of a NetCDF, Hdf5 or NASA Ames file. The tab is following the EUFAR Standards & Protocols NetCDF convention and few attributes are automatically displayed. Important information about the dataset is usually recorded in the global attributes.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_005.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
 The edit icon |edit icon| for each field gives the user the possibility to modify each global attribute from the tab view. Once an attribute has been modified, the file has to be saved to keep the new attribute.
-Finally an object in the lower part of the central widget is here to give information about the compatibility of the file, if it is a NetCDF one, with the official EUFAR Standards and Protocols NetCDF convention.
 
 .. NOTE::
   Once the user has clicked on the |edit icon|, and before confirming its modification by clicking on the |save as icon|, it is possible to cancel the modification by doing a right click on the same button. It will close the edit mode and replace the new text by the old one.
@@ -395,46 +436,30 @@ The second tab is dedicated to variables and there attributes.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_006.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
-A list of all variables included in the NetCDF/NASA Ames file is displayed in the left side, ordered alphabetically. If a user clicks on a variable, attributes will be displayed on the right side of the tab. As for the global attributes tab, an edit icon |edit icon| is here to let the user modify directly the variable attributes from the tab. Right clicks are also registered to cancel a modification in edit mode. Few of them are not intended to be modify, like the units or the non value, consequently a grey colour is superimposed on them to inform the user.
+A list of all variables included in the NetCDF/Hdf5/NASA Ames file is displayed in the left side, ordered alphabetically. If a user clicks on a variable, attributes will be displayed on the right side of the tab. As for the global attributes tab, an edit icon |edit icon| is here to let the user modify directly the variable attributes from the tab. Right clicks are also registered to cancel a modification in edit mode. Few of them are not intended to be modify, like the units or the non value, consequently a grey colour is superimposed on them to inform the user.
 
 .. |edit icon| image:: images/icons/edit_icon.png
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 .. |save as icon| image:: images/icons/save_as_icon.png
    :width: 130px
    :height: 130px
    :scale: 12 %
-
-
-^^^^^^^^^^^^^^^^^^^^^
-The new variables tab
-^^^^^^^^^^^^^^^^^^^^^
-
-The purpose of the third tab, not visible by default, is to welcome newly-created variables, to avoid wrong manipulation and for the sake of convenience. Once a variable is created, it will appear in this new tab. If the user wants to save the new variable(s), he must migrate it/them in the ``Variables`` tab.
-
-.. image:: images/egads_gui_screencaptures/EGADS_GUI_007.png
-   :width: 936px
-   :height: 647px
-   :scale: 45 %
-   :align: center
-
-This tab behaves completely as the ``Variables`` tab. 
-
-.. NOTE::
-  Variables created from algorithms or by the user have to be migrated from the new variables tab to the variables tab if the user wants to save them. Variables still in the new variables tab won't be saved.
+   :align: top
 
 
 -----------
 The footbar
 -----------
 
-The purpose of the footbar is to display information about the file actually loaded, like the name, the size and the conventions, and messages to confirm the actions of the user, like the modification of metadata or the creation of variables. Since version 1.0.0, messages are displayed for few seconds about the actions performed and confirmed by the user: modification of metadata, deletion of variables, ...
+The purpose of the footbar is to display information about the file actually loaded, like the name, the size and the conventions, and messages to confirm the actions of the user, like the modification of metadata or the creation of variables. 
 
 
 ---------------------

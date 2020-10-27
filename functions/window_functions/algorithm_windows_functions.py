@@ -380,7 +380,7 @@ class MyAlgorithmDisplay(QtWidgets.QDialog, Ui_displayAlgorithmWindow):
 
 
 class MyProcessing(QtWidgets.QDialog, Ui_processingWindow):
-    def __init__(self, list_of_algorithms, list_of_variables_and_attributes, list_of_new_variables_and_attributes):
+    def __init__(self, list_of_algorithms, list_of_variables_and_attributes):
         logging.debug('gui - algorithm_window_functions.py - MyProcessing - __init__')
         QtWidgets.QWidget.__init__(self)
         self.setupUi(self)
@@ -388,9 +388,7 @@ class MyProcessing(QtWidgets.QDialog, Ui_processingWindow):
         self.aw_combobox_2.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.list_of_algorithms = list_of_algorithms
         self.new_var_list = None
-        self.list_of_variables_and_attributes = self.prepare_variable_dict(dict(list_of_variables_and_attributes,
-                                                                                **list_of_new_variables_and_attributes))
-        self.list_of_new_variables_and_attributes = list_of_new_variables_and_attributes
+        self.list_of_variables_and_attributes = self.prepare_variable_dict(list_of_variables_and_attributes)
         self.algorithm = None
         self.types_for_combobox = ['vector', 'array', 'vector_optional', 'array_optional']
         self.wait_window = None
@@ -420,18 +418,17 @@ class MyProcessing(QtWidgets.QDialog, Ui_processingWindow):
     def execute_processing(self):
         logging.debug('gui - algorithm_window_functions.py - MyProcessing - close_window_save : algorithm '
                       + self.algorithm().metadata["Processor"])
-        new_var_list = list(self.list_of_new_variables_and_attributes.keys())
         output_names = [str(widget.text()) for widget in self.list_edit_output]
-        filtered_list = [string for string in output_names if ('/' + string) in new_var_list]
+        filtered_list = [string for string in output_names if ('/' + string) in self.list_of_variables_and_attributes]
         if filtered_list:
             if len(filtered_list) > 1:
-                text = 'The following variable already exist in the New variables workspace:<ul>'
+                text = 'The following variable already exist in the Variables workspace:<ul>'
                 for var in filtered_list:
                     text += '<li>' + var + '</li>'
                 text += ('</ul>Please confirm the overwriting by clicking on <b>Overwrite</b>. Click on <b>Cancel</b> '
                          'to cancel the processing.')
             else:
-                text = ('The following variable, ' + filtered_list[0] + ', already exists in the New variables '
+                text = ('The following variable, ' + filtered_list[0] + ', already exists in the Variables '
                         'workspace. Please confirm the overwriting by clicking on <b>Overwrite</b>. Click on '
                         '<b>Cancel</b> to cancel the processing.')
             existing_window = MyExistingVariable(text)
@@ -489,8 +486,8 @@ class MyProcessing(QtWidgets.QDialog, Ui_processingWindow):
         self.setWindowTitle('Processing')
         self.aw_okButton.setEnabled(False)
         self.aw_combobox_2.clear()
-        self.aw_edit_1.setPlainText("")
-        self.aw_edit_2.setPlainText("")
+        self.aw_edit_1.setText('')
+        self.aw_edit_2.setText('')
         clear_layout(self.input_layout)
         clear_layout(self.output_layout)
         if self.aw_combobox_1.currentText() == "Make a choice...":
@@ -514,15 +511,15 @@ class MyProcessing(QtWidgets.QDialog, Ui_processingWindow):
         if self.aw_combobox_2.currentText() != "Make a choice...":
             rep, algo = str(self.aw_combobox_1.currentText()).lower(), str(self.aw_combobox_2.currentText())
             self.setWindowTitle('Processing - ' + algo)
-            self.aw_edit_1.setPlainText("")
-            self.aw_edit_2.setPlainText("")
+            self.aw_edit_1.setText('')
+            self.aw_edit_2.setText('')
             self.algorithm = self.list_of_algorithms[rep + ' - ' + algo]['method']
             try:
-                self.aw_edit_2.setText('<p align="justify">' + str(self.algorithm().metadata["Description"]) + '</p>')
+                self.aw_edit_2.setText(str(self.algorithm().metadata["Description"]))
             except KeyError:
                 pass
             try:
-                self.aw_edit_1.setText('<p align="justify">' + str(self.algorithm().metadata["Purpose"]) + '</p>')
+                self.aw_edit_1.setText(str(self.algorithm().metadata["Purpose"]))
             except KeyError:
                 pass
 
@@ -926,16 +923,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_input_del_1.append(QtWidgets.QToolButton())
         self.cw_input_del_1[self.input_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_input_del_1[self.input_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_input_del_1[self.input_num].setStyleSheet("QToolButton {\n"
-                                                          "    border: 1px solid transparent;\n"
-                                                          "    background-color: transparent;\n"
-                                                          "    width: 27px;\n"
-                                                          "    height: 27px;\n"
-                                                          "}\n"
-                                                          "\n"
-                                                          "QToolButton:flat {\n"
-                                                          "    border: none;\n"
-                                                          "}")
+        self.cw_input_del_1[self.input_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_input_del_1[self.input_num].setIcon(icon)
         self.cw_input_del_1[self.input_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_input_del_1[self.input_num].setObjectName('cw_input_del_1_' + str(self.input_num))
@@ -953,25 +941,14 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_input_lb_1[self.input_num].setObjectName('cw_input_lb_1_' + str(self.input_num))
         self.cw_input_lb_1[self.input_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing |
                                                         QtCore.Qt.AlignVCenter)
-        self.cw_input_lb_1[self.input_num].setStyleSheet("QLabel {\n"
-                                                         "    color: rgb(45,45,45);\n"
-                                                         "}")
+        self.cw_input_lb_1[self.input_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_input_gd_1[self.input_num].addWidget(self.cw_input_lb_1[self.input_num], 0, 0, 1, 1)
         self.cw_input_ln_1.append(QtWidgets.QLineEdit())
         self.cw_input_ln_1[self.input_num].setEnabled(True)
         self.cw_input_ln_1[self.input_num].setMinimumSize(QtCore.QSize(200, 27))
         self.cw_input_ln_1[self.input_num].setMaximumSize(QtCore.QSize(200, 27))
         self.cw_input_ln_1[self.input_num].setFont(font2)
-        self.cw_input_ln_1[self.input_num].setStyleSheet("QLineEdit {\n"
-                                                         "    border-radius: 3px;\n"
-                                                         "    padding: 1px 4px 1px 4px;\n"
-                                                         "    background-color: rgb(240, 240, 240);\n"
-                                                         "    color: rgb(45,45,45);\n"
-                                                         "}\n"
-                                                         "\n"
-                                                         "QLineEdit:disabled {\n"
-                                                         "    background-color: rgb(200,200,200);\n"
-                                                         "}")
+        self.cw_input_ln_1[self.input_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
         self.cw_input_ln_1[self.input_num].setText('')
         self.cw_input_ln_1[self.input_num].setFrame(False)
         self.cw_input_ln_1[self.input_num].setObjectName('cw_input_ln_1_' + str(self.input_num))
@@ -985,24 +962,13 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_1.append(QtWidgets.QToolButton())
         self.cw_info_bt_1[self.input_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_1[self.input_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_1[self.input_num].setStyleSheet("QToolButton {\n"
-                                                        "    border: 1px solid transparent;\n"
-                                                        "    background-color: transparent;\n"
-                                                        "    width: 27px;\n"
-                                                        "    height: 27px;\n"
-                                                        "}\n"
-                                                        "\n"
-                                                        "QToolButton:flat {\n"
-                                                        "    border: none;\n"
-                                                        "}")
+        self.cw_info_bt_1[self.input_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_1[self.input_num].setIcon(icon2)
         self.cw_info_bt_1[self.input_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_1[self.input_num].setObjectName('cw_info_bt_1_' + str(self.input_num))
 
         in_hor_lay.addWidget(self.cw_info_bt_1[self.input_num])
         self.cw_input_gd_1[self.input_num].addLayout(in_hor_lay, 0, 2, 1, 1)
-
-        # self.cw_input_gd_1[self.input_num].addWidget(self.cw_info_bt_1[self.input_num], 0, 2, 1, 1)
         self.cw_input_gd_1[self.input_num].addItem(
             QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum), 0, 3, 1, 1)
         self.cw_input_lb_2.append(QtWidgets.QLabel())
@@ -1013,25 +979,14 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_input_lb_2[self.input_num].setObjectName('cw_input_lb_2_' + str(self.input_num))
         self.cw_input_lb_2[self.input_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing |
                                                         QtCore.Qt.AlignVCenter)
-        self.cw_input_lb_2[self.input_num].setStyleSheet("QLabel {\n"
-                                                         "    color: rgb(45,45,45);\n"
-                                                         "}")
+        self.cw_input_lb_2[self.input_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_input_gd_1[self.input_num].addWidget(self.cw_input_lb_2[self.input_num], 1, 0, 1, 1)
         self.cw_input_ln_2.append(QtWidgets.QLineEdit())
         self.cw_input_ln_2[self.input_num].setEnabled(True)
         self.cw_input_ln_2[self.input_num].setMinimumSize(QtCore.QSize(200, 27))
         self.cw_input_ln_2[self.input_num].setMaximumSize(QtCore.QSize(200, 27))
         self.cw_input_ln_2[self.input_num].setFont(font2)
-        self.cw_input_ln_2[self.input_num].setStyleSheet("QLineEdit {\n"
-                                                         "    border-radius: 3px;\n"
-                                                         "    padding: 1px 4px 1px 4px;\n"
-                                                         "    background-color: rgb(240, 240, 240);\n"
-                                                         "    color: rgb(45,45,45);\n"
-                                                         "}\n"
-                                                         "\n"
-                                                         "QLineEdit:disabled {\n"
-                                                         "    background-color: rgb(200,200,200);\n"
-                                                         "}")
+        self.cw_input_ln_2[self.input_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
         self.cw_input_ln_2[self.input_num].setText('')
         self.cw_input_ln_2[self.input_num].setFrame(False)
         self.cw_input_ln_2[self.input_num].setObjectName('cw_input_ln_2_' + str(self.input_num))
@@ -1045,16 +1000,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_2.append(QtWidgets.QToolButton())
         self.cw_info_bt_2[self.input_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_2[self.input_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_2[self.input_num].setStyleSheet("QToolButton {\n"
-                                                        "    border: 1px solid transparent;\n"
-                                                        "    background-color: transparent;\n"
-                                                        "    width: 27px;\n"
-                                                        "    height: 27px;\n"
-                                                        "}\n"
-                                                        "\n"
-                                                        "QToolButton:flat {\n"
-                                                        "    border: none;\n"
-                                                        "}")
+        self.cw_info_bt_2[self.input_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_2[self.input_num].setIcon(icon2)
         self.cw_info_bt_2[self.input_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_2[self.input_num].setObjectName('cw_info_bt_2_' + str(self.input_num))
@@ -1062,7 +1008,6 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         in_hor_lay.addWidget(self.cw_info_bt_2[self.input_num])
         self.cw_input_gd_1[self.input_num].addLayout(in_hor_lay, 1, 2, 1, 1)
 
-        # self.cw_input_gd_1[self.input_num].addWidget(self.cw_info_bt_2[self.input_num], 1, 2, 1, 1)
         self.cw_input_gd_1[self.input_num].addItem(
             QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum), 1, 3, 1, 1)
         self.cw_input_lb_3.append(QtWidgets.QLabel())
@@ -1073,25 +1018,14 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_input_lb_3[self.input_num].setObjectName('cw_input_lb_3_' + str(self.input_num))
         self.cw_input_lb_3[self.input_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing |
                                                         QtCore.Qt.AlignVCenter)
-        self.cw_input_lb_3[self.input_num].setStyleSheet("QLabel {\n"
-                                                         "    color: rgb(45,45,45);\n"
-                                                         "}")
+        self.cw_input_lb_3[self.input_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_input_gd_1[self.input_num].addWidget(self.cw_input_lb_3[self.input_num], 2, 0, 1, 1)
         self.cw_input_ln_3.append(QtWidgets.QLineEdit())
         self.cw_input_ln_3[self.input_num].setEnabled(True)
         self.cw_input_ln_3[self.input_num].setMinimumSize(QtCore.QSize(200, 27))
         self.cw_input_ln_3[self.input_num].setMaximumSize(QtCore.QSize(200, 27))
         self.cw_input_ln_3[self.input_num].setFont(font2)
-        self.cw_input_ln_3[self.input_num].setStyleSheet("QLineEdit {\n"
-                                                         "    border-radius: 3px;\n"
-                                                         "    padding: 1px 4px 1px 4px;\n"
-                                                         "    background-color: rgb(240, 240, 240);\n"
-                                                         "    color: rgb(45,45,45);\n"
-                                                         "}\n"
-                                                         "\n"
-                                                         "QLineEdit:disabled {\n"
-                                                         "    background-color: rgb(200,200,200);\n"
-                                                         "}")
+        self.cw_input_ln_3[self.input_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
         self.cw_input_ln_3[self.input_num].setText('')
         self.cw_input_ln_3[self.input_num].setFrame(False)
         self.cw_input_ln_3[self.input_num].setObjectName('cw_input_ln_3_' + str(self.input_num))
@@ -1105,16 +1039,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_3.append(QtWidgets.QToolButton())
         self.cw_info_bt_3[self.input_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_3[self.input_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_3[self.input_num].setStyleSheet("QToolButton {\n"
-                                                        "    border: 1px solid transparent;\n"
-                                                        "    background-color: transparent;\n"
-                                                        "    width: 27px;\n"
-                                                        "    height: 27px;\n"
-                                                        "}\n"
-                                                        "\n"
-                                                        "QToolButton:flat {\n"
-                                                        "    border: none;\n"
-                                                        "}")
+        self.cw_info_bt_3[self.input_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_3[self.input_num].setIcon(icon2)
         self.cw_info_bt_3[self.input_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_3[self.input_num].setObjectName('cw_info_bt_3_' + str(self.input_num))
@@ -1122,7 +1047,6 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         in_hor_lay.addWidget(self.cw_info_bt_3[self.input_num])
         self.cw_input_gd_1[self.input_num].addLayout(in_hor_lay, 2, 2, 1, 1)
 
-        # self.cw_input_gd_1[self.input_num].addWidget(self.cw_info_bt_3[self.input_num], 2, 2, 1, 1)
         self.cw_input_gd_1[self.input_num].addItem(
             QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum), 2, 3, 1, 1)
         self.cw_input_lb_4.append(QtWidgets.QLabel())
@@ -1133,25 +1057,14 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_input_lb_4[self.input_num].setObjectName('cw_input_lb_4_' + str(self.input_num))
         self.cw_input_lb_4[self.input_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing |
                                                         QtCore.Qt.AlignVCenter)
-        self.cw_input_lb_4[self.input_num].setStyleSheet("QLabel {\n"
-                                                         "    color: rgb(45,45,45);\n"
-                                                         "}")
+        self.cw_input_lb_4[self.input_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_input_gd_1[self.input_num].addWidget(self.cw_input_lb_4[self.input_num], 3, 0, 1, 1)
         self.cw_input_ln_4.append(QtWidgets.QLineEdit())
         self.cw_input_ln_4[self.input_num].setEnabled(True)
         self.cw_input_ln_4[self.input_num].setMinimumSize(QtCore.QSize(500, 27))
         self.cw_input_ln_4[self.input_num].setMaximumSize(QtCore.QSize(500, 27))
         self.cw_input_ln_4[self.input_num].setFont(font2)
-        self.cw_input_ln_4[self.input_num].setStyleSheet("QLineEdit {\n"
-                                                         "    border-radius: 3px;\n"
-                                                         "    padding: 1px 4px 1px 4px;\n"
-                                                         "    background-color: rgb(240, 240, 240);\n"
-                                                         "    color: rgb(45,45,45);\n"
-                                                         "}\n"
-                                                         "\n"
-                                                         "QLineEdit:disabled {\n"
-                                                         "    background-color: rgb(200,200,200);\n"
-                                                         "}")
+        self.cw_input_ln_4[self.input_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
         self.cw_input_ln_4[self.input_num].setText('')
         self.cw_input_ln_4[self.input_num].setFrame(False)
         self.cw_input_ln_4[self.input_num].setObjectName('cw_input_ln_4_' + str(self.input_num))
@@ -1165,16 +1078,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_4.append(QtWidgets.QToolButton())
         self.cw_info_bt_4[self.input_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_4[self.input_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_4[self.input_num].setStyleSheet("QToolButton {\n"
-                                                        "    border: 1px solid transparent;\n"
-                                                        "    background-color: transparent;\n"
-                                                        "    width: 27px;\n"
-                                                        "    height: 27px;\n"
-                                                        "}\n"
-                                                        "\n"
-                                                        "QToolButton:flat {\n"
-                                                        "    border: none;\n"
-                                                        "}")
+        self.cw_info_bt_4[self.input_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_4[self.input_num].setIcon(icon2)
         self.cw_info_bt_4[self.input_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_4[self.input_num].setObjectName('cw_info_bt_4_' + str(self.input_num))
@@ -1182,7 +1086,6 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         in_hor_lay.addWidget(self.cw_info_bt_4[self.input_num])
         self.cw_input_gd_1[self.input_num].addLayout(in_hor_lay, 3, 42, 1, 1)
 
-        # self.cw_input_gd_1[self.input_num].addWidget(self.cw_info_bt_4[self.input_num], 3, 4, 1, 1)
         self.cw_input_hl_1[self.input_num].addItem(
             QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
         self.cw_input_vl.addLayout(self.cw_input_vl_1[self.input_num])
@@ -1192,12 +1095,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_input_li_1[self.input_num].setFrameShape(QtWidgets.QFrame.HLine)
         self.cw_input_li_1[self.input_num].setFrameShadow(QtWidgets.QFrame.Sunken)
         self.cw_input_li_1[self.input_num].setObjectName("cw_input_li_1_" + str(self.input_num))
-        self.cw_input_li_1[self.input_num].setStyleSheet("QFrame {\n"
-                                                         "    background: rgb(190,190,190);\n"
-                                                         "    height: 5px;\n"
-                                                         "    border: 0px solid black;\n"
-                                                         "    margin-right: 5px;\n"
-                                                         "}")
+        self.cw_input_li_1[self.input_num].setStyleSheet(stylesheet_creation_function('qframe_algo'))
         self.cw_input_vl_1[self.input_num].addWidget(self.cw_input_li_1[self.input_num])
         self.cw_input_vl_1[self.input_num].addItem(
             QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed))
@@ -1296,16 +1194,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_del_1.append(QtWidgets.QToolButton())
         self.cw_output_del_1[self.output_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_output_del_1[self.output_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_output_del_1[self.output_num].setStyleSheet("QToolButton {\n"
-                                                            "    border: 1px solid transparent;\n"
-                                                            "    background-color: transparent;\n"
-                                                            "    width: 27px;\n"
-                                                            "    height: 27px;\n"
-                                                            "}\n"
-                                                            "\n"
-                                                            "QToolButton:flat {\n"
-                                                            "    border: none;\n"
-                                                            "}")
+        self.cw_output_del_1[self.output_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_output_del_1[self.output_num].setIcon(icon)
         self.cw_output_del_1[self.output_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_output_del_1[self.output_num].setObjectName('cw_output_del_1_' + str(self.output_num))
@@ -1319,9 +1208,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_lb_1[self.output_num].setMinimumSize(QtCore.QSize(0, 27))
         self.cw_output_lb_1[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_lb_1[self.output_num].setFont(font)
-        self.cw_output_lb_1[self.output_num].setStyleSheet("QLabel {\n"
-                                                           "    color: rgb(45,45,45);\n"
-                                                           "}")
+        self.cw_output_lb_1[self.output_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_output_lb_1[self.output_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTop |
                                                           QtCore.Qt.AlignTrailing)
         self.cw_output_lb_1[self.output_num].setObjectName("cw_output_lb_1_" + str(self.output_num))
@@ -1333,16 +1220,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_ln_1[self.output_num].setMinimumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_1[self.output_num].setMaximumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_1[self.output_num].setFont(font2)
-        self.cw_output_ln_1[self.output_num].setStyleSheet("QLineEdit {\n"
-                                                           "   border-radius: 3px;\n"
-                                                           "   padding: 1px 4px 1px 4px;\n"
-                                                           "   background-color: rgb(240, 240, 240);\n"
-                                                           "   color: rgb(45,45,45);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QLineEdit:disabled {\n"
-                                                           "   background-color: rgb(200,200,200);\n"
-                                                           "}")
+        self.cw_output_ln_1[self.output_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
         self.cw_output_ln_1[self.output_num].setText("")
         self.cw_output_ln_1[self.output_num].setFrame(False)
         self.cw_output_ln_1[self.output_num].setObjectName("cw_output_ln_1_" + str(self.output_num))
@@ -1354,16 +1232,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_5.append(QtWidgets.QToolButton())
         self.cw_info_bt_5[self.output_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_5[self.output_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_5[self.output_num].setStyleSheet("QToolButton {\n"
-                                                         "    border: 1px solid transparent;\n"
-                                                         "    background-color: transparent;\n"
-                                                         "    width: 27px;\n"
-                                                         "    height: 27px;\n"
-                                                         "}\n"
-                                                         "\n"
-                                                         "QToolButton:flat {\n"
-                                                         "    border: none;\n"
-                                                         "}")
+        self.cw_info_bt_5[self.output_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_5[self.output_num].setIcon(icon2)
         self.cw_info_bt_5[self.output_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_5[self.output_num].setObjectName("cw_info_bt_5_" + str(self.output_num))
@@ -1375,9 +1244,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_lb_5[self.output_num].setMinimumSize(QtCore.QSize(0, 27))
         self.cw_output_lb_5[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_lb_5[self.output_num].setFont(font)
-        self.cw_output_lb_5[self.output_num].setStyleSheet("QLabel {\n"
-                                                           "    color: rgb(45,45,45);\n"
-                                                           "}")
+        self.cw_output_lb_5[self.output_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_output_lb_5[self.output_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing |
                                                           QtCore.Qt.AlignVCenter)
         self.cw_output_lb_5[self.output_num].setObjectName("cw_output_lb_5_" + str(self.output_num))
@@ -1394,16 +1261,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_ln_5[self.output_num].setMinimumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_5[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_ln_5[self.output_num].setFont(font2)
-        self.cw_output_ln_5[self.output_num].setStyleSheet("QLineEdit {\n"
-                                                           "   border-radius: 3px;\n"
-                                                           "   padding: 1px 4px 1px 4px;\n"
-                                                           "   background-color: rgb(240, 240, 240);\n"
-                                                           "   color: rgb(45,45,45);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QLineEdit:disabled {\n"
-                                                           "   background-color: rgb(200,200,200);\n"
-                                                           "}")
+        self.cw_output_ln_5[self.output_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
         self.cw_output_ln_5[self.output_num].setText("")
         self.cw_output_ln_5[self.output_num].setFrame(False)
         self.cw_output_ln_5[self.output_num].setObjectName("cw_output_ln_5_" + str(self.output_num))
@@ -1414,16 +1272,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_9.append(QtWidgets.QToolButton())
         self.cw_info_bt_9[self.output_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_9[self.output_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_9[self.output_num].setStyleSheet("QToolButton {\n"
-                                                         "    border: 1px solid transparent;\n"
-                                                         "    background-color: transparent;\n"
-                                                         "    width: 27px;\n"
-                                                         "    height: 27px;\n"
-                                                         "}\n"
-                                                         "\n"
-                                                         "QToolButton:flat {\n"
-                                                         "    border: none;\n"
-                                                         "}")
+        self.cw_info_bt_9[self.output_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_9[self.output_num].setIcon(icon2)
         self.cw_info_bt_9[self.output_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_9[self.output_num].setObjectName("cw_info_bt_9_" + str(self.output_num))
@@ -1435,9 +1284,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_lb_2[self.output_num].setMinimumSize(QtCore.QSize(0, 27))
         self.cw_output_lb_2[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_lb_2[self.output_num].setFont(font)
-        self.cw_output_lb_2[self.output_num].setStyleSheet("QLabel {\n"
-                                                           "    color: rgb(45,45,45);\n"
-                                                           "}")
+        self.cw_output_lb_2[self.output_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_output_lb_2[self.output_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTop |
                                                           QtCore.Qt.AlignTrailing)
         self.cw_output_lb_2[self.output_num].setObjectName("cw_output_lb_2_" + str(self.output_num))
@@ -1449,16 +1296,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_ln_2[self.output_num].setMinimumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_2[self.output_num].setMaximumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_2[self.output_num].setFont(font2)
-        self.cw_output_ln_2[self.output_num].setStyleSheet("QLineEdit {\n"
-                                                           "   border-radius: 3px;\n"
-                                                           "   padding: 1px 4px 1px 4px;\n"
-                                                           "   background-color: rgb(240, 240, 240);\n"
-                                                           "   color: rgb(45,45,45);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QLineEdit:disabled {\n"
-                                                           "   background-color: rgb(200,200,200);\n"
-                                                           "}")
+        self.cw_output_ln_2[self.output_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
         self.cw_output_ln_2[self.output_num].setText("")
         self.cw_output_ln_2[self.output_num].setFrame(False)
         self.cw_output_ln_2[self.output_num].setObjectName("cw_output_ln_2_" + str(self.output_num))
@@ -1470,16 +1308,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_6.append(QtWidgets.QToolButton())
         self.cw_info_bt_6[self.output_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_6[self.output_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_6[self.output_num].setStyleSheet("QToolButton {\n"
-                                                         "    border: 1px solid transparent;\n"
-                                                         "    background-color: transparent;\n"
-                                                         "    width: 27px;\n"
-                                                         "    height: 27px;\n"
-                                                         "}\n"
-                                                         "\n"
-                                                         "QToolButton:flat {\n"
-                                                         "    border: none;\n"
-                                                         "}")
+        self.cw_info_bt_6[self.output_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_6[self.output_num].setIcon(icon2)
         self.cw_info_bt_6[self.output_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_6[self.output_num].setObjectName("cw_info_bt_6_" + str(self.output_num))
@@ -1491,9 +1320,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_lb_6[self.output_num].setMinimumSize(QtCore.QSize(0, 27))
         self.cw_output_lb_6[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_lb_6[self.output_num].setFont(font)
-        self.cw_output_lb_6[self.output_num].setStyleSheet("QLabel {\n"
-                                                           "    color: rgb(45,45,45);\n"
-                                                           "}")
+        self.cw_output_lb_6[self.output_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_output_lb_6[self.output_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTop |
                                                           QtCore.Qt.AlignTrailing)
         self.cw_output_lb_6[self.output_num].setObjectName("cw_output_lb_6_" + str(self.output_num))
@@ -1510,16 +1337,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_ln_6[self.output_num].setMinimumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_6[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_ln_6[self.output_num].setFont(font2)
-        self.cw_output_ln_6[self.output_num].setStyleSheet("QLineEdit {\n"
-                                                           "   border-radius: 3px;\n"
-                                                           "   padding: 1px 4px 1px 4px;\n"
-                                                           "   background-color: rgb(240, 240, 240);\n"
-                                                           "   color: rgb(45,45,45);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QLineEdit:disabled {\n"
-                                                           "   background-color: rgb(200,200,200);\n"
-                                                           "}")
+        self.cw_output_ln_6[self.output_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
         self.cw_output_ln_6[self.output_num].setText("")
         self.cw_output_ln_6[self.output_num].setFrame(False)
         self.cw_output_ln_6[self.output_num].setObjectName("cw_output_ln_6_" + str(self.output_num))
@@ -1531,16 +1349,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_10.append(QtWidgets.QToolButton())
         self.cw_info_bt_10[self.output_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_10[self.output_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_10[self.output_num].setStyleSheet("QToolButton {\n"
-                                                          "    border: 1px solid transparent;\n"
-                                                          "    background-color: transparent;\n"
-                                                          "    width: 27px;\n"
-                                                          "    height: 27px;\n"
-                                                          "}\n"
-                                                          "\n"
-                                                          "QToolButton:flat {\n"
-                                                          "    border: none;\n"
-                                                          "}")
+        self.cw_info_bt_10[self.output_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_10[self.output_num].setIcon(icon2)
         self.cw_info_bt_10[self.output_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_10[self.output_num].setObjectName("cw_info_bt_10_" + str(self.output_num))
@@ -1552,9 +1361,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_lb_3[self.output_num].setMinimumSize(QtCore.QSize(0, 27))
         self.cw_output_lb_3[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_lb_3[self.output_num].setFont(font)
-        self.cw_output_lb_3[self.output_num].setStyleSheet("QLabel {\n"
-                                                           "    color: rgb(45,45,45);\n"
-                                                           "}")
+        self.cw_output_lb_3[self.output_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_output_lb_3[self.output_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTop |
                                                           QtCore.Qt.AlignTrailing)
         self.cw_output_lb_3[self.output_num].setObjectName("cw_output_lb_3_" + str(self.output_num))
@@ -1566,16 +1373,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_ln_3[self.output_num].setMinimumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_3[self.output_num].setMaximumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_3[self.output_num].setFont(font2)
-        self.cw_output_ln_3[self.output_num].setStyleSheet("QLineEdit {\n"
-                                                           "   border-radius: 3px;\n"
-                                                           "   padding: 1px 4px 1px 4px;\n"
-                                                           "   background-color: rgb(240, 240, 240);\n"
-                                                           "   color: rgb(45,45,45);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QLineEdit:disabled {\n"
-                                                           "   background-color: rgb(200,200,200);\n"
-                                                           "}")
+        self.cw_output_ln_3[self.output_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
         self.cw_output_ln_3[self.output_num].setText("")
         self.cw_output_ln_3[self.output_num].setFrame(False)
         self.cw_output_ln_3[self.output_num].setObjectName("cw_output_ln_3_" + str(self.output_num))
@@ -1587,16 +1385,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_7.append(QtWidgets.QToolButton())
         self.cw_info_bt_7[self.output_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_7[self.output_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_7[self.output_num].setStyleSheet("QToolButton {\n"
-                                                         "    border: 1px solid transparent;\n"
-                                                         "    background-color: transparent;\n"
-                                                         "    width: 27px;\n"
-                                                         "    height: 27px;\n"
-                                                         "}\n"
-                                                         "\n"
-                                                         "QToolButton:flat {\n"
-                                                         "    border: none;\n"
-                                                         "}")
+        self.cw_info_bt_7[self.output_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_7[self.output_num].setIcon(icon2)
         self.cw_info_bt_7[self.output_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_7[self.output_num].setObjectName("cw_info_bt_7_" + str(self.output_num))
@@ -1608,9 +1397,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_lb_4[self.output_num].setMinimumSize(QtCore.QSize(0, 27))
         self.cw_output_lb_4[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_lb_4[self.output_num].setFont(font)
-        self.cw_output_lb_4[self.output_num].setStyleSheet("QLabel {\n"
-                                                           "    color: rgb(45,45,45);\n"
-                                                           "}")
+        self.cw_output_lb_4[self.output_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_output_lb_4[self.output_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTop |
                                                           QtCore.Qt.AlignTrailing)
         self.cw_output_lb_4[self.output_num].setObjectName("cw_output_lb_4_" + str(self.output_num))
@@ -1622,16 +1409,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_ln_4[self.output_num].setMinimumSize(QtCore.QSize(150, 27))
         self.cw_output_ln_4[self.output_num].setMaximumSize(QtCore.QSize(16777215, 27))
         self.cw_output_ln_4[self.output_num].setFont(font2)
-        self.cw_output_ln_4[self.output_num].setStyleSheet("QLineEdit {\n"
-                                                           "   border-radius: 3px;\n"
-                                                           "   padding: 1px 4px 1px 4px;\n"
-                                                           "   background-color: rgb(240, 240, 240);\n"
-                                                           "   color: rgb(45,45,45);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QLineEdit:disabled {\n"
-                                                           "   background-color: rgb(200,200,200);\n"
-                                                           "}")
+        self.cw_output_ln_4[self.output_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
         self.cw_output_ln_4[self.output_num].setText("")
         self.cw_output_ln_4[self.output_num].setFrame(False)
         self.cw_output_ln_4[self.output_num].setObjectName("cw_output_ln_4_" + str(self.output_num))
@@ -1643,16 +1421,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_8.append(QtWidgets.QToolButton())
         self.cw_info_bt_8[self.output_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_8[self.output_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_8[self.output_num].setStyleSheet("QToolButton {\n"
-                                                         "    border: 1px solid transparent;\n"
-                                                         "    background-color: transparent;\n"
-                                                         "    width: 27px;\n"
-                                                         "    height: 27px;\n"
-                                                         "}\n"
-                                                         "\n"
-                                                         "QToolButton:flat {\n"
-                                                         "    border: none;\n"
-                                                         "}")
+        self.cw_info_bt_8[self.output_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_8[self.output_num].setIcon(icon2)
         self.cw_info_bt_8[self.output_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_8[self.output_num].setObjectName("cw_info_bt_8_" + str(self.output_num))
@@ -1664,9 +1433,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_lb_7[self.output_num].setMinimumSize(QtCore.QSize(0, 27))
         self.cw_output_lb_7[self.output_num].setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.cw_output_lb_7[self.output_num].setFont(font)
-        self.cw_output_lb_7[self.output_num].setStyleSheet("QLabel {\n"
-                                                           "    color: rgb(45,45,45);\n"
-                                                           "}")
+        self.cw_output_lb_7[self.output_num].setStyleSheet(stylesheet_creation_function('qlabel'))
         self.cw_output_lb_7[self.output_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTop |
                                                           QtCore.Qt.AlignTrailing)
         self.cw_output_lb_7[self.output_num].setObjectName("cw_output_lb_7_" + str(self.output_num))
@@ -1681,57 +1448,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_cb_1[self.output_num].setMinimumSize(QtCore.QSize(150, 27))
         self.cw_output_cb_1[self.output_num].setMaximumSize(QtCore.QSize(150, 27))
         self.cw_output_cb_1[self.output_num].setFont(font2)
-        self.cw_output_cb_1[self.output_num].setStyleSheet("QComboBox {\n"
-                                                           "    border: 1px solid #acacac;\n"
-                                                           "    border-radius: 1px;\n"
-                                                           "    padding-left: 5px;\n"
-                                                           "    background-color: qlineargradient(x1: 0, y1: 0, "
-                                                           "x2: 0, y2: 1, \n"
-                                                           "                                stop: 0 #f0f0f0, "
-                                                           "stop: 1 #e5e5e5);\n"
-                                                           "    color: rgb(45,45,45);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QComboBox:disabled {\n"
-                                                           "    background-color:  rgb(200,200,200);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QComboBox:hover {\n"
-                                                           "    border: 1px solid #7eb4ea;\n"
-                                                           "    border-radius: 1px;\n"
-                                                           "    background-color: qlineargradient(x1: 0, y1: 0, "
-                                                           "x2: 0, y2: 1, \n"
-                                                           "                                stop: 0 #ecf4fc, "
-                                                           "stop: 1 #dcecfc);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QComboBox::drop-down {\n"
-                                                           "    subcontrol-origin: padding;\n"
-                                                           "    subcontrol-position: top right;\n"
-                                                           "    width: 27px;\n"
-                                                           "    border-left-width: 1px;\n"
-                                                           "    border-left-color: darkgray;\n"
-                                                           "    border-left-style: solid;\n"
-                                                           "    border-top-right-radius: 3px;\n"
-                                                           "    border-bottom-right-radius: 3px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QComboBox::down-arrow {\n"
-                                                           "    image: url(icons/down_arrow_icon.svg); \n"
-                                                           "    width: 16px;\n"
-                                                           "    height: 16px\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QComboBox QAbstractItemView {\n"
-                                                           "    selection-background-color: rgb(200,200,200);\n"
-                                                           "    selection-color: black;\n"
-                                                           "    background: #f0f0f0;\n"
-                                                           "    border: 0px solid #f0f0f0;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QComboBox QAbstractItemView::item {\n"
-                                                           "    margin: 5px 5px 5px 5px;\n"
-                                                           "}")
+        self.cw_output_cb_1[self.output_num].setStyleSheet(stylesheet_creation_function('qcombobox'))
         self.cw_output_cb_1[self.output_num].setFrame(False)
         self.cw_output_cb_1[self.output_num].setObjectName("cw_output_cb_1_" + str(self.output_num))
         self.cw_output_cb_1[self.output_num].addItems(['Make a choice...', 'Other...'] + self.output_categories)
@@ -1744,16 +1461,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_add_1.append(QtWidgets.QToolButton())
         self.cw_output_add_1[self.output_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_output_add_1[self.output_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_output_add_1[self.output_num].setStyleSheet("QToolButton {\n"
-                                                            "    border: 1px solid transparent;\n"
-                                                            "    background-color: transparent;\n"
-                                                            "    width: 27px;\n"
-                                                            "    height: 27px;\n"
-                                                            "}\n"
-                                                            "\n"
-                                                            "QToolButton:flat {\n"
-                                                            "    border: none;\n"
-                                                            "}")
+        self.cw_output_add_1[self.output_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_output_add_1[self.output_num].setIcon(icon3)
         self.cw_output_add_1[self.output_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_output_add_1[self.output_num].setObjectName("cw_output_add_1_" + str(self.output_num))
@@ -1771,205 +1479,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_lw_1[self.output_num].setMaximumSize(QtCore.QSize(250, 100))
         self.cw_output_lw_1[self.output_num].setFont(font2)
         self.cw_output_lw_1[self.output_num].setFocusPolicy(QtCore.Qt.NoFocus)
-        self.cw_output_lw_1[self.output_num].setStyleSheet("QListWidget {\n"
-                                                           "    border-radius: 3px;\n"
-                                                           "    background-color:  rgb(240, 240, 240);\n"
-                                                           "    color: rgb(45,45,45);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QListWidget:disabled {\n"
-                                                           "    background-color:  rgb(200,200,200);\n"
-                                                           "    color: rgb(45,45,45);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QListView::item {\n"
-                                                           "    border: 0px solid rgb(240,240,240);\n"
-                                                           "    border-radius: 3px;\n"
-                                                           "    padding: 1px 1px 1px 1px;\n"
-                                                           "    margin: 3px 3px 3px 3px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QListView::item:selected {\n"
-                                                           "    border: 0px solid rgb(240,240,240);\n"
-                                                           "    border-radius: 3px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QListView::item:selected:!active {\n"
-                                                           "    background: rgb(200,200,200);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QListView::item:selected:active {\n"
-                                                           "    background: rgb(200,200,200);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QListView::item:hover {\n"
-                                                           "    background: rgb(230,230,230);\n"
-                                                           "    border-radius: 3px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar:vertical {\n"
-                                                           "  border: 1px solid white;\n"
-                                                           "  background-color: rgb(240, 240, 240);\n"
-                                                           "  width: 20px;\n"
-                                                           "  margin: 21px 0px 21px 0px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar:horizontal {\n"
-                                                           "  border: 1px solid white;\n"
-                                                           "  background-color: rgb(240, 240, 240);\n"
-                                                           "  height: 20px;\n"
-                                                           "  margin: 0px 21px 0px 21px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::handle:vertical {\n"
-                                                           "  background-color: rgb(205, 205, 205);\n"
-                                                           "  min-height: 25px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar:handle:vertical:hover {\n"
-                                                           "  background-color: rgb(166, 166, 166);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar:handle:vertical:pressed {\n"
-                                                           "  background-color: rgb(96, 96, 96);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::handle:horizontal {\n"
-                                                           "  background-color: rgb(205, 205, 205);\n"
-                                                           "  min-width: 25px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar:handle:horizontal:hover {\n"
-                                                           "  background-color: rgb(166, 166, 166);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar:handle:horizontal:pressed {\n"
-                                                           "  background-color: rgb(96, 96, 96);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::add-line:vertical {\n"
-                                                           "  border-top: 1px solid rgb(240,240,240);\n"
-                                                           "  border-left: 1px solid white;\n"
-                                                           "  border-right: 1px solid white;\n"
-                                                           "  border-bottom: 1px solid white;\n"
-                                                           "  background-color: rgb(240, 240, 240);\n"
-                                                           "  height: 20px;\n"
-                                                           "  subcontrol-position: bottom;\n"
-                                                           "  subcontrol-origin: margin;\n"
-                                                           "  border-bottom-right-radius: 3px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::add-line:vertical:hover {\n"
-                                                           "  background-color: rgb(218, 218, 218);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::add-line:vertical:pressed {\n"
-                                                           "  background-color: rgb(96, 96, 96);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::sub-line:vertical {\n"
-                                                           "  border-top: 1px solid white;\n"
-                                                           "  border-left: 1px solid white;\n"
-                                                           "  border-right: 1px solid white;\n"
-                                                           "  border-bottom: 1px solid rgb(240,240,240);\n"
-                                                           "  background-color: rgb(240, 240, 240);\n"
-                                                           "  height: 20px;\n"
-                                                           "  subcontrol-position: top;\n"
-                                                           "  subcontrol-origin: margin;\n"
-                                                           "  border-top-right-radius: 3px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::sub-line:vertical:hover {\n"
-                                                           "  background-color: rgb(218, 218, 218);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::sub-line:vertical:pressed {\n"
-                                                           "  background-color: rgb(96, 96, 96);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::up-arrow:vertical {\n"
-                                                           "  image: url(icons/up_arrow_icon.svg); \n"
-                                                           "  width: 16px;\n"
-                                                           "  height: 16px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::up-arrow:vertical:pressed {\n"
-                                                           "  right: -1px;\n"
-                                                           "  bottom: -1px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::down-arrow:vertical {\n"
-                                                           "  image: url(icons/down_arrow_icon.svg); \n"
-                                                           "  width: 16px;\n"
-                                                           "  height: 16px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::down-arrow:vertical:pressed {\n"
-                                                           "  right: -1px;\n"
-                                                           "  bottom: -1px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::add-line:horizontal {\n"
-                                                           "  border-top: 1px solid white;\n"
-                                                           "  border-left: 1px solid rgb(240,240,240);\n"
-                                                           "  border-right: 1px solid white;\n"
-                                                           "  border-bottom: 1px solid white;\n"
-                                                           "  background-color: rgb(240, 240, 240);\n"
-                                                           "  width: 20px;\n"
-                                                           "  subcontrol-position: right;\n"
-                                                           "  subcontrol-origin: margin;\n"
-                                                           "  border-bottom-right-radius: 3px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::add-line:horizontal:hover {\n"
-                                                           "  background-color: rgb(218, 218, 218);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::add-line:horizontal:pressed {\n"
-                                                           "  background-color: rgb(96, 96, 96);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::sub-line:horizontal {\n"
-                                                           "  border-top: 1px solid white;\n"
-                                                           "  border-left: 1px solid white;\n"
-                                                           "  border-right: 1px solid rgb(240,240,240);\n"
-                                                           "  border-bottom: 1px solid white;\n"
-                                                           "  background-color: rgb(240, 240, 240);\n"
-                                                           "  width: 20px;\n"
-                                                           "  subcontrol-position: left;\n"
-                                                           "  subcontrol-origin: margin;\n"
-                                                           "border-bottom-left-radius: 3px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::sub-line:horizontal:hover {\n"
-                                                           "  background-color: rgb(218, 218, 218);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::sub-line:horizontal:pressed {\n"
-                                                           "  background-color: rgb(96, 96, 96);\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::left-arrow:horizontal {\n"
-                                                           "  image: url(icons/left_arrow_icon.svg); \n"
-                                                           "  width: 16px;\n"
-                                                           "  height: 16px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::left-arrow:horizontal:pressed {\n"
-                                                           "  right: -1px;\n"
-                                                           "  bottom: -1px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::right-arrow:horizontal {\n"
-                                                           "  image: url(icons/right_arrow_icon.svg); \n"
-                                                           "  width: 16px;\n"
-                                                           "  height: 16px;\n"
-                                                           "}\n"
-                                                           "\n"
-                                                           "QScrollBar::right-arrow:horizontal:pressed {\n"
-                                                           "  right: -1px;\n"
-                                                           "  bottom: -1px;\n"
-                                                           "}")
+        self.cw_output_lw_1[self.output_num].setStyleSheet(stylesheet_creation_function('qlistwidget'))
         self.cw_output_lw_1[self.output_num].setObjectName("cw_output_lw_1_" + str(self.output_num))
         self.cw_output_hl_8[self.output_num].addWidget(self.cw_output_lw_1[self.output_num])
 
@@ -1981,16 +1491,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_info_bt_11.append(QtWidgets.QToolButton())
         self.cw_info_bt_11[self.output_num].setMinimumSize(QtCore.QSize(27, 27))
         self.cw_info_bt_11[self.output_num].setMaximumSize(QtCore.QSize(27, 27))
-        self.cw_info_bt_11[self.output_num].setStyleSheet("QToolButton {\n"
-                                                          "    border: 1px solid transparent;\n"
-                                                          "    background-color: transparent;\n"
-                                                          "    width: 27px;\n"
-                                                          "    height: 27px;\n"
-                                                          "}\n"
-                                                          "\n"
-                                                          "QToolButton:flat {\n"
-                                                          "    border: none;\n"
-                                                          "}")
+        self.cw_info_bt_11[self.output_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
         self.cw_info_bt_11[self.output_num].setIcon(icon2)
         self.cw_info_bt_11[self.output_num].setIconSize(QtCore.QSize(23, 23))
         self.cw_info_bt_11[self.output_num].setObjectName("cw_info_bt_11_" + str(self.output_num))
@@ -2008,12 +1509,7 @@ class MyAlgorithm(QtWidgets.QDialog, Ui_creationWindow):
         self.cw_output_li_1.append(QtWidgets.QFrame())
         self.cw_output_li_1[self.output_num].setFrameShape(QtWidgets.QFrame.HLine)
         self.cw_output_li_1[self.output_num].setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.cw_output_li_1[self.output_num].setStyleSheet("QFrame {\n"
-                                                           "    background: rgb(190,190,190);\n"
-                                                           "    height: 5px;\n"
-                                                           "    border: 0px solid black;\n"
-                                                           "    margin-right: 5px;\n"
-                                                           "}")
+        self.cw_output_li_1[self.output_num].setStyleSheet(stylesheet_creation_function('qframe_algo'))
         self.cw_output_li_1[self.output_num].setObjectName("cw_output_li_1_" + str(self.output_num))
         self.cw_output_vl_3[self.output_num].addWidget(self.cw_output_li_1[self.output_num])
         self.cw_output_vl_3[self.output_num].addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,

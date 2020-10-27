@@ -1,0 +1,85 @@
+QTabWidget::pane {
+    border: 1px solid rgb(180,180,180);
+    background-color: rgb(230,230,230);
+}
+
+QTabWidget::tab-bar {
+    top: 1px;
+    bottom: 1px;
+    left: 10px;
+}
+
+QTabBar {
+    qproperty-drawBase: 0;
+}
+
+QTabBar::tab {
+    border-top: 1px solid rgb(180,180,180);
+	border-left: 1px solid rgb(180,180,180);
+	border-right: 1px solid rgb(180,180,180);
+    padding: 2px 15px 2px 15px;
+	margin-right: 2px;
+	color: rgb(45,45,45);
+}
+
+QTabBar::tab:hover {
+    background-color: rgb(210,210,210);
+}
+
+QTabBar::tab:selected {
+    background: rgb(230,230,230);
+}
+
+QTabBar::tab:!selected {
+    margin-top: 4px;
+	color: rgb(70,70,70);
+}
+
+QTabBar::tab:!selected:hover {
+    border-bottom: 1px solid rgb(180,180,180);
+}
+
+QTabBar::tab:top, QTabBar::tab:bottom {
+    margin-right: -1px;
+}
+
+QTabBar::tab:top:last, QTabBar::tab:bottom:last,
+QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one {
+    margin-right: 0px;
+}
+
+QTabBar::scroller {
+}
+
+QTabBar QToolButton {
+    border: 1px solid rgb(180,180,180);
+    background-color: rgb(240,240,240);
+}
+
+QTabBar QToolButton:hover {
+    background-color: rgb(219, 219, 219);
+}
+
+QTabBar QToolButton::right-arrow {
+    image: url(icons/right_arrow_icon.svg); 
+    width: 16px;
+    height: 16px;
+    margin : 2px 2px 2px 2px;
+}
+
+QTabBar QToolButton::right-arrow:pressed {
+    right: -1px;
+    bottom: -1px;
+}
+
+QTabBar QToolButton::left-arrow {
+    image: url(icons/left_arrow_icon.svg); 
+    width: 16px;
+    height: 16px;
+    margin : 2px 2px 2px 2px;
+}
+
+QTabBar QToolButton::left-arrow:pressed {
+    right: -1px;
+    bottom: -1px;
+}

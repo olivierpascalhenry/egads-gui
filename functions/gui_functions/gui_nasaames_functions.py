@@ -1,11 +1,14 @@
 import logging
+import os
 from PyQt5 import QtWidgets, QtCore
 from functions.utils import (font_creation_function, clear_layout, icon_creation_function, stylesheet_creation_function,
                              full_path_name_from_treewidget)
 from functions.gui_functions.gui_widgets import PushButtonRight
 from functions.gui_functions.gui_global_functions import (update_icons_state, read_set_attribute_gui,
                                                           update_edit_icon_state, modify_attribute_gui_global,
-                                                          modify_attribute_gui_var)
+                                                          modify_attribute_gui_var, update_tree_widget,
+                                                          populate_tree_widget)
+from functions.window_functions.other_windows_functions import MyDimensionSelection
 
 
 def nasaames_gui_initialization(self):
@@ -245,7 +248,14 @@ def add_nasaames_variable_tab(self):
     self.variable_list.customContextMenuRequested.connect(self.right_click_menu)
     self.variable_list.itemClicked.connect(lambda: na_tree_var_reading(self))
     self.variable_list.itemClicked.connect(lambda: update_icons_state(self))
-    # self.variable_list.dropFile.connect(lambda path_object: move_object_in_variable_dict(self, path_object))
+    self.variable_list.itemSelectionChanged.connect(lambda: clear_metadata_layout(self))
+
+
+def clear_metadata_layout(self):
+    items = self.variable_list.selectedItems()
+    if len(items) == 0:
+        clear_layout(self.metadata_container)
+        update_icons_state(self)
 
 
 def update_na_global_attribute_gui(self):
@@ -259,12 +269,13 @@ def update_na_global_attribute_gui(self):
 
 
 def populate_na_tree_widget(self):
-    self.variable_list.clear()
-    for key in sorted(list(self.list_of_variables_and_attributes.keys())):
-        widget = QtWidgets.QTreeWidgetItem()
-        widget.setText(0, key[1:])
-        widget.setToolTip(0, 'dataset: ' + key[1:])
-        self.variable_list.addTopLevelItem(widget)
+    populate_tree_widget(self.variable_list, self.list_of_variables_and_attributes)
+    # self.variable_list.clear()
+    # for key in sorted(list(self.list_of_variables_and_attributes.keys())):
+    #     widget = QtWidgets.QTreeWidgetItem()
+    #     widget.setText(0, key[1:])
+    #     widget.setToolTip(0, 'dataset: ' + key[1:])
+    #     self.variable_list.addTopLevelItem(widget)
 
 
 def na_tree_var_reading(self):
@@ -281,6 +292,7 @@ def add_na_variable_metadata_widgets(self):
     font1 = font_creation_function('normal')
     font2 = font_creation_function('small')
     icon1 = icon_creation_function('edit_icon.svg')
+    icon2 = icon_creation_function('dimension_icon.svg')
     self.dataset_grid = QtWidgets.QGridLayout()
     self.dataset_grid.setContentsMargins(5, -1, -1, -1)
     self.dataset_grid.setVerticalSpacing(10)
@@ -311,6 +323,18 @@ def add_na_variable_metadata_widgets(self):
     self.var_dimensions_ln.setFrame(False)
     self.var_dimensions_ln.setObjectName("var_dimensions_ln")
     self.dataset_grid.addWidget(self.var_dimensions_ln, 3, 1, 1, 1)
+
+    self.var_dimension_bt = QtWidgets.QToolButton(self.variable_widget)
+    self.var_dimension_bt.setEnabled(False)
+    self.var_dimension_bt.setMinimumSize(QtCore.QSize(27, 27))
+    self.var_dimension_bt.setMaximumSize(QtCore.QSize(27, 27))
+    self.var_dimension_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton'))
+    self.var_dimension_bt.setText("")
+    self.var_dimension_bt.setIcon(icon2)
+    self.var_dimension_bt.setIconSize(QtCore.QSize(23, 23))
+    self.var_dimension_bt.setObjectName("var_dimension_bt")
+    self.dataset_grid.addWidget(self.var_dimension_bt, 3, 2, 1, 1)
+
     self.var_varname_lb = QtWidgets.QLabel(self.variable_widget)
     self.var_varname_lb.setMinimumSize(QtCore.QSize(0, 27))
     self.var_varname_lb.setMaximumSize(QtCore.QSize(16777215, 27))
@@ -394,6 +418,7 @@ def add_na_variable_metadata_widgets(self):
     self.var_varname_lb.setText("Variable name:")
     self.var_fillvalue_lb.setText("Fill value:")
     self.var_dimensions_lb.setText("Dimensions:")
+    self.var_dimension_bt.clicked.connect(lambda: dimension_selection_window(self))
     var_buttons = self.variable_widget.findChildren(PushButtonRight)
     for widget in var_buttons:
         widget.clicked.connect(lambda: modify_attribute_gui_var(self, 'left'))
@@ -414,6 +439,62 @@ def update_na_variable_attribute_gui(self):
     read_set_attribute_gui(self.var_fillvalue_ln, '_FillValue', sublist[0].metadata)
     if not self.var_fillvalue_ln.text():
         read_set_attribute_gui(self.var_fillvalue_ln, 'missing_value', sublist[0].metadata)
-    for key, value in sublist[1].items():
-        dimensions_str = dimensions_str + str(value) + ' (' + key + '), '
+    self.var_dimensions_lb.setStyleSheet(stylesheet_creation_function('qlabel'))
+    self.var_dimensions_lb.setToolTip('')
+    if sublist[1] is not None:
+        no_dim = False
+        same_folder = True
+        for key, value in sublist[1].items():
+            if 'no dimension' in key:
+                no_dim = True
+                dimensions_str = dimensions_str + str(value) + ' (no dimension), '
+            else:
+                dimensions_str = dimensions_str + str(value) + ' (' + os.path.basename(key) + '), '
+                if os.path.dirname(path) != os.path.dirname(key):
+                    same_folder = False
+        if no_dim or not same_folder:
+            self.var_dimensions_lb.setStyleSheet(stylesheet_creation_function('qlabel_warning'))
+            if no_dim:
+                self.var_dimensions_lb.setToolTip('One or more dimensions are missing')
+            if not same_folder:
+                self.var_dimensions_lb.setToolTip('One or more dimensions are not from the same folder')
+    else:
+        if sublist[2]:
+            dimensions_str = str(sublist[0].shape[0]) + ' (' + os.path.basename(path) + '), '
+        else:
+            self.var_dimensions_lb.setStyleSheet(stylesheet_creation_function('qlabel_warning'))
+            self.var_dimensions_lb.setToolTip('This variable has no dimension')
+            for value in sublist[0].shape:
+                dimensions_str = dimensions_str + str(value) + ', '
     read_set_attribute_gui(self.var_dimensions_ln, dimensions_str[:-2])
+
+
+def dimension_selection_window(self):
+    dim_exist = False
+    is_dim = False
+    for _, var_dict in self.list_of_variables_and_attributes.items():
+        if var_dict[2]:
+            dim_exist = True
+
+    path, _ = full_path_name_from_treewidget(self.variable_list)
+    var = self.list_of_variables_and_attributes[path]
+    dim_list = {var_name: var_dict[0].shape[0] for var_name, var_dict in self.list_of_variables_and_attributes.items()
+                if var_dict[2]}
+    if var[2]:
+        is_dim = True
+    selection_window = MyDimensionSelection(dim_list, var, path, dim_exist)
+    selection_window.exec_()
+    if not selection_window.cancel:
+        if is_dim and not selection_window.variable[2]:
+            for var_name, var_dict in self.list_of_variables_and_attributes.items():
+                dim_dict = var_dict[1]
+                if dim_dict is not None:
+                    if path in dim_dict:
+                        if len(dim_dict) == 1:
+                            var_dict[1] = None
+
+        update_tree_widget(self.variable_list, self.list_of_variables_and_attributes)
+        update_na_variable_attribute_gui(self)
+        self.modified = True
+        self.make_window_title()
+        self.start_status_bar_msg_thread('Dimensions have been modified...')

@@ -24,19 +24,22 @@ def move_object_in_variable_dict(self, path_object):
             var_list[new_key] = var_list.pop(key)
 
 
-def add_variable_to_widget_tree(treewidget, name, path):
-    if path:
-        if path[0] == '/':
-            path = path[1:]
-    if path:
-        if path[-1] == '/':
-            path = path[:-1]
+def add_variable_to_widget_tree(treewidget, path, group=False, dim=False):
+    if path[0] == '/':
+        path = path[1:]
+    path_elem = path.split('/')
     new_item = QtWidgets.QTreeWidgetItem()
-    new_item.setText(0, name)
-    new_item.setToolTip(0, 'dataset: ' + path + '/' + name)
+    new_item.setText(0, path_elem[-1])
+    if group:
+        new_item.setToolTip(0, 'group: ' + path)
+    else:
+        if dim:
+            new_item.setToolTip(0, 'dimension: ' + path)
+        else:
+            new_item.setToolTip(0, 'dataset: ' + path)
     item = treewidget.invisibleRootItem()
     if path:
-        for elem in path.split('/'):
+        for elem in path_elem:
             for j in range(item.childCount()):
                 if item.child(j).text(0) == elem:
                     item = item.child(j)

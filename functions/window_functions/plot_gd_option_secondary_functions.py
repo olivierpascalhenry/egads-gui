@@ -620,6 +620,8 @@ def tick_option_window(self):
 def extent_option_window(self):
     logging.debug('gui - plot_gd_option_secondary_functions.py - tick_option_window')
     default_extent_dict = grid_projection_parameters()[str(self.pw_grid_combobox_7.currentText())]['default_extent']
+    tmp = grid_projection_parameters()[str(self.pw_grid_combobox_7.currentText())]['central_longitude_extent']
+    default_extent_dict['central_longitude_extent'] = tmp
     extent_window = MyExtent(self.gd_extent_options, default_extent_dict)
     extent_window.exec_()
     if extent_window.new_option_dict is not None:

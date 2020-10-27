@@ -7,8 +7,10 @@ from functions.utils import (font_creation_function, clear_layout, icon_creation
 from functions.gui_functions.gui_widgets import PushButtonRight, MyTreeWidget
 from functions.gui_functions.gui_global_functions import (read_set_attribute_gui, modify_attribute_gui_global,
                                                           modify_attribute_gui_var, update_icons_state,
-                                                          update_edit_icon_state, populate_tree_widget)
+                                                          update_edit_icon_state, populate_tree_widget,
+                                                          update_tree_widget)
 from functions.gui_functions.gui_support_functions import move_object_in_variable_dict
+from functions.window_functions.other_windows_functions import MyDimensionSelection
 
 
 def netcdf_gui_initialization(self):
@@ -24,6 +26,7 @@ def netcdf_gui_initialization(self):
 def nc_tree_var_reading(self):
     if len(self.variable_list.selectedItems()) == 1:
         path, _ = full_path_name_from_treewidget(self.variable_list)
+
         try:
             var_object = self.list_of_variables_and_attributes[path]
         except KeyError:
@@ -221,9 +224,7 @@ def add_netcdf_variable_tab(self):
     self.variable_list.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
     self.variable_list.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
     self.variable_list.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
-    # self.variable_list.setDragDropMode(QtWidgets.QAbstractItemView.NoDragDrop)
     self.variable_list.setDefaultDropAction(QtCore.Qt.MoveAction)
-    # self.variable_list.setDefaultDropAction(QtCore.Qt.IgnoreAction)
     self.variable_list.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
     self.variable_list.setObjectName("variable_list")
     self.variable_list.headerItem().setText(0, "1")
@@ -239,13 +240,22 @@ def add_netcdf_variable_tab(self):
     self.variable_list.customContextMenuRequested.connect(self.right_click_menu)
     self.variable_list.itemClicked.connect(lambda: nc_tree_var_reading(self))
     self.variable_list.itemClicked.connect(lambda: update_icons_state(self))
-    self.variable_list.dropFile.connect(lambda path_object: move_object_in_variable_dict(self, path_object))
+    self.variable_list.itemSelectionChanged.connect(lambda: clear_metadata_layout(self))
+    self.variable_list.dropFile.connect(lambda path_object: tree_widget_move_actions(self, path_object))
+
+
+def clear_metadata_layout(self):
+    items = self.variable_list.selectedItems()
+    if len(items) == 0:
+        clear_layout(self.metadata_container)
+        update_icons_state(self)
 
 
 def add_netcdf_variable_metadata_widgets(self):
     font1 = font_creation_function('normal')
     font2 = font_creation_function('small')
     icon1 = icon_creation_function('edit_icon.svg')
+    icon2 = icon_creation_function('dimension_icon.svg')
     self.dataset_grid = QtWidgets.QGridLayout()
     self.dataset_grid.setContentsMargins(5, -1, -1, -1)
     self.dataset_grid.setVerticalSpacing(10)
@@ -278,6 +288,16 @@ def add_netcdf_variable_metadata_widgets(self):
     self.var_dimensions_ln.setFrame(False)
     self.var_dimensions_ln.setObjectName("var_dimensions_ln")
     self.dataset_grid.addWidget(self.var_dimensions_ln, 6, 1, 1, 1)
+    self.var_dimension_bt = QtWidgets.QToolButton(self.variable_widget)
+    self.var_dimension_bt.setEnabled(False)
+    self.var_dimension_bt.setMinimumSize(QtCore.QSize(27, 27))
+    self.var_dimension_bt.setMaximumSize(QtCore.QSize(27, 27))
+    self.var_dimension_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton'))
+    self.var_dimension_bt.setText("")
+    self.var_dimension_bt.setIcon(icon2)
+    self.var_dimension_bt.setIconSize(QtCore.QSize(23, 23))
+    self.var_dimension_bt.setObjectName("var_dimension_bt")
+    self.dataset_grid.addWidget(self.var_dimension_bt, 6, 2, 1, 1)
     self.var_long_name_lb = QtWidgets.QLabel(self.variable_widget)
     self.var_long_name_lb.setMinimumSize(QtCore.QSize(0, 27))
     self.var_long_name_lb.setMaximumSize(QtCore.QSize(16777215, 27))
@@ -434,6 +454,7 @@ def add_netcdf_variable_metadata_widgets(self):
     self.var_Category_lb.setText("Category:")
     self.var_units_lb.setText("Units:")
     self.var_objecttype_lb.setText("Object type:")
+    self.var_dimension_bt.clicked.connect(lambda: dimension_selection_window(self))
     var_buttons = self.variable_widget.findChildren(PushButtonRight)
     for widget in var_buttons:
         widget.clicked.connect(lambda: modify_attribute_gui_var(self, 'left'))
@@ -484,16 +505,6 @@ def add_netcdf_group_metadata_widgets(self):
     self.var_groupname_lb.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
     self.var_groupname_lb.setObjectName("var_groupname_lb")
     self.group_grid.addWidget(self.var_groupname_lb, 1, 0, 1, 1)
-    self.var_groupdimension_ln = QtWidgets.QLineEdit(self.variable_widget)
-    self.var_groupdimension_ln.setEnabled(False)
-    self.var_groupdimension_ln.setMinimumSize(QtCore.QSize(0, 27))
-    self.var_groupdimension_ln.setMaximumSize(QtCore.QSize(16777215, 27))
-    self.var_groupdimension_ln.setFont(font2)
-    self.var_groupdimension_ln.setStyleSheet(stylesheet_creation_function('qlineedit'))
-    self.var_groupdimension_ln.setText("")
-    self.var_groupdimension_ln.setFrame(False)
-    self.var_groupdimension_ln.setObjectName("var_groupdimension_ln")
-    self.group_grid.addWidget(self.var_groupdimension_ln, 2, 1, 1, 1)
     self.var_groupname_bt = PushButtonRight(self.variable_widget)
     self.var_groupname_bt.setEnabled(False)
     self.var_groupname_bt.setMinimumSize(QtCore.QSize(27, 27))
@@ -504,19 +515,10 @@ def add_netcdf_group_metadata_widgets(self):
     self.var_groupname_bt.setIconSize(QtCore.QSize(23, 23))
     self.var_groupname_bt.setObjectName("var_groupname_bt")
     self.group_grid.addWidget(self.var_groupname_bt, 1, 2, 1, 1)
-    self.var_groupdimension_lb = QtWidgets.QLabel(self.variable_widget)
-    self.var_groupdimension_lb.setMinimumSize(QtCore.QSize(0, 27))
-    self.var_groupdimension_lb.setMaximumSize(QtCore.QSize(16777215, 27))
-    self.var_groupdimension_lb.setFont(font1)
-    self.var_groupdimension_lb.setStyleSheet(stylesheet_creation_function('qlabel'))
-    self.var_groupdimension_lb.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
-    self.var_groupdimension_lb.setObjectName("var_groupdimension_lb")
-    self.group_grid.addWidget(self.var_groupdimension_lb, 2, 0, 1, 1)
     self.metadata_container.addLayout(self.group_grid)
     self.metadata_container.setAlignment(QtCore.Qt.AlignTop)
     self.var_objecttype_lb.setText("Object type:")
     self.var_groupname_lb.setText("Group name:")
-    self.var_groupdimension_lb.setText("Dimensions:")
     var_buttons = self.variable_widget.findChildren(PushButtonRight)
     for widget in var_buttons:
         widget.clicked.connect(lambda: modify_attribute_gui_var(self, 'left'))
@@ -541,7 +543,12 @@ def update_nc_variable_attribute_gui(self):
         sublist = self.list_of_variables_and_attributes[path[1:]]
     dimensions_str = ''
     if isinstance(sublist[0], EgadsData):
-        read_set_attribute_gui(self.var_objecttype_ln, 'Dataset')
+        self.var_dimensions_lb.setStyleSheet(stylesheet_creation_function('qlabel'))
+        self.var_dimensions_lb.setToolTip('')
+        if sublist[2]:
+            read_set_attribute_gui(self.var_objecttype_ln, 'Dimension')
+        else:
+            read_set_attribute_gui(self.var_objecttype_ln, 'Dataset')
         read_set_attribute_gui(self.var_varname_ln, var)
         read_set_attribute_gui(self.var_long_name_ln, 'long_name', sublist[0].metadata)
         read_set_attribute_gui(self.var_units_ln, 'units', sublist[0].metadata)
@@ -550,17 +557,70 @@ def update_nc_variable_attribute_gui(self):
         read_set_attribute_gui(self.var_fillvalue_ln, '_FillValue', sublist[0].metadata)
         if not self.var_fillvalue_ln.text():
             read_set_attribute_gui(self.var_fillvalue_ln, 'missing_value', sublist[0].metadata)
-        for key, value in sublist[1].items():
-            dimensions_str = dimensions_str + str(value) + ' (' + os.path.basename(key) + '), '
+        if sublist[1] is not None:
+            no_dim = False
+            same_folder = True
+            for key, value in sublist[1].items():
+                if 'no dimension' in key:
+                    no_dim = True
+                    dimensions_str = dimensions_str + str(value) + ' (no dimension), '
+                else:
+                    dimensions_str = dimensions_str + str(value) + ' (' + os.path.basename(key) + '), '
+                    if os.path.dirname(path) != os.path.dirname(key):
+                        same_folder = False
+            if no_dim or not same_folder:
+                self.var_dimensions_lb.setStyleSheet(stylesheet_creation_function('qlabel_warning'))
+                if no_dim:
+                    self.var_dimensions_lb.setToolTip('One or more dimensions are missing')
+                if not same_folder:
+                    self.var_dimensions_lb.setToolTip('One or more dimensions are not from the same folder')
+        else:
+            if sublist[2]:
+                dimensions_str = str(sublist[0].shape[0]) + ' (' + os.path.basename(path) + '), '
+            else:
+                self.var_dimensions_lb.setStyleSheet(stylesheet_creation_function('qlabel_warning'))
+                self.var_dimensions_lb.setToolTip('This variable has no dimension')
+                for value in sublist[0].shape:
+                    dimensions_str = dimensions_str + str(value) + ', '
         read_set_attribute_gui(self.var_dimensions_ln, dimensions_str[:-2])
     else:
         read_set_attribute_gui(self.var_objecttype_ln, 'Group')
         read_set_attribute_gui(self.var_groupname_ln, var)
-        if sublist[1]:
-            for key, value in sublist[1].items():
-                dimensions_str = dimensions_str + str(value) + ' (' + os.path.basename(key) + '), '
-            read_set_attribute_gui(self.var_groupdimension_ln, dimensions_str[:-2])
 
 
 def populate_netcdf_tree_widget(self):
     populate_tree_widget(self.variable_list, self.list_of_variables_and_attributes)
+
+
+def dimension_selection_window(self):
+    is_dim = False
+    path, _ = full_path_name_from_treewidget(self.variable_list)
+    var = self.list_of_variables_and_attributes[path]
+    dim_list = {var_name: var_dict[0].shape[0] for var_name, var_dict in self.list_of_variables_and_attributes.items()
+                if var_dict[2]}
+    if var[2]:
+        is_dim = True
+    selection_window = MyDimensionSelection(dim_list, var, path)
+    selection_window.exec_()
+    if not selection_window.cancel:
+        if is_dim and not selection_window.variable[2]:
+            for var_name, var_dict in self.list_of_variables_and_attributes.items():
+                dim_dict = var_dict[1]
+                if dim_dict is not None:
+                    if path in dim_dict:
+                        if len(dim_dict) == 1:
+                            var_dict[1] = None
+
+        update_tree_widget(self.variable_list, self.list_of_variables_and_attributes)
+        update_nc_variable_attribute_gui(self)
+        self.modified = True
+        self.make_window_title()
+        self.start_status_bar_msg_thread('Dimensions have been modified...')
+
+
+def tree_widget_move_actions(self, path_object):
+    move_object_in_variable_dict(self, path_object)
+    update_tree_widget(self.variable_list, self.list_of_variables_and_attributes)
+    self.modified = True
+    self.make_window_title()
+    self.start_status_bar_msg_thread('Variables and/or folders have been moved...')

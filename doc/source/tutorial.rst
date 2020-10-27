@@ -6,8 +6,8 @@ Tutorial
 Important information
 *********************
 
-All tutorials proposed here are produced using a NetCDF file as a reference. Apart from the fact that metadata are different, there is almost no difference concerning the interface if using a NASA Ames file.
-Once the GUI is ready to handle raw, csv and text files, the corresponding tutorials will be added here if certain differences exist compared to NetCDF handling.
+All tutorials proposed here are produced using a NetCDF file as a reference. Apart from the fact that metadata are different, there is almost no difference concerning the interface if using a NASA Ames file or a Hdf5 file.
+Once the GUI is ready to handle raw, csv and text files, the corresponding tutorials will be added here if certain differences exist compared to NetCDF/NASA Ames/Hdf5 handling.
 
 *******************
 How to open a file?
@@ -17,7 +17,7 @@ How to open a file?
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_open_file_1b.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -25,7 +25,7 @@ How to open a file?
    :width: 130px
    :height: 130px
    :scale: 12 %
-   :align: middle
+   :align: top
 
 * Then apply the filter ``NetCDF Files (*.nc)``, select the NetCDF file you want to open in the list, and click on ``Open``.
 
@@ -39,7 +39,7 @@ How to open a file?
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_005.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -52,7 +52,7 @@ How to save a file?
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_save_file_2.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -60,6 +60,7 @@ How to save a file?
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 * When ``Saving As`` is selected, just enter the name of the new file and the format, then click ``Save`` to confirm the action.
 
@@ -72,7 +73,7 @@ How to close a file?
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_close_file_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -80,12 +81,13 @@ How to close a file?
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 * As a consequence, the graphical interface should be cleaned.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_000.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -104,7 +106,7 @@ From the global attributes tab
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_global_attributes_tab_4.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -112,17 +114,19 @@ From the global attributes tab
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 .. |save| image:: images/icons/save_icon.png
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 * Then, modify the attribute as you wish.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_global_attributes_tab_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -130,7 +134,7 @@ From the global attributes tab
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_global_attributes_tab_2.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -138,7 +142,7 @@ From the global attributes tab
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_global_attributes_tab_3.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -150,7 +154,7 @@ From the global attributes window
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_global_attributes_window_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -158,6 +162,7 @@ From the global attributes window
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 * Here you have the possibility to create, modify and delete global attributes. Click on ``Show other attributes`` to display other attributes not showed in the window. To modify a global attribute, just click in the associated field and enter your text. Then click on ``Save`` to confirm your modification.
 
@@ -171,7 +176,7 @@ From the global attributes window
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_global_attributes_tab_3.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -180,7 +185,7 @@ From the global attributes window
 How to modify the attributes of a variable ?
 ********************************************
 
-EGADS GUI propose two ways to modify a variable attribute: from the variable attributes tab and from the variable attributes window. The variable attributes tab only shows the most important attributes, in agreement with the EUFAR Standards & Protocols NetCDF convention. The second solution is the only one if the user wants to display other attributes and to create and/or delete variable attributes.
+EGADS GUI propose two ways to modify a variable or a group attribute: from the variable attributes tab and from the variable attributes window. The variable attributes tab only shows the most important attributes, in agreement with the EUFAR Standards & Protocols NetCDF convention. The second solution is the only one if the user wants to display other attributes and to create and/or delete variable attributes.
 
 ---------------------
 From the variable tab
@@ -190,7 +195,7 @@ From the variable tab
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_variable_attributes_tab_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -198,25 +203,24 @@ From the variable tab
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_variable_attributes_tab_2.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
 * Enter your text and click on |save| to confirm your modification.
 
-.. image:: images/egads_gui_screencaptures/EGADS_GUI_variable_attributes_tab_3.png
-   :width: 936px
-   :height: 647px
-   :scale: 45 %
-   :align: center
-
 * The software should display the modified attribute and the word ``modified`` in the window title.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_variable_attributes_tab_4.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
+
+
+.. NOTE::
+  It is possible to modify the name of a group with the same methodology. In that case, just select a group and follow the procedure from above.
+
 
 -----------------------------------
 From the variable attributes window
@@ -226,7 +230,7 @@ From the variable attributes window
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_variable_attributes_tab_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -236,10 +240,11 @@ From the variable attributes window
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_variable_attributes_window_2.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -255,9 +260,13 @@ From the variable attributes window
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_variable_attributes_tab_4.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
+
+
+.. NOTE::
+  It is possible to modify/create/delete the attributes of a group. In that case, just select a group and follow the procedure from above.
 
 
 **************************
@@ -272,10 +281,11 @@ EGADS GUI gives the user the possibility to use and apply algorithm embedded in 
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_processing_window_2.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -303,51 +313,209 @@ EGADS GUI gives the user the possibility to use and apply algorithm embedded in 
    :scale: 45 %
    :align: center
 
-* Depending on the size of the input variables and on the complexity of the algorithm, the processing can take time. Once the output(s) is(are) ready, a new tab appears and new variables are stored here.
+* Depending on the size of the input variables and on the complexity of the algorithm, the processing can take time. Once the output(s) is(are) ready, the new variable is displayed in the Variables tab.
 
-.. image:: images/egads_gui_screencaptures/EGADS_GUI_007.png
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_processing_window_6.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
 
-************************************************************************
-How to migrate a variable from the new variable tab to the variable tab?
-************************************************************************
+.. NOTE::
+  When a variable is created, by an algorithm or by the user, there is no dimension associated to this variable. Thus Dimension label is displayed in red. It is the duty of the user to click on the Dimension button and assigned a dimension to this variable. A variable with no dimension won't be saved.
 
-To avoid wrong manipulation and for the sake of convenience, a tab dedicated to new variables and called ``New variables`` has been introduced in EGADS GUI. Once a variable is created, it will appear in this new tab. If the user wants to save the new variable(s), he must migrate it/them in the ``Variables`` tab.
 
-* To migrate a newly-created variable, select the variable to be migrated in the ``New variables`` tab and click on |migrate|.
+*****************************************
+How to select a dimension for a variable?
+*****************************************
 
-.. image:: images/egads_gui_screencaptures/EGADS_GUI_migrate_variable_1.png
+* A variable, when it has been created by the user or by an algorithm, does not have a dimension. Thus, a small warning icon is displayed instead of the usual variable icon. Moreover, when selecting the variable, the field Dimensions is colored in red and a tooltip give details about the issue.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_select_dimension_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
-.. |migrate| image:: images/icons/migrate_icon.png
+* To select a dimension for a variable, click on |select dimension| at the right side of the Dimensions field.
+
+.. |select dimension| image:: images/icons/dimension_icon.png
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
-* The newly-created variable should disappear from the ``New variables`` tab (the tab is removed if the list of variable is empty) and appear in the ``Variables`` tab.
-
-.. image:: images/egads_gui_screencaptures/EGADS_GUI_migrate_variable_2.png
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_select_dimension_2.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
+
+* The Dimension window is displayed and list all available dimensions found in the file into the main combobox. From here you can select a dimension for your variable, or remove a dimension from your variable. There is also the possibility to make a dimension from a variable, and vice versa. As all other variables are associated to the time, let's assign the time to our new variable.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_select_dimension_3.png
+   :width: 451px
+   :height: 292px
+   :scale: 45 %
+   :align: center
+
+* Once validated, the warning icon is replaced by the standard variable icon, and all warning messages are cleared. The dimension is now listed in the Dimensions field.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_select_dimension_4.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+
+.. NOTE::
+  When selecting a dimension, this one should have the same shape than the corresponding variable dimension. If it is not the case, a warning message will be displayed.
+
+
+****************************************
+How to make a dimension from a variable?
+****************************************
+
+* As our new variable is a converted time, it is a good opportunity to make it a dimension. Click again on the Dimension button.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_select_dimension_5.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+* Then click on Convert a variable to a dimension and click Ok.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_select_dimension_6.png
+   :width: 451px
+   :height: 292px
+   :scale: 45 %
+   :align: center
+
+* The icon of the variable has changed to the dimension icon, and Object type shows now Dimension.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_select_dimension_7.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+
+***************************************************
+How to move a variable in the folder/variable tree?
+***************************************************
+
+* In the variable list, it is possible to move variables/dimensions manually from a folder to another one. First select a variable and drag it to another folder.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_movement_in_tree_1.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+* Once the variable has been droped, it can be selected from its new folder.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_movement_in_tree_2.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+
+.. NOTE::
+  Only variables/dimensions can be moved by drag & drop.
+
+
+***************************
+How to create a new folder?
+***************************
+
+* When working on a NetCDF or Hdf5 file, it is possible to add a folder in the workspace. From the Variables tab, click on |create folder|.
+
+.. |create folder| image:: images/icons/create_group_icon.png
+   :width: 130px
+   :height: 130px
+   :scale: 12 %
+   :align: top
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_create_folder_1.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+* A new folder is created with a default name.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_create_folder_2.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+
+***********************
+How to copy a variable?
+***********************
+
+* It's really easy to make a copy of a variable. Select it from the Variables tab.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_copy_variable_1.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+* Right click to display the object menu. And click on |copy| to make the copy.
+
+.. |copy| image:: images/icons/copy_icon.png
+   :width: 130px
+   :height: 130px
+   :scale: 12 %
+   :align: top
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_copy_variable_2.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+* To paste the variable, right click somewhere in the variable tree, and click on |paste|.
+
+.. |paste| image:: images/icons/paste_icon.png
+   :width: 130px
+   :height: 130px
+   :scale: 12 %
+   :align: top
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_copy_variable_3.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+* The new variable is an exact copy of the previous one, with a different name.
+
+.. image:: images/egads_gui_screencaptures/EGADS_GUI_copy_variable_4.png
+   :width: 936px
+   :height: 589px
+   :scale: 45 %
+   :align: center
+
+
+.. NOTE::
+  Only variables/dimensions can be copied and pasted.
+
 
 *************************
 How to delete a variable?
 *************************
 
-* In the ``Variables`` or ``New variables`` tab, select a variable in the list and click on |delete|.
+* In the ``Variables`` tab, select a variable in the list and click on |delete|.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_delete_variable_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -355,6 +523,11 @@ How to delete a variable?
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
+
+
+.. NOTE::
+  It is possible to delete a group and all variables/groups in the previous group. In that case, just select a group and follow the procedure from above.
 
 
 *******************************************
@@ -367,7 +540,7 @@ EGADS GUI offers the possibility to create algorithm from a window, by filling i
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_create_window_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -375,6 +548,7 @@ EGADS GUI offers the possibility to create algorithm from a window, by filling i
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 
 * The algorithm creation window is composed of three tabs. The first one to prepare all metadata (category, sources, ...) and the algorithm formula, the second one to create all inputs needed by the algorithm, and the last one to create all outputs returned by the algorithm. First let's prepare all metadata and then the algorithm itself. A special attention should be paid to the ``Algorithm`` field. The formula has to be written in Python 3 (importing modules like numpy is possible). The input variables injected in the algorithm and the output variables returned by the algorithm have to be prepared in the next tabs. Once you are done with the first tab, click on the tab ``Input(s)``.
@@ -409,7 +583,7 @@ EGADS GUI offers the possibility to create algorithm from a window, by filling i
   There is no system to check the algorithm result. Once the algorithm is saved, EGADS and its GUI expect the algorithm to be true and stable.
 
 .. NOTE::
-  If using the stand-alone version of the GUI, new algorithms are saved in the ``user_algorithms`` folder in the main directory. The user always has the possibility to create an algorithm manually with a text editor. In that case, follow the EGADS documentation about new algorithms and save the algorithm in the ``user_algorithms`` folder. Do not forget to edit or create __init__.py files.
+  If using the stand-alone version of the GUI, new algorithms are saved in the ``user_algorithms`` folder in the EGADS $HOME directory. The user always has the possibility to create an algorithm manually with a text editor. In that case, follow the EGADS documentation about new algorithms and save the algorithm in the ``user_algorithms`` folder. Do not forget to edit or create __init__.py files.
 
 
 **********************************************
@@ -422,7 +596,7 @@ When processing data, it is always a good idea to understand how an algorithm wo
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_display_algorithm_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -445,7 +619,7 @@ The EGADS GUI offers the possibility to display the values of a variable.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_variable_attributes_tab_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -453,7 +627,7 @@ The EGADS GUI offers the possibility to display the values of a variable.
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_display_data_2.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -461,6 +635,7 @@ The EGADS GUI offers the possibility to display the values of a variable.
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 * The values are displayed in a table, and few information are given like the units and the name of the variable.
 
@@ -481,7 +656,7 @@ By integrating the Python modules Matplotlib and Cartopy, the EGADS GUI gives th
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_variable_attributes_tab_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -489,7 +664,7 @@ By integrating the Python modules Matplotlib and Cartopy, the EGADS GUI gives th
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_plot_data_2.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -497,6 +672,7 @@ By integrating the Python modules Matplotlib and Cartopy, the EGADS GUI gives th
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 * Time series or gridded data are plot using default options. Figure and plot options are available to modify entirely the plot. There is also a tab for options dedicated to the saving process.
 
@@ -527,10 +703,11 @@ If the user wants to display data into Google Earth software, there is a possibi
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_export_window_1.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 
@@ -594,10 +771,11 @@ EGADS GUI gives the user the possibility to use a batch processing function. Thi
    :width: 130px
    :height: 130px
    :scale: 12 %
+   :align: top
 
 .. image:: images/egads_gui_screencaptures/EGADS_GUI_batch_processing_6.png
    :width: 936px
-   :height: 647px
+   :height: 589px
    :scale: 45 %
    :align: center
 

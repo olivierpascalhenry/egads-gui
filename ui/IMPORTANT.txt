@@ -1,3 +1,0 @@
-!! IMPORTANT !!
-
-All QToolButton instances in the Ui_mainwindow.py file has been replaced by a custom subclassed QToolButton to introduce a right click, used to cancel modification in EGADS GUI dedicated fields.

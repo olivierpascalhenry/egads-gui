@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_naVariableAttributeWindow(object):
     def setupUi(self, naVariableAttributeWindow):
         naVariableAttributeWindow.setObjectName("naVariableAttributeWindow")
-        naVariableAttributeWindow.resize(561, 213)
+        naVariableAttributeWindow.resize(561, 198)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -168,54 +168,9 @@ class Ui_naVariableAttributeWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}\n"
-"\n"
-"QComboBox {\n"
-"    border: 1px solid #acacac;\n"
-"    border-radius: 1px;\n"
-"    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
-"}\n"
-"\n"
-"QComboBox:disabled {\n"
-"    background-color:  rgb(200,200,200);\n"
-"}\n"
-"\n"
-"QComboBox:hover {\n"
-"    border: 1px solid #7eb4ea;\n"
-"    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, \n"
-"                                stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
-"}\n"
-"\n"
-"QComboBox::drop-down {\n"
-"    subcontrol-origin: padding;\n"
-"    subcontrol-position: top right;\n"
-"    width: 27px;\n"
-"    border-left-width: 1px;\n"
-"    border-left-color: darkgray;\n"
-"    border-left-style: solid;\n"
-"    border-top-right-radius: 3px;\n"
-"    border-bottom-right-radius: 3px;\n"
-"}\n"
-"\n"
-"QComboBox::down-arrow {\n"
-"    image: url(icons/down_arrow_icon.svg); \n"
-"    width: 16px;\n"
-"    height: 16px\n"
-"}\n"
-"\n"
-"QComboBox QAbstractItemView {\n"
-"    selection-background-color: rgb(200,200,200);\n"
-"    selection-color: black;\n"
-"    background: #f0f0f0;\n"
-"    border: 0px solid #f0f0f0;\n"
-"}\n"
-"\n"
-"QComboBox QAbstractItemView::item {\n"
-"    margin: 5px 5px 5px 5px;\n"
-"}")
+"")
         self.gridLayout_2 = QtWidgets.QGridLayout(naVariableAttributeWindow)
+        self.gridLayout_2.setVerticalSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -577,8 +532,6 @@ class Ui_naVariableAttributeWindow(object):
         self.gridLayout_2.addItem(spacerItem3, 2, 0, 1, 1)
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem4)
         self.vw_okButton = QtWidgets.QToolButton(naVariableAttributeWindow)
         self.vw_okButton.setMinimumSize(QtCore.QSize(100, 27))
         self.vw_okButton.setMaximumSize(QtCore.QSize(100, 27))
@@ -614,8 +567,8 @@ class Ui_naVariableAttributeWindow(object):
 "}")
         self.vw_okButton.setObjectName("vw_okButton")
         self.horizontalLayout_7.addWidget(self.vw_okButton)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem5)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem4)
         self.vw_cancelButton = QtWidgets.QToolButton(naVariableAttributeWindow)
         self.vw_cancelButton.setMinimumSize(QtCore.QSize(100, 27))
         self.vw_cancelButton.setMaximumSize(QtCore.QSize(100, 27))
@@ -651,8 +604,8 @@ class Ui_naVariableAttributeWindow(object):
 "}")
         self.vw_cancelButton.setObjectName("vw_cancelButton")
         self.horizontalLayout_7.addWidget(self.vw_cancelButton)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem6)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem5)
         self.gridLayout_2.addLayout(self.horizontalLayout_7, 3, 0, 1, 1)
 
         self.retranslateUi(naVariableAttributeWindow)

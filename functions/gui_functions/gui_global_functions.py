@@ -6,7 +6,8 @@ from egads import EgadsData
 from PyQt5 import QtWidgets, QtCore, QtGui
 from functions.utils import (font_creation_function, stylesheet_creation_function, humansize, icon_creation_function,
                              clear_layout, full_path_name_from_treewidget, replace_old_path_by_new_path,
-                             replace_old_path_by_new_path_tooltip, get_element_value)
+                             replace_old_path_by_new_path_tooltip, get_element_value, treewidget_item_from_path,
+                             dimensions_in_same_folder)
 from functions.gui_functions.gui_widgets import DropFrame
 from functions.gui_functions.gui_support_functions import too_many_files
 from functions.window_functions.other_windows_functions import MyInfo
@@ -22,7 +23,6 @@ def gui_reset_function(self):
     update_icons_state(self)
     clear_layout(self.global_container)
     clear_layout(self.variable_widget_container)
-    clear_layout(self.newvariable_widget_container)
     try:
         clear_layout(self.metadata_container)
     except AttributeError:
@@ -31,7 +31,6 @@ def gui_reset_function(self):
         clear_layout(self.newmetadata_container)
     except AttributeError:
         pass
-    self.tab_view.removeTab(2)
     self.tab_view.setEnabled(False)
     self.tab_view.setVisible(False)
     self.gridLayout.removeWidget(self.tab_view)
@@ -135,19 +134,29 @@ def populate_tree_widget(variable_list, variable_dict):
     variable_list.clear()
     for item in sorted(list(variable_dict.keys())):
         if isinstance(variable_dict[item][0], EgadsData):
-            item_type = 'dataset'
+            if variable_dict[item][2]:
+                item_type = 'dimension'
+            else:
+                item_type = 'dataset'
         else:
             item_type = 'group'
         if item[0] == '/':
             item = item[1:]
         root_item = None
         for i, subitem in enumerate(item.split('/')):
+            if item_type == 'group':
+                icon = icon_creation_function('folder_icon.svg')
+            elif item_type == 'dimension':
+                icon = icon_creation_function('variable_dimension_icon.svg')
+            else:
+                icon = icon_creation_function('variable_icon.svg')
+            widget = QtWidgets.QTreeWidgetItem()
+            widget.setText(0, subitem)
+            widget.setToolTip(0, item_type + ': ' + item)
+            widget.setIcon(0, icon)
             if i == 0:
                 existing_item = variable_list.findItems(subitem, QtCore.Qt.MatchExactly)
                 if not existing_item:
-                    widget = QtWidgets.QTreeWidgetItem()
-                    widget.setText(0, subitem)
-                    widget.setToolTip(0, item_type + ': ' + item)
                     variable_list.addTopLevelItem(widget)
                     root_item = widget
                 else:
@@ -155,9 +164,6 @@ def populate_tree_widget(variable_list, variable_dict):
             else:
                 child_count = root_item.columnCount()
                 if child_count == 0:
-                    widget = QtWidgets.QTreeWidgetItem()
-                    widget.setText(0, subitem)
-                    widget.setToolTip(0, item_type + ': ' + item)
                     root_item.addChild(widget)
                     root_item = widget
                 else:
@@ -170,11 +176,40 @@ def populate_tree_widget(variable_list, variable_dict):
                                 child_found = True
                                 break
                     if not child_found:
-                        widget = QtWidgets.QTreeWidgetItem()
-                        widget.setText(0, subitem)
-                        widget.setToolTip(0, item_type + ': ' + item)
                         root_item.addChild(widget)
                         root_item = widget
+
+
+def update_tree_widget(variable_list, variable_dict):
+    for var_name, var_dict in variable_dict.items():
+        if isinstance(var_dict[0], EgadsData) and not var_dict[2]:
+            if var_dict[1] is None:
+                icon = icon_creation_function('small_warning_icon.svg')
+            else:
+                dim_missing = False
+                for dim in var_dict[1]:
+                    if 'no dimension' in dim:
+                        dim_missing = True
+                if dim_missing:
+                    icon = icon_creation_function('small_warning_icon.svg')
+                else:
+                    if not dimensions_in_same_folder(list(var_dict[1].keys()), var_name):
+                        icon = icon_creation_function('small_warning_icon.svg')
+                    else:
+                        icon = icon_creation_function('variable_icon.svg')
+            item = treewidget_item_from_path(variable_list, var_name)
+
+            item.setIcon(0, icon)
+            if var_name[0] == '/':
+                var_name = var_name[1:]
+            item.setToolTip(0, 'dataset: ' + var_name)
+
+        elif isinstance(var_dict[0], EgadsData) and var_dict[2]:
+            item = treewidget_item_from_path(variable_list, var_name)
+            item.setIcon(0, icon_creation_function('variable_dimension_icon.svg'))
+            if var_name[0] == '/':
+                var_name = var_name[1:]
+            item.setToolTip(0, 'dimension: ' + var_name)
 
 
 def read_set_attribute_gui(gui_object, attr_name, attr_dict=None):
@@ -271,46 +306,69 @@ def modify_attribute_gui_var(self, click):
             line.setEnabled(True)
             button.setIcon(icon_creation_function('save_as_icon.svg'))
     else:
-        if self.tab_view.currentIndex() == 1:
-            variable_list = self.variable_list
-            variable_dict = self.list_of_variables_and_attributes
-        else:
-            variable_list = self.new_variable_list
-            variable_dict = self.list_of_new_variables_and_attributes
-        path, _ = full_path_name_from_treewidget(variable_list)
+        path, _ = full_path_name_from_treewidget(self.variable_list)
         if click == 'left':
+            if isinstance(self.list_of_variables_and_attributes[path][0], EgadsData):
+                object_type = 'Variable'
+            else:
+                object_type = 'Group'
             if attr == 'varname' or attr == 'groupname':
-                parent = str(pathlib.PurePosixPath(path).parent)
+                parent = os.path.dirname(path)
                 if parent == '/':
                     parent = ''
                 new_path = parent + '/' + str(line.text())
-                variable_dict[new_path] = variable_dict.pop(path)
-
-                if variable_dict[new_path][2]:
-                    for var, value in variable_dict.items():
+                self.list_of_variables_and_attributes[new_path] = self.list_of_variables_and_attributes.pop(path)
+                if self.list_of_variables_and_attributes[new_path][2]:
+                    for var, value in self.list_of_variables_and_attributes.items():
                         dim_dict = value[1]
                         modified = False
-                        for dim_path in dim_dict:
-                            if dim_path == path:
-                                dim_dict[new_path] = dim_dict.pop(path)
-                                modified = True
-                        if modified:
-                            variable_dict[var][1] = dim_dict
+                        if isinstance(value[0], EgadsData) and not value[2]:
+                            for dim_path in dim_dict:
+                                if dim_path == path:
+                                    dim_dict[new_path] = dim_dict.pop(path)
+                                    modified = True
+                            if modified:
+                                self.list_of_variables_and_attributes[var][1] = dim_dict
                     dimensions_str = ''
-                    for key, value in variable_dict[new_path][1].items():
-                        dimensions_str = dimensions_str + str(value) + ' (' + os.path.basename(key) + '), '
+                    if self.list_of_variables_and_attributes[new_path][1] is not None:
+                        no_dim = False
+                        same_folder = True
+                        for key, value in self.list_of_variables_and_attributes[new_path][1].items():
+                            if 'no dimension' in key:
+                                no_dim = True
+                            else:
+                                if os.path.dirname(path) != os.path.dirname(key):
+                                    same_folder = False
+                            if no_dim:
+                                dimensions_str = dimensions_str + str(value) + ' (no dimension), '
+                            else:
+                                dimensions_str = dimensions_str + str(value) + ' (' + os.path.basename(key) + '), '
+                        if no_dim or not same_folder:
+                            self.var_dimensions_lb.setStyleSheet(stylesheet_creation_function('qlabel_warning'))
+                            if no_dim:
+                                self.var_dimensions_lb.setToolTip('This variable has no dimension')
+                            if not same_folder:
+                                self.var_dimensions_lb.setToolTip('One or more dimensions are not from the same folder')
+                    else:
+                        if self.list_of_variables_and_attributes[new_path][2]:
+                            dimensions_str = (str(self.list_of_variables_and_attributes[new_path][0].shape[0])
+                                              + ' (' + os.path.basename(path) + '), ')
+                        else:
+                            self.var_dimensions_lb.setStyleSheet(stylesheet_creation_function('qlabel_warning'))
+                            self.var_dimensions_lb.setToolTip('This variable has no dimension')
+                            for value in self.list_of_variables_and_attributes[new_path][0].shape:
+                                dimensions_str = dimensions_str + str(value) + ', '
                     read_set_attribute_gui(self.var_dimensions_ln, dimensions_str[:-2])
-
-                variable_list.currentItem().setText(0, str(line.text()))
+                self.variable_list.currentItem().setText(0, str(line.text()))
                 if attr == 'groupname':
-                    replace_old_path_by_new_path(variable_dict, path, new_path)
-                    replace_old_path_by_new_path_tooltip(variable_list, new_path)
+                    replace_old_path_by_new_path(self.list_of_variables_and_attributes, path, new_path)
+                    replace_old_path_by_new_path_tooltip(self.variable_list, new_path)
             else:
                 try:
-                    variable_dict[path][0].metadata[attr] = str(line.text())
+                    self.list_of_variables_and_attributes[path][0].metadata[attr] = str(line.text())
                 except AttributeError:
-                    variable_dict[path][0].metadata[attr] = str(line.toPlainText())
-            self.start_status_bar_msg_thread('Variable attributes have been modified...')
+                    self.list_of_variables_and_attributes[path][0].metadata[attr] = str(line.toPlainText())
+            self.start_status_bar_msg_thread(object_type + ' attributes have been modified...')
             self.modified = True
             self.make_window_title()
             line.setEnabled(False)
@@ -319,10 +377,10 @@ def modify_attribute_gui_var(self, click):
             line.setEnabled(False)
             button.setIcon(icon_creation_function('edit_icon.svg'))
             if attr == 'varname' or attr == 'groupname':
-                line.setText(variable_list.selectedItems()[0].text(0))
+                line.setText(self.variable_list.selectedItems()[0].text(0))
             else:
                 try:
-                    line.setText(variable_dict[path][0].metadata[attr])
+                    line.setText(self.list_of_variables_and_attributes[path][0].metadata[attr])
                     line.setCursorPosition(0)
                 except KeyError:
                     line.setText('')
@@ -355,9 +413,8 @@ def update_icons_state(self):
         self.actionCloseBar.setEnabled(False)
         self.actionAlgorithmsBar.setEnabled(False)
         self.actionCreatealgorithmBar.setEnabled(True)
-        self.actionCreateVariableBar.setEnabled(False)
+        # self.actionCreateVariableBar.setEnabled(False)
         self.actionDeleteVariableBar.setEnabled(False)
-        self.actionMigrateVariableBar.setEnabled(False)
         self.actionGlobalAttributesBar.setEnabled(False)
         self.actionVariableAttributesBar.setEnabled(False)
         self.actionDisplayBar.setEnabled(False)
@@ -369,28 +426,22 @@ def update_icons_state(self):
         self.actionExport.setEnabled(True)
         self.actionAlgorithmsBar.setEnabled(True)
         self.actionGlobalAttributesBar.setEnabled(True)
-        self.actionCreateVariableBar.setEnabled(True)
         if self.file_ext in ['NetCDF Files (*.nc *.cdf)', 'Hdf Files (*.h5 *.hdf5 *.he5)']:
             self.actionCreate_group.setEnabled(True)
         else:
             self.actionCreate_group.setEnabled(False)
+
         if self.tab_view.currentIndex() == 0:
             self.actionDeleteVariableBar.setEnabled(False)
-            self.actionMigrateVariableBar.setEnabled(False)
             self.actionVariableAttributesBar.setEnabled(False)
             self.actionDisplayBar.setEnabled(False)
             self.actionPlotBar.setEnabled(False)
+
         else:
-            if self.tab_view.currentIndex() == 1:
-                variable_list = self.variable_list
-                self.actionMigrateVariableBar.setEnabled(False)
-            else:
-                variable_list = self.new_variable_list
-                self.actionMigrateVariableBar.setEnabled(True)
-            if len(variable_list.selectedItems()) > 1:
+            if len(self.variable_list.selectedItems()) > 1:
                 dataset_exist = False
-                for widget in variable_list.selectedItems():
-                    if 'dataset' in widget.toolTip(0):
+                for widget in self.variable_list.selectedItems():
+                    if 'dataset' in widget.toolTip(0) or 'dimension' in widget.toolTip(0):
                         dataset_exist = True
                 self.actionDeleteVariableBar.setEnabled(True)
                 self.actionVariableAttributesBar.setEnabled(False)
@@ -399,8 +450,8 @@ def update_icons_state(self):
                     self.actionPlotBar.setEnabled(True)
                 else:
                     self.actionPlotBar.setEnabled(False)
-            elif len(variable_list.selectedItems()) == 1:
-                widget = variable_list.selectedItems()[0]
+            elif len(self.variable_list.selectedItems()) == 1:
+                widget = self.variable_list.selectedItems()[0]
                 if 'group' in widget.toolTip(0):
                     self.actionDeleteVariableBar.setEnabled(True)
                     self.actionVariableAttributesBar.setEnabled(True)
@@ -413,51 +464,35 @@ def update_icons_state(self):
                     self.actionPlotBar.setEnabled(True)
             else:
                 self.actionDeleteVariableBar.setEnabled(False)
-                self.actionMigrateVariableBar.setEnabled(False)
                 self.actionVariableAttributesBar.setEnabled(False)
                 self.actionDisplayBar.setEnabled(False)
                 self.actionPlotBar.setEnabled(False)
 
 
 def update_edit_icon_state(self):
-    if self.tab_view.currentIndex() == 1:
-        if 'dataset' in self.variable_list.selectedItems()[0].toolTip(0):
-            if self.file_ext in ['NetCDF Files (*.nc *.cdf)', 'Hdf Files (*.h5 *.hdf5 *.he5)']:
-                self.var_long_name_bt.setIcon(icon_creation_function('edit_icon.svg'))
-                self.var_Category_bt.setIcon(icon_creation_function('edit_icon.svg'))
-                self.var_long_name_bt.setEnabled(True)
-                self.var_Category_bt.setEnabled(True)
-                self.var_long_name_ln.setEnabled(False)
-                self.var_Category_ln.setEnabled(False)
-            self.var_varname_bt.setIcon(icon_creation_function('edit_icon.svg'))
-            self.var_varname_bt.setEnabled(True)
-            self.var_varname_ln.setEnabled(False)
-        else:
-            self.var_groupname_bt.setIcon(icon_creation_function('edit_icon.svg'))
-            self.var_groupname_bt.setEnabled(True)
-            self.var_groupname_ln.setEnabled(False)
-
-    elif self.tab_view.currentIndex() == 2:
-        if 'dataset' in self.new_variable_list.selectedItems()[0].toolTip(0):
-            self.new_varname_bt.setIcon(icon_creation_function('edit_icon.svg'))
-            self.new_long_name_bt.setIcon(icon_creation_function('edit_icon.svg'))
-            self.new_Category_bt.setIcon(icon_creation_function('edit_icon.svg'))
-            self.new_varname_bt.setEnabled(True)
-            self.new_long_name_bt.setEnabled(True)
-            self.new_Category_bt.setEnabled(True)
-            self.new_varname_ln.setEnabled(False)
-            self.new_long_name_ln.setEnabled(False)
-            self.new_Category_ln.setEnabled(False)
-        else:
-            self.new_groupname_bt.setIcon(icon_creation_function('edit_icon.svg'))
-            self.new_groupname_bt.setEnabled(True)
-            self.new_groupname_ln.setEnabled(False)
+    tooltip = self.variable_list.selectedItems()[0].toolTip(0)
+    if 'dataset' in tooltip or 'dimension' in tooltip:
+        if self.file_ext in ['NetCDF Files (*.nc *.cdf)', 'Hdf Files (*.h5 *.hdf5 *.he5)']:
+            self.var_long_name_bt.setIcon(icon_creation_function('edit_icon.svg'))
+            self.var_Category_bt.setIcon(icon_creation_function('edit_icon.svg'))
+            self.var_long_name_bt.setEnabled(True)
+            self.var_Category_bt.setEnabled(True)
+            self.var_long_name_ln.setEnabled(False)
+            self.var_Category_ln.setEnabled(False)
+        self.var_varname_bt.setIcon(icon_creation_function('edit_icon.svg'))
+        self.var_varname_bt.setEnabled(True)
+        self.var_varname_ln.setEnabled(False)
+        self.var_dimension_bt.setEnabled(True)
+    else:
+        self.var_groupname_bt.setIcon(icon_creation_function('edit_icon.svg'))
+        self.var_groupname_bt.setEnabled(True)
+        self.var_groupname_ln.setEnabled(False)
 
 
 def status_bar_update(self):
     logging.debug('gui - old_gui_global_functions.py - status_bar_update')
     if self.file_is_opened:
-        filename = pathlib.PurePath(self.file_name).name
+        filename = str(pathlib.PurePath(self.file_name).name)
         filesize = humansize(pathlib.Path(self.file_name).stat().st_size)
         filetype = ''
         conventions = ''
@@ -487,7 +522,8 @@ def status_bar_update(self):
         self.default_message = filename + '   |   ' + filesize + '   |   ' + filetype + '   |   ' + conventions
     else:
         self.default_message = ''
-    self.statusBar.showMessage(self.default_message)
+    # self.statusBar.showMessage(self.default_message)
+    self.statusbar_label.setText(self.default_message)
 
 
 def create_quick_access_menu(self):

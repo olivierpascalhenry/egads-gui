@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'existingvarwindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_existingvarWindow(object):
     def setupUi(self, existingvarWindow):
         existingvarWindow.setObjectName("existingvarWindow")
-        existingvarWindow.resize(450, 250)
+        existingvarWindow.resize(495, 181)
         existingvarWindow.setMinimumSize(QtCore.QSize(0, 0))
         existingvarWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
@@ -188,6 +188,7 @@ class Ui_existingvarWindow(object):
 "}")
         self.gridLayout_2 = QtWidgets.QGridLayout(existingvarWindow)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_2.setVerticalSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.scroll_area = QtWidgets.QScrollArea(existingvarWindow)
         self.scroll_area.setStyleSheet("QScrollArea { background: transparent; }\n"
@@ -359,7 +360,7 @@ class Ui_existingvarWindow(object):
         self.scroll_area.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area.setObjectName("scroll_area")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 450, 170))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 495, 125))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setContentsMargins(10, 10, 10, 10)
@@ -387,11 +388,11 @@ class Ui_existingvarWindow(object):
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.scroll_area.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout_2.addWidget(self.scroll_area, 0, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem = QtWidgets.QSpacerItem(20, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.gridLayout_2.addItem(spacerItem, 1, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(11, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.overwrite_button = QtWidgets.QToolButton(existingvarWindow)
         self.overwrite_button.setMinimumSize(QtCore.QSize(100, 27))
@@ -464,7 +465,7 @@ class Ui_existingvarWindow(object):
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem3)
         self.gridLayout_2.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 11, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.gridLayout_2.addItem(spacerItem4, 3, 0, 1, 1)
 
         self.retranslateUi(existingvarWindow)
@@ -473,7 +474,7 @@ class Ui_existingvarWindow(object):
     def retranslateUi(self, existingvarWindow):
         _translate = QtCore.QCoreApplication.translate
         existingvarWindow.setWindowTitle(_translate("existingvarWindow", "Information"))
-        self.label.setText(_translate("existingvarWindow", "The following variables already exist in the New variables workspace:"))
+        self.label.setText(_translate("existingvarWindow", "<html><head/><body><p>The following variables already exist in the New variables workspace:.</p></body></html>"))
         self.overwrite_button.setText(_translate("existingvarWindow", "Overwrite"))
         self.cancel_button.setText(_translate("existingvarWindow", "Cancel"))
 

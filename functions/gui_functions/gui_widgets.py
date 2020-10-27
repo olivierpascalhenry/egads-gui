@@ -46,56 +46,61 @@ class MyTreeWidget(QtWidgets.QTreeWidget):
             return QtWidgets.QTreeWidget.startDrag(self, actions)
 
     def dropEvent(self, event):
-        if 'group' in self.item_tooltip:
-            cancel_drop = False
-            item_idx = None
-            drop_from_item = self.dropIndicatorPosition()
-            item = self.itemAt(event.pos())
-            if item is None:
-                item = self.invisibleRootItem()
-            if 'dataset' in item.toolTip(0):
-                parent = item.parent()
-                if parent is None:
-                    parent = self.invisibleRootItem()
-                item_idx = parent.indexOfChild(item)
-                if drop_from_item == 0 or drop_from_item == 2:
-                    item_idx += 1
-            else:
-                parent = item
-            self.new_path, _ = full_path_name_from_treewidget(parent=parent)
-            if self.new_path == '/':
-                self.new_path = self.item_text
-            if self.new_path[0] == '/':
-                self.new_path = self.new_path[1:] + '/' + self.item_text
-            if self.old_path == '/' + self.new_path:
-                cancel_drop = True
-            if self.child_exist_same_name(parent):
-                cancel_drop = True
-            if 'dataset' in self.item_tooltip:
-                tooltip_text = 'dataset: ' + self.new_path
-            else:
-                tooltip_text = 'group: ' + self.new_path
 
-            if not cancel_drop:
-                new_item = QtWidgets.QTreeWidgetItem()
-                new_item.setText(0, self.item_text)
-                new_item.setToolTip(0, tooltip_text)
-                if item_idx is not None:
-                    parent.insertChild(item_idx, new_item)
-                else:
-                    parent.addChild(new_item)
-                if 'group' in self.selectedItems()[0].toolTip(0):
-                    self.hierarchy = self.get_hierarchy(self.selectedItems()[0])
-                    if self.hierarchy:
-                        self.add_hierarchy(new_item, self.hierarchy, tooltip_text)
+        # a revoir
 
-            if not cancel_drop:
-                event.accept()
-                self.dropFile.emit([self.old_path, '/' + self.new_path])
+        # if 'group' in self.item_tooltip:
+        cancel_drop = False
+        item_idx = None
+        drop_from_item = self.dropIndicatorPosition()
+        item = self.itemAt(event.pos())
+        if item is None:
+            item = self.invisibleRootItem()
+        if 'dataset' in item.toolTip(0) or 'dimension' in item.toolTip(0):
+            parent = item.parent()
+            if parent is None:
+                parent = self.invisibleRootItem()
+            item_idx = parent.indexOfChild(item)
+            if drop_from_item == 0 or drop_from_item == 2:
+                item_idx += 1
+        else:
+            parent = item
+        self.new_path, _ = full_path_name_from_treewidget(parent=parent)
+        if self.new_path == '/':
+            self.new_path = self.item_text
+        if self.new_path[0] == '/':
+            self.new_path = self.new_path[1:] + '/' + self.item_text
+        if self.old_path == '/' + self.new_path:
+            cancel_drop = True
+        if self.child_exist_same_name(parent):
+            cancel_drop = True
+        if 'dataset' in self.item_tooltip:
+            tooltip_text = 'dataset: ' + self.new_path
+        elif 'dimension' in self.item_tooltip:
+            tooltip_text = 'dimension: ' + self.new_path
+        else:
+            tooltip_text = 'group: ' + self.new_path
+
+        if not cancel_drop:
+            new_item = QtWidgets.QTreeWidgetItem()
+            new_item.setText(0, self.item_text)
+            new_item.setToolTip(0, tooltip_text)
+            if item_idx is not None:
+                parent.insertChild(item_idx, new_item)
             else:
-                event.ignore()
+                parent.addChild(new_item)
+            if 'group' in self.selectedItems()[0].toolTip(0):
+                self.hierarchy = self.get_hierarchy(self.selectedItems()[0])
+                if self.hierarchy:
+                    self.add_hierarchy(new_item, self.hierarchy, tooltip_text)
+
+        if not cancel_drop:
+            event.accept()
+            self.dropFile.emit([self.old_path, '/' + self.new_path])
         else:
             event.ignore()
+        # else:
+        #     event.ignore()
 
     def get_hierarchy(self, parent):
         ordered_dict = OrderedDict()

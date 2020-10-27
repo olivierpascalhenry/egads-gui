@@ -1,11 +1,160 @@
 import logging
 from PyQt5 import QtCore, QtGui, QtWidgets
 from ui.Ui_globalattributewindow import Ui_globalAttributeWindow
+from ui.Ui_naglobalattributewindow import Ui_naglobalAttributeWindow
 from ui.Ui_variableattributewindow import Ui_variableAttributeWindow
 from ui.Ui_navariableattributewindow import Ui_naVariableAttributeWindow
 from ui.Ui_groupattributewindow import Ui_groupAttributeWindow
 from functions.utils import clear_layout, font_creation_function, icon_creation_function, stylesheet_creation_function
 from functions.window_functions.other_windows_functions import MyExistingVariable
+
+
+class MyNAGlobalAttributes(QtWidgets.QDialog, Ui_naglobalAttributeWindow):
+    def __init__(self, global_attributes, open_file_ext):
+        logging.debug('gui - metadata_windows_functions.py - MyNAGlobalAttributes - __init__')
+        QtWidgets.QWidget.__init__(self)
+        self.setupUi(self)
+        self.splitter.setSizes([177, 400])
+        self.global_attributes = global_attributes
+        self.open_file_ext = open_file_ext
+        self.gw_showButton.clicked.connect(self.other_attribute)
+        self.gw_okButton.clicked.connect(self.close_window_save)
+        self.gw_cancelButton.clicked.connect(self.close_window)
+        self.list_label = []
+        self.list_line = []
+        self.list_del = []
+        self.attribute_num = 0
+        self.na_metadata_not_for_user = ['NLHEAD', 'FFI', 'IVOL', 'NVOL', 'DX', 'NIV', 'NV', 'VSCAL', 'VMISS', 'VNAME',
+                                         'NSCOML' 'NNCOML', 'ORG', 'SNAME', 'MNAME']
+        self.populate_attribute_nasaames()
+        logging.info('gui - metadata_windows_functions.py - MyNAGlobalAttributes - ready')
+
+    def populate_attribute_nasaames(self):
+        logging.debug('gui - metadata_windows_functions.py - MyNAGlobalAttributes - populate_attribute_nasaames')
+        try:
+            self.gw_conventions_ln.setText('NASA Ames')
+            self.gw_title_ln.setCursorPosition(0)
+        except KeyError:
+            logging.error('gui - metadata_windows_functions.py - MyNAGlobalAttributes - populate_attribute_nasaames : '
+                          'no Conventions key')
+            pass
+        try:
+            self.gw_title_lb.setText('title - MNAME:')
+            self.gw_title_ln.setText(self.global_attributes["MNAME"])
+            self.gw_title_ln.setCursorPosition(0)
+        except KeyError:
+            logging.error('gui - metadata_windows_functions.py - MyNAGlobalAttributes - populate_attribute_nasaames : '
+                          'no title key')
+            pass
+        try:
+            self.gw_institution_lb.setText('institution - ORG:')
+            self.gw_institution_ln.setText(self.global_attributes["ORG"])
+            self.gw_institution_ln.setCursorPosition(0)
+        except KeyError:
+            logging.error('gui - metadata_windows_functions.py - MyNAGlobalAttributes - populate_attribute_nasaames : '
+                          'no institution key')
+            pass
+        try:
+            self.gw_source_lb.setText('source - SNAME:')
+            self.gw_source_ln.setText(self.global_attributes["SNAME"])
+            self.gw_source_ln.setCursorPosition(0)
+        except KeyError:
+            logging.error('gui - metadata_windows_functions.py - MyNAGlobalAttributes - populate_attribute_nasaames : '
+                          'no source key')
+            pass
+
+    def other_attribute(self):
+        logging.debug('gui - metadata_windows_functions.py - MyNAGlobalAttributes - other_attribute')
+        if self.gw_showButton.text() == "Show other attributes":
+            self.list_label = []
+            self.list_line = []
+            self.list_del = []
+            self.attribute_num = 0
+            font1 = font_creation_function('normal')
+            font2 = font_creation_function('small')
+            for key, value in sorted(self.global_attributes.items()):
+                if key not in self.na_metadata_not_for_user:
+                    self.list_label.append(QtWidgets.QLabel())
+                    self.list_label[self.attribute_num].setFont(font1)
+                    self.list_label[self.attribute_num].setMinimumSize(QtCore.QSize(0, 27))
+                    self.list_label[self.attribute_num].setMaximumSize(QtCore.QSize(16777215, 27))
+                    self.list_label[self.attribute_num].setObjectName("label_" + str(self.attribute_num))
+                    self.list_label[self.attribute_num].setText(key + ':')
+                    self.list_label[self.attribute_num].setToolTip(key)
+                    self.list_label[self.attribute_num].setStyleSheet(stylesheet_creation_function('qlabel'))
+                    self.list_label[self.attribute_num].setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing |
+                                                                     QtCore.Qt.AlignVCenter)
+                    self.other_attributes_layout.addWidget(self.list_label[self.attribute_num], self.attribute_num,
+                                                           0, 1, 1)
+                    if key == "SCOM" or key == "NCOM":
+                        self.list_line.append(QtWidgets.QPlainTextEdit())
+                        self.list_line[self.attribute_num].setMinimumSize(QtCore.QSize(0, 100))
+                        self.list_line[self.attribute_num].setMaximumSize(QtCore.QSize(16777215, 100))
+                        self.list_line[self.attribute_num].setFrameShape(QtWidgets.QFrame.NoFrame)
+                        self.list_line[self.attribute_num].setPlainText(str(value))
+                        self.list_line[self.attribute_num].setStyleSheet(stylesheet_creation_function('qplaintextedit'))
+                    else:
+                        self.list_line.append(QtWidgets.QLineEdit())
+                        self.list_line[self.attribute_num].setMinimumSize(QtCore.QSize(0, 27))
+                        self.list_line[self.attribute_num].setMaximumSize(QtCore.QSize(16777215, 27))
+                        self.list_line[self.attribute_num].setFrame(False)
+                        self.list_line[self.attribute_num].setText(str(value))
+                        self.list_line[self.attribute_num].setCursorPosition(0)
+                        self.list_line[self.attribute_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
+                    self.list_line[self.attribute_num].setEnabled(True)
+                    self.list_line[self.attribute_num].setObjectName("line_" + str(self.attribute_num))
+                    self.list_line[self.attribute_num].setFocus(True)
+                    self.list_line[self.attribute_num].setFont(font2)
+                    self.other_attributes_layout.addWidget(self.list_line[self.attribute_num], self.attribute_num, 1,
+                                                           1, 1)
+                    if key == "missing_value":
+                        self.list_line[self.attribute_num].setEnabled(False)
+                    if self.attribute_num > 0:
+                        self.setTabOrder(self.list_line[self.attribute_num - 1], self.list_line[self.attribute_num])
+                    self.attribute_num += 1
+            if self.attribute_num != 0:
+                self.gw_showButton.setText("Hide other attributes")
+            else:
+                self.gw_showButton.setText("Hide other attributes")
+                label = QtWidgets.QLabel()
+                label.setMinimumSize(QtCore.QSize(200, 27))
+                label.setMaximumSize(QtCore.QSize(200, 27))
+                label.setObjectName("label")
+                label.setText("No more attribute")
+                label.setStyleSheet(stylesheet_creation_function('qlabel'))
+                self.other_attributes_layout.addWidget(label, 0, 0, 1, 1)
+            self.other_attributes_layout.setAlignment(QtCore.Qt.AlignTop)
+        elif self.gw_showButton.text() == "Hide other attributes":
+            self.list_label = []
+            self.list_line = []
+            self.list_del = []
+            self.attribute_num = 0
+            clear_layout(self.other_attributes_layout)
+            self.gw_showButton.setText("Show other attributes")
+
+    def close_window_save(self):
+        logging.debug('gui - metadata_windows_functions.py - MyNAGlobalAttributes - close_window_save')
+        self.global_attributes["MNAME"] = str(self.gw_title_ln.text())
+        self.global_attributes["ORG"] = str(self.gw_institution_ln.text())
+        self.global_attributes["SNAME"] = str(self.gw_source_ln.text())
+        for index, widget in enumerate(self.list_label):
+            if widget is not None:
+                try:
+                    if isinstance(self.list_line[index], QtWidgets.QPlainTextEdit):
+                        self.global_attributes[str(widget.text()[:-1])] = float(self.list_line[index].toPlainText())
+                    else:
+                        self.global_attributes[str(widget.text()[:-1])] = float(self.list_line[index].text())
+                except ValueError:
+                    if isinstance(self.list_line[index], QtWidgets.QPlainTextEdit):
+                        self.global_attributes[str(widget.text()[:-1])] = str(self.list_line[index].toPlainText())
+                    else:
+                        self.global_attributes[str(widget.text()[:-1])] = str(self.list_line[index].text())
+        self.close()
+
+    def close_window(self):
+        logging.debug('gui - metadata_windows_functions.py - MyNAGlobalAttributes - close_window')
+        self.global_attributes = None
+        self.close()
 
 
 class MyGlobalAttributes(QtWidgets.QDialog, Ui_globalAttributeWindow):
@@ -21,15 +170,7 @@ class MyGlobalAttributes(QtWidgets.QDialog, Ui_globalAttributeWindow):
         self.gw_okButton.clicked.connect(self.close_window_save)
         self.gw_cancelButton.clicked.connect(self.close_window)
         self.gw_button_1.clicked.connect(self.add_attribute)
-        if self.open_file_ext in ['NetCDF Files (*.nc *.cdf)', 'Hdf Files (*.h5 *.hdf5 *.he5)']:
-            self.populate_attribute_netcdf()
-        elif self.open_file_ext == 'NASA Ames Files (*.na)':
-            clear_layout(self.verticalLayout_3)
-            self.gw_addAttribute_lb.setVisible(False)
-            self.gw_addAttribute_rl.setVisible(False)
-            self.gw_button_1.setVisible(False)
-            self.splitter.setSizes([177, 400, 0])
-            self.populate_attribute_nasaames()
+        self.populate_attribute_netcdf()
         self.add_list_label = []
         self.add_list_line = []
         self.add_list_del = []
@@ -44,8 +185,6 @@ class MyGlobalAttributes(QtWidgets.QDialog, Ui_globalAttributeWindow):
                                "geospatial_vertical_max", "geospatial_vertical_positive", "geospatial_vertical_units",
                                "history", "project", "references", "time_coverage_start", "time_coverage_end",
                                "time_coverage_duration"]
-        self.na_metadata_not_for_user = ['NLHEAD', 'FFI', 'IVOL', 'NVOL', 'DX', 'NIV', 'NV', 'VSCAL', 'VMISS', 'VNAME',
-                                         'NSCOML' 'NNCOML', 'ORG', 'SNAME', 'MNAME']
         self.populate_combobox()
         logging.info('gui - metadata_windows_functions.py - MyGlobalAttributes - ready')
 
@@ -57,29 +196,24 @@ class MyGlobalAttributes(QtWidgets.QDialog, Ui_globalAttributeWindow):
     def close_window_save(self):
         logging.debug('gui - metadata_windows_functions.py - MyGlobalAttributes - close_window_save')
         overwrite = False
-        if self.open_file_ext in ['NetCDF Files (*.nc *.cdf)', 'Hdf Files (*.h5 *.hdf5 *.he5)']:
-            new_attr_list = [str(widget.text()) for widget in self.add_list_label if widget is not None]
-            filtered_list = [string for string in new_attr_list if string in list(self.global_attributes.keys())]
-            if filtered_list:
-                text = 'The following metadata already exist in the global metadata dictionary:<ul>'
-                for attr in filtered_list:
-                    text += '<li>' + attr + '</li>'
-                text += ('</ul>Please confirm the overwriting by clicking on <b>Overwrite</b>. Click on <b>Cancel</b> '
-                         'to go back to the Metadata window.')
-                existing_window = MyExistingVariable(text)
-                existing_window.exec_()
-                if not existing_window.overwrite:
-                    return
-                else:
-                    overwrite = True
-            self.global_attributes["Conventions"] = str(self.gw_conventions_ln.text())
-            self.global_attributes["title"] = str(self.gw_title_ln.text())
-            self.global_attributes["institution"] = str(self.gw_institution_ln.text())
-            self.global_attributes["source"] = str(self.gw_source_ln.text())
-        elif self.open_file_ext == 'NASA Ames Files (*.na)':
-            self.global_attributes["MNAME"] = str(self.gw_title_ln.text())
-            self.global_attributes["ORG"] = str(self.gw_institution_ln.text())
-            self.global_attributes["SNAME"] = str(self.gw_source_ln.text())
+        new_attr_list = [str(widget.text()) for widget in self.add_list_label if widget is not None]
+        filtered_list = [string for string in new_attr_list if string in list(self.global_attributes.keys())]
+        if filtered_list:
+            text = 'The following metadata already exist in the global metadata dictionary:<ul>'
+            for attr in filtered_list:
+                text += '<li>' + attr + '</li>'
+            text += ('</ul>Please confirm the overwriting by clicking on <b>Overwrite</b>. Click on <b>Cancel</b> '
+                     'to go back to the Metadata window.')
+            existing_window = MyExistingVariable(text)
+            existing_window.exec_()
+            if not existing_window.overwrite:
+                return
+            else:
+                overwrite = True
+        self.global_attributes["Conventions"] = str(self.gw_conventions_ln.text())
+        self.global_attributes["title"] = str(self.gw_title_ln.text())
+        self.global_attributes["institution"] = str(self.gw_institution_ln.text())
+        self.global_attributes["source"] = str(self.gw_source_ln.text())
         for index, widget in enumerate(self.list_label):
             if widget is not None:
                 try:
@@ -205,40 +339,6 @@ class MyGlobalAttributes(QtWidgets.QDialog, Ui_globalAttributeWindow):
                           'source key')
             pass
 
-    def populate_attribute_nasaames(self):
-        logging.debug('gui - metadata_windows_functions.py - MyGlobalAttributes - populate_attribute_nasaames')
-        try:
-            self.gw_conventions_ln.setText('NASA Ames')
-            self.gw_title_ln.setCursorPosition(0)
-        except KeyError:
-            logging.error('gui - metadata_windows_functions.py - MyGlobalAttributes - populate_attribute_nasaames : '
-                          'no Conventions key')
-            pass
-        try:
-            self.gw_title_lb.setText('title - MNAME:')
-            self.gw_title_ln.setText(self.global_attributes["MNAME"])
-            self.gw_title_ln.setCursorPosition(0)
-        except KeyError:
-            logging.error('gui - metadata_windows_functions.py - MyGlobalAttributes - populate_attribute_nasaames : '
-                          'no title key')
-            pass
-        try:
-            self.gw_institution_lb.setText('institution - ORG:')
-            self.gw_institution_ln.setText(self.global_attributes["ORG"])
-            self.gw_institution_ln.setCursorPosition(0)
-        except KeyError:
-            logging.error('gui - metadata_windows_functions.py - MyGlobalAttributes - populate_attribute_nasaames : '
-                          'no institution key')
-            pass
-        try:
-            self.gw_source_lb.setText('source - SNAME:')
-            self.gw_source_ln.setText(self.global_attributes["SNAME"])
-            self.gw_source_ln.setCursorPosition(0)
-        except KeyError:
-            logging.error('gui - metadata_windows_functions.py - MyGlobalAttributes - populate_attribute_nasaames : '
-                          'no source key')
-            pass
-
     def other_attribute(self):
         logging.debug('gui - metadata_windows_functions.py - MyGlobalAttributes - other_attribute : '
                       'gw_showButton.text() ' + str(self.gw_showButton.text()))
@@ -251,8 +351,7 @@ class MyGlobalAttributes(QtWidgets.QDialog, Ui_globalAttributeWindow):
             font2 = font_creation_function('small')
             icon1 = icon_creation_function('del_icon.svg')
             for key, value in sorted(self.global_attributes.items()):
-                if (key != "Conventions" and key != "title" and key != "institution" and key != "source" and key not
-                        in self.na_metadata_not_for_user):
+                if key != "Conventions" and key != "title" and key != "institution" and key != "source":
                     self.list_label.append(QtWidgets.QLabel()) 
                     self.list_label[self.attribute_num].setFont(font1)
                     self.list_label[self.attribute_num].setMinimumSize(QtCore.QSize(0, 27))
@@ -265,40 +364,31 @@ class MyGlobalAttributes(QtWidgets.QDialog, Ui_globalAttributeWindow):
                                                                      QtCore.Qt.AlignVCenter)
                     self.other_attributes_layout.addWidget(self.list_label[self.attribute_num], self.attribute_num,
                                                            0, 1, 1)
-                    if key == "SCOM" or key == "NCOM":
-                        self.list_line.append(QtWidgets.QPlainTextEdit())
-                        self.list_line[self.attribute_num].setMinimumSize(QtCore.QSize(0, 100))
-                        self.list_line[self.attribute_num].setMaximumSize(QtCore.QSize(16777215, 100))
-                        self.list_line[self.attribute_num].setFrameShape(QtWidgets.QFrame.NoFrame)
-                        self.list_line[self.attribute_num].setPlainText(str(value))
-                        self.list_line[self.attribute_num].setStyleSheet(stylesheet_creation_function('qplaintextedit'))
-                    else:
-                        self.list_line.append(QtWidgets.QLineEdit())
-                        self.list_line[self.attribute_num].setMinimumSize(QtCore.QSize(0, 27))
-                        self.list_line[self.attribute_num].setMaximumSize(QtCore.QSize(16777215, 27))
-                        self.list_line[self.attribute_num].setFrame(False)
-                        self.list_line[self.attribute_num].setText(str(value))
-                        self.list_line[self.attribute_num].setCursorPosition(0)
-                        self.list_line[self.attribute_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
+                    self.list_line.append(QtWidgets.QLineEdit())
+                    self.list_line[self.attribute_num].setMinimumSize(QtCore.QSize(0, 27))
+                    self.list_line[self.attribute_num].setMaximumSize(QtCore.QSize(16777215, 27))
+                    self.list_line[self.attribute_num].setFrame(False)
+                    self.list_line[self.attribute_num].setText(str(value))
+                    self.list_line[self.attribute_num].setCursorPosition(0)
+                    self.list_line[self.attribute_num].setStyleSheet(stylesheet_creation_function('qlineedit'))
                     self.list_line[self.attribute_num].setEnabled(True)
                     self.list_line[self.attribute_num].setObjectName("line_" + str(self.attribute_num))
                     self.list_line[self.attribute_num].setFocus(True)
                     self.list_line[self.attribute_num].setFont(font2)
                     self.other_attributes_layout.addWidget(self.list_line[self.attribute_num], self.attribute_num, 1,
                                                            1, 1)
-                    if self.open_file_ext in ['NetCDF Files (*.nc *.cdf)', 'Hdf Files (*.h5 *.hdf5 *.he5)']:
-                        self.list_del.append(QtWidgets.QToolButton())
-                        self.list_del[self.attribute_num].setMinimumSize(QtCore.QSize(27, 27))
-                        self.list_del[self.attribute_num].setMaximumSize(QtCore.QSize(27, 27))
-                        self.list_del[self.attribute_num].setText("")
-                        self.list_del[self.attribute_num].setIcon(icon1)
-                        self.list_del[self.attribute_num].setIconSize(QtCore.QSize(23, 23))
-                        self.list_del[self.attribute_num].setAutoRaise(True)
-                        self.list_del[self.attribute_num].setObjectName("list_del_" + str(self.attribute_num))
-                        self.list_del[self.attribute_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
-                        self.other_attributes_layout.addWidget(self.list_del[self.attribute_num], self.attribute_num, 2,
-                                                               1, 1)
-                        self.list_del[self.attribute_num].clicked.connect(self.delete_attribute)
+                    self.list_del.append(QtWidgets.QToolButton())
+                    self.list_del[self.attribute_num].setMinimumSize(QtCore.QSize(27, 27))
+                    self.list_del[self.attribute_num].setMaximumSize(QtCore.QSize(27, 27))
+                    self.list_del[self.attribute_num].setText("")
+                    self.list_del[self.attribute_num].setIcon(icon1)
+                    self.list_del[self.attribute_num].setIconSize(QtCore.QSize(23, 23))
+                    self.list_del[self.attribute_num].setAutoRaise(True)
+                    self.list_del[self.attribute_num].setObjectName("list_del_" + str(self.attribute_num))
+                    self.list_del[self.attribute_num].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
+                    self.other_attributes_layout.addWidget(self.list_del[self.attribute_num], self.attribute_num, 2,
+                                                           1, 1)
+                    self.list_del[self.attribute_num].clicked.connect(self.delete_attribute)
                     if key == "missing_value":
                         self.list_line[self.attribute_num].setEnabled(False)
                     if self.attribute_num > 0:

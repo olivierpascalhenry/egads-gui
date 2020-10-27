@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'wait_batch_processing.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -16,7 +16,7 @@ class Ui_waitBatchWindow(object):
         waitBatchWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
-        font.setPointSize(11)
+        font.setPointSize(10)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         waitBatchWindow.setFont(font)
@@ -234,6 +234,8 @@ class Ui_waitBatchWindow(object):
         self.progress_label.setMinimumSize(QtCore.QSize(0, 0))
         self.progress_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(9)
         font.setItalic(True)
         self.progress_label.setFont(font)
         self.progress_label.setStyleSheet("QLabel {\n"

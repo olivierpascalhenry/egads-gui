@@ -1,15 +1,55 @@
 #### To do list: ####
 
-* add map export possibility for GE. (v 1.5)
-* rework logging system (v1.5)
-* create a system to permit movement in TreeWidget and dimension handling in NetCdf with groups (v1.4)
-* add a button to change dimension (v1.4)
-* when creating a new variable or run an algorithme, the new variable shouldn't have a dimension -> let the user decide which dimension should be linked from a dimension list (v1.4)
+* add map export possibility for GE. (v 1.6)
+* rework logging system (v1.6)
+* add an option to avoid loading data into memory (v1.5)
+* review the use of the modification variable in the title (v1.5)
+* rework batch processing window to handle folders and dimension selection (v1.5)
 
   
 #### To fix list: ####
 
-* nothing
+* check if regsitry key is removed when GUI is uninstalled.
+
+
+### October 27 2020, Release version 1.4.0 ###
+With the new system to handle dimension, it is now possible to delete dimension. Variables depending of a removed dimensions will display a small warning. New variables are now created without a dimension by default. Movements are now possible for groups, variables and dimensions. The New variables tab has been removed to facilitate the use of the GUI.
+
+  * FIXED:
+    * the migration of new variables to the main workspace have been fixed.
+    * removed all references to the following objects: self.list_of_dimensions.
+    * the style of the right click menu has been fixed.
+    * the style of all windows has been fixed.
+    * the style of the toolbar has been fixed.
+    * when opening the group metadata window, metadata weren't read properly.
+    * the style of the metadata windows has been fixed.
+    * when an option is modified and confirmed, and if the list of recent files is not empty, the list was not displayed when using menus. It has been fixed.
+    * the renaming of a dimension has been fixed.
+    * the renaming of a group has been fixed.
+    * when no item is selected in all treewidgets, the metadata layout is now cleared.
+    * a key was not present in the defaut extent dictionary when ploting georeferenced data.
+    * the style of the QTabWidget in the batch processing window was not applied correctly when options were added to the QTabWidget.
+
+  * ADDED:
+    * a button to change/add/remove dimension has been added to the Variables an New variables tabs.
+    * an option has been added to warn the user when he tries to delete a dimension.
+    * it is now possible to copy/paste a variable/dimension.
+    * it is now possible to create folders.
+    * movements have been added in treewidget for groups, variables and dimensions.
+    * icons have been added for folders, variables and dimensions.
+    * a warning message has been added when a user try to save a file with one or more variables missing one or more dimensions, or with no dimension at all, or with dimension in another folder.
+    * a dedicated window for global attributes from NASA Ames file format has been added.
+  
+  * MODIFIED:
+    * the deletion of variables/dimensions/folders have been modified: now it is possible to delete dimensions. A warning, based on GUI options, can be displayed when deleting dimensions.
+    * if a dimension is deleted, the variables based on that dimension will display the shape of the dimension with no mention to the dimension.
+    * the possibility to set a variable for x axis in plot window has been removed, as it is possible now to modify the dimension(s) of a variable.
+    * dimension dictionary has been removed from dimensions, as it is useless.
+    * the New variable tab has been removed.
+    * when a folder is renamed, the dimension dictionary of each variable is updated to reflect the renaming.
+    * the documentation has been updated.
+    * the statusbar has been modified to comply official guidelines.
+    * the batch processing window has been modified to work with EGADS 1.2.7.
 
 
 ### August 24 2020, Release version 1.3.0 ###

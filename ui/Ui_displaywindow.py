@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'display_window.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -235,6 +235,7 @@ class Ui_displayWindow(object):
 "  bottom: -1px;\n"
 "}")
         self.gridLayout_3 = QtWidgets.QGridLayout(displayWindow)
+        self.gridLayout_3.setVerticalSpacing(0)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.splitter = QtWidgets.QSplitter(displayWindow)
         self.splitter.setStyleSheet("QSplitter::handle {\n"
@@ -629,8 +630,8 @@ class Ui_displayWindow(object):
         self.dw_label_7.setMinimumSize(QtCore.QSize(0, 27))
         self.dw_label_7.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(11)
+        font.setFamily("FreeSans")
+        font.setPointSize(10)
         font.setBold(False)
         font.setWeight(50)
         font.setKerning(True)
@@ -662,8 +663,8 @@ class Ui_displayWindow(object):
         self.dw_label_8.setMinimumSize(QtCore.QSize(0, 27))
         self.dw_label_8.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(11)
+        font.setFamily("FreeSans")
+        font.setPointSize(10)
         font.setBold(False)
         font.setWeight(50)
         font.setKerning(True)
@@ -687,12 +688,10 @@ class Ui_displayWindow(object):
         self.horizontalLayout_2.addWidget(self.dw_label_8)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.gridLayout_3.addWidget(self.splitter, 0, 0, 1, 1)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.gridLayout_3.addItem(spacerItem3, 1, 0, 1, 1)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem4)
         self.dw_okButton = QtWidgets.QToolButton(displayWindow)
         self.dw_okButton.setEnabled(True)
         self.dw_okButton.setMinimumSize(QtCore.QSize(100, 27))
@@ -727,8 +726,8 @@ class Ui_displayWindow(object):
 "}")
         self.dw_okButton.setObjectName("dw_okButton")
         self.horizontalLayout.addWidget(self.dw_okButton)
-        spacerItem5 = QtWidgets.QSpacerItem(398, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem5)
+        spacerItem4 = QtWidgets.QSpacerItem(398, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem4)
         self.gridLayout_3.addLayout(self.horizontalLayout, 2, 0, 1, 1)
 
         self.retranslateUi(displayWindow)
